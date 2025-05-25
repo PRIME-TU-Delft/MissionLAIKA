@@ -1,0 +1,1 @@
+# Mission LAIKA: Linear Algebra in Kinematics and Aerodynamics
