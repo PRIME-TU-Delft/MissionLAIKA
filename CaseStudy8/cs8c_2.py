@@ -107,7 +107,7 @@ class Plane(MovingCameraScene, PrimeScene):
            \begin{cases}
             x_1 = x_2 \\
             x_2 = x_3 \\
-            x_1 = x_3 \\
+            x_3 = x_3 \\
             \end{cases} \rightarrow
             \begin{bmatrix}
             x_1\\
@@ -236,30 +236,30 @@ class Plane(MovingCameraScene, PrimeScene):
             x3_text.animate.shift(0.5*RIGHT),
         )
         
-        # Add a tracker so the 1 goes to 0 when the system moves back
-        vt = ValueTracker(1.0)
+        # # Add a tracker so the 1 goes to 0 when the system moves back
+        # vt = ValueTracker(1.0)
 
-        num1 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x1_text.get_center())
-        num2 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x2_text.get_center())
-        num3 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x3_text.get_center())
+        # num1 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x1_text.get_center())
+        # num2 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x2_text.get_center())
+        # num3 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x3_text.get_center())
 
-        # Updaters that replace contents each frame while preserving center position
-        def make_updater(num_mob):
-            def updater(m):
-                new_tex = MathTex(f"{vt.get_value():.2f}", font_size=50, color=yellow)
-                new_tex.move_to(m.get_center())
-                m.become(new_tex)
-            return updater
+        # # Updaters that replace contents each frame while preserving center position
+        # def make_updater(num_mob):
+        #     def updater(m):
+        #         new_tex = MathTex(f"{vt.get_value():.2f}", font_size=50, color=yellow)
+        #         new_tex.move_to(m.get_center())
+        #         m.become(new_tex)
+        #     return updater
 
-        # replace x's with 1
-        self.play(
-            ReplacementTransform(x1_text, num1), 
-            ReplacementTransform(x2_text, num2), 
-            ReplacementTransform(x3_text, num3))
+        # # replace x's with 1
+        # self.play(
+        #     ReplacementTransform(x1_text, num1), 
+        #     ReplacementTransform(x2_text, num2), 
+        #     ReplacementTransform(x3_text, num3))
 
-        num1.add_updater(make_updater(num1))
-        num2.add_updater(make_updater(num2))
-        num3.add_updater(make_updater(num3))
+        # num1.add_updater(make_updater(num1))
+        # num2.add_updater(make_updater(num2))
+        # num3.add_updater(make_updater(num3))
 
         self.wait(2)
 
@@ -269,22 +269,22 @@ class Plane(MovingCameraScene, PrimeScene):
             arrow1.animate.put_start_and_end_on(point2, point2),
             arrow2.animate.put_start_and_end_on(point1, point1),
             arrow3.animate.put_start_and_end_on(point3, point3),
-            num1.animate.shift(0.5 * LEFT),
-            num2.animate.shift(0.5 * LEFT),
-            num3.animate.shift(0.5 * LEFT),
-            vt.animate.set_value(0.0), 
+            x1_text.animate.shift(0.5 * LEFT),
+            x2_text.animate.shift(0.5 * LEFT),
+            x3_text.animate.shift(0.5 * LEFT),
+            # vt.animate.set_value(0.0), 
             run_time=2 
         )
         self.wait(1)
 
-        num1.clear_updaters()
-        num2.clear_updaters()
-        num3.clear_updaters()
+        # num1.clear_updaters()
+        # num2.clear_updaters()
+        # num3.clear_updaters()
 
         self.play(
-            FadeOut(num1),
-            FadeOut(num2),
-            FadeOut(num3),
+            FadeOut(x1_text),
+            FadeOut(x2_text),
+            FadeOut(x3_text),
             FadeOut(dashed_1),
             FadeOut(dashed_2),
             FadeOut(dashed_3),
@@ -415,11 +415,11 @@ class Plane(MovingCameraScene, PrimeScene):
 
 
         self.wait(1)
-        self.play(col_text2[0][15:18].animate.set_color(yellow), col_text2[0][30:33].animate.set_color(yellow))
+        self.play(col_text2[0][15:18].animate.set_color(GREEN), col_text2[0][30:33].animate.set_color(yellow))
 
-        point1 = left_square.get_left()
-        point2 = center_square.get_bottom()
-        point3 = right_square.get_right()
+        point1 = left_square.get_right()
+        point2 = center_square.get_center()
+        point3 = right_square.get_left()
         
         def out_and_back(t):
             return 2 * t if t <= 0.5 else 2 * (1 - t)
@@ -442,40 +442,43 @@ class Plane(MovingCameraScene, PrimeScene):
         tracker = ValueTracker(0)
         center_square.add_updater(update_center)
 
+        # create and add arrows to model motion
+        left_arrow_1 = Line(start=point1+2*DOWN, end=point1+2*DOWN + 1 * LEFT, color=GREEN, buff=0)
+        left_arrow_1.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
+
+        left_arrow_2 = Line(start=point2+2*DOWN + 0.1*LEFT, end=point2+2*DOWN + 1.1 * LEFT, color=yellow, buff=0)
+        left_arrow_2.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
+
+        right_arrow_1 = Line(start=point3+2*DOWN, end=point3+2*DOWN + 1 * RIGHT, color=yellow, buff=0)
+        right_arrow_1.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
+        
+        right_arrow_2 = Line(start=point2+2*DOWN + 0.1*RIGHT, end=point2+2*DOWN + 1.1 * RIGHT, color=GREEN, buff=0)
+        right_arrow_2.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
+
         self.play(
+            GrowFromPoint(left_arrow_1,point1+2*DOWN),
+            GrowFromPoint(right_arrow_1, point3+2*DOWN),
+            GrowFromPoint(left_arrow_2,point2+2*DOWN + 0.1*LEFT),
+            GrowFromPoint(right_arrow_2,point2+2*DOWN + 0.1*RIGHT),
             AnimationGroup(left_square.animate.shift(0.5 * LEFT),
             right_square.animate.shift(0.5 * RIGHT),
             rate_func=out_and_back,
             lag_ratio=0),
             tracker.animate.set_value(1),
-
             run_time=2
         )
         center_square.remove_updater(update_center)
         right_square.shift(0.5 * LEFT)
         left_square.shift(0.5 * RIGHT)
 
-        # create and add arrows to model motion
-        left_arrow_1 = Line(start=point1, end=point1 + 1 * LEFT, color=yellow, buff=0)
-        left_arrow_1.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
-        left_arrow_2 = Line(start=point2+0.5*DOWN + 0.1*LEFT, end=point2+0.5*DOWN + 1.1 * LEFT, color=yellow, buff=0)
-        left_arrow_2.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        right_arrow_1 = Line(start=point3, end=point3 + 1 * RIGHT, color=yellow, buff=0)
-        right_arrow_1.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-        
-        right_arrow_2 = Line(start=point2+0.5*DOWN + 0.1*RIGHT, end=point2+0.5*DOWN + 1.1 * RIGHT, color=yellow, buff=0)
-        right_arrow_2.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-
-        self.play(
-            GrowFromPoint(left_arrow_1,point1),
-            GrowFromPoint(right_arrow_1, point3),
-            GrowFromPoint(left_arrow_2,point2+0.5*DOWN + 0.1*LEFT),
-            GrowFromPoint(right_arrow_2,point2+0.5*DOWN + 0.1*RIGHT),
-            duration=3
-            )
+        # self.play(
+        #     GrowFromPoint(left_arrow_1,point1),
+        #     GrowFromPoint(right_arrow_1, point3),
+        #     GrowFromPoint(left_arrow_2,point2+0.5*DOWN + 0.1*LEFT),
+        #     GrowFromPoint(right_arrow_2,point2+0.5*DOWN + 0.1*RIGHT),
+        #     duration=3
+        #     )
    
 
         self.wait(2)
@@ -494,10 +497,15 @@ class Plane(MovingCameraScene, PrimeScene):
 
         self.play(ReplacementTransform(col_text2, col_text3))
 
-        self.play(col_text3[0][15:18].animate.set_color(yellow), col_text3[0][29:31].animate.set_color(yellow),col_text3[0][32].animate.set_color(yellow))
+        self.play(col_text3[0][15:18].animate.set_color(GREEN), col_text3[0][29:31].animate.set_color(yellow),col_text3[0][32].animate.set_color(yellow))
 
         # add arrows to model new motion
-        left_arrow_3 = Line(start=point1, end=point1 +  LEFT, color=yellow, buff=0)
+
+        point1 = point1 + 2*DOWN
+        point2 = point2 + 2*DOWN
+        point3 = point3 + 2*DOWN
+
+        left_arrow_3 = Line(start=point1, end=point1 +  LEFT, color=GREEN, buff=0)
         left_arrow_3.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
         left_arrow_4 = Line(start=point1 + 1.1*LEFT, end=point1 + 2.1 * LEFT, color=yellow, buff=0)
@@ -506,19 +514,23 @@ class Plane(MovingCameraScene, PrimeScene):
         right_arrow_3 = Line(start=point3, end=point3 +  RIGHT, color=yellow, buff=0)
         right_arrow_3.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
-        right_arrow_4 = Line(start=point2+0.5*DOWN, end=point2+0.5*DOWN + 1 * RIGHT, color=yellow, buff=0)
+        right_arrow_4 = Line(start=point2, end=point2 + 1 * RIGHT, color=GREEN, buff=0)
         right_arrow_4.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
-        self.play(AnimationGroup(left_square.animate.shift(1 * UNIT * LEFT),right_square.animate.shift(0.5 * UNIT * RIGHT), center_square.animate.shift(0.5 * UNIT * RIGHT), run_time=0.7),)
-        self.play(AnimationGroup(left_square.animate.shift(1 * UNIT * RIGHT), right_square.animate.shift(0.5 * UNIT * LEFT), center_square.animate.shift(0.5 * UNIT * LEFT), run_time=0.7),)
-        
-        self.play(
-            GrowFromPoint(left_arrow_3,point1),
+        self.play(AnimationGroup(left_square.animate.shift(1 * UNIT * LEFT),right_square.animate.shift(0.5 * UNIT * RIGHT), center_square.animate.shift(0.5 * UNIT * RIGHT), run_time=0.7),
+                  GrowFromPoint(left_arrow_3,point1),
             GrowFromPoint(right_arrow_3, point3),
             GrowFromPoint(left_arrow_4,point1 + 1.1*LEFT),
-            GrowFromPoint(right_arrow_4,point2+0.5*DOWN),
-            duration=3
-            )
+            GrowFromPoint(right_arrow_4,point2),)
+        self.play(AnimationGroup(left_square.animate.shift(1 * UNIT * RIGHT), right_square.animate.shift(0.5 * UNIT * LEFT), center_square.animate.shift(0.5 * UNIT * LEFT), run_time=0.7),)
+        
+        # self.play(
+        #     GrowFromPoint(left_arrow_3,point1),
+        #     GrowFromPoint(right_arrow_3, point3),
+        #     GrowFromPoint(left_arrow_4,point1 + 1.1*LEFT),
+        #     GrowFromPoint(right_arrow_4,point2+0.5*DOWN),
+        #     duration=3
+        #     )
         self.wait(2)
 
         # remove entire system
@@ -607,11 +619,21 @@ class Plane(MovingCameraScene, PrimeScene):
         point4 = left_square2.get_bottom() + 1.8*UNIT*LEFT
         point5 = right_square2.get_bottom() + 1.8*UNIT*RIGHT
 
+
+        left_arrow_6 = Line(start=point4+0.5*DOWN + 3.6 * RIGHT * UNIT, end=point4+0.5*DOWN, color=yellow, buff=0)
+        left_arrow_6.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
+
+        right_arrow_6 = Line(start=point5+0.5*DOWN + 3.6 * LEFT * UNIT, end=point5+0.5*DOWN, color=yellow, buff=0)
+        right_arrow_6.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
+
+
         self.play(
             left_square2.animate.shift(1 * UNIT * LEFT),
             m1_text.animate.shift(1 * UNIT * LEFT),
             right_square2.animate.shift(1 * UNIT * RIGHT),
             m2_text.animate.shift(1 * UNIT * RIGHT),
+            GrowFromPoint(left_arrow_6,point4+0.5*DOWN + 3.6 * RIGHT * UNIT),
+            GrowFromPoint(right_arrow_6, point5+0.5*DOWN + 3.6 * LEFT * UNIT),
             run_time=0.7
         )
         self.play(
@@ -623,14 +645,8 @@ class Plane(MovingCameraScene, PrimeScene):
         )
         self.wait(1)
 
-        left_arrow_6 = Line(start=point4+0.5*DOWN + 3.6 * RIGHT * UNIT, end=point4+0.5*DOWN, color=yellow, buff=0)
-        left_arrow_6.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        right_arrow_6 = Line(start=point5+0.5*DOWN + 3.6 * LEFT * UNIT, end=point5+0.5*DOWN, color=yellow, buff=0)
-        right_arrow_6.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        self.play(
-            GrowFromPoint(left_arrow_6,point4+0.5*DOWN + 3.6 * RIGHT * UNIT),
-            GrowFromPoint(right_arrow_6, point5+0.5*DOWN + 3.6 * LEFT * UNIT),
-            duration=3)
+        # self.play(
+        #     GrowFromPoint(left_arrow_6,point4+0.5*DOWN + 3.6 * RIGHT * UNIT),
+        #     GrowFromPoint(right_arrow_6, point5+0.5*DOWN + 3.6 * LEFT * UNIT),
+        #     duration=3)
         self.wait(1)
