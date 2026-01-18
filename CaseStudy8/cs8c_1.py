@@ -108,36 +108,83 @@ class Plane(MovingCameraScene, PrimeScene):
         #############################Equations#############################
         ###################################################################
 
+        # eq7 = MathTex(
+        #     r"\begin{cases}"
+        #     r"m_1x_1'' = k(x_2-x_1)\\"
+        #     r"m_2x_2'' = - k(x_2-x_1) +k(x_3-x_2) \\"
+        #     r"m_3x_3''=-k(x_3-x_2)"
+        #     r"\end{cases}", font_size=65, color = dark_blue
+        # )
+
+        # eq7[0][5:7].set_color(red)
+        # eq7[0][20:22].set_color(red)
+        # eq7[0][45:47].set_color(red)
+
+        # eq7[0][7].set_color(yellow)
+        # eq7[0][10].set_color(yellow)
+        # eq7[0][22].set_color(yellow)
+        # eq7[0][25].set_color(yellow)
+        # eq7[0][47].set_color(yellow)
+        # eq7[0][50].set_color(yellow)
+        # eq7[0][14:16].set_color(yellow)
+        # eq7[0][17:19].set_color(yellow)
+        # eq7[0][30:32].set_color(yellow)
+        # eq7[0][33:35].set_color(yellow)
+        # eq7[0][39:41].set_color(yellow)
+
+        # eq7[0][42:44].set_color(yellow)
+        # eq7[0][55:57].set_color(yellow)
+        # eq7[0][58:60].set_color(yellow)
+
+        # eq7[0][12].set_color(blue)
+        # eq7[0][28].set_color(blue)
+        # eq7[0][37].set_color(blue)
+        # eq7[0][53].set_color(blue)
+
         eq7 = MathTex(
-            r"\begin{cases}"
-            r"m_1x_1'' = k(x_2-x_1)\\"
-            r"m_2x_2'' = - k(x_2-x_1) +k(x_3-x_2) \\"
-            r"m_3x_3''=-k(x_3-x_2)"
-            r"\end{cases}", font_size=65, color = dark_blue
+            r"\begin{aligned}"
+            r"m_1x_1'' &= k(x_2-x_1)\\"
+            r"m_2x_2'' &= - k(x_2-x_1) +k(x_3-x_2) = kx_1 - 2kx_2 +kx_3 \\"
+            r"m_3x_3''&=-k(x_3-x_2) \end{aligned}", font_size=50, color = dark_blue
         )
-        eq7[0][5:7].set_color(red)
-        eq7[0][20:22].set_color(red)
-        eq7[0][45:47].set_color(red)
 
-        eq7[0][7].set_color(yellow)
-        eq7[0][10].set_color(yellow)
-        eq7[0][22].set_color(yellow)
-        eq7[0][25].set_color(yellow)
-        eq7[0][47].set_color(yellow)
-        eq7[0][50].set_color(yellow)
-        eq7[0][14:16].set_color(yellow)
-        eq7[0][17:19].set_color(yellow)
-        eq7[0][30:32].set_color(yellow)
-        eq7[0][33:35].set_color(yellow)
-        eq7[0][39:41].set_color(yellow)
+        
+        # # DEBUG
+        # indices = index_labels(eq7[0])
+        # indices.move_to(eq7.get_center())
+        # self.add(indices)
+        # self.wait(2)
+
+
+        eq7[0][:2].set_color(red)
+        eq7[0][15:17].set_color(red)
+        eq7[0][53:55].set_color(red)
+
+        eq7[0][2].set_color(yellow)
+        eq7[0][5].set_color(yellow)
+        eq7[0][17].set_color(yellow)
+        eq7[0][20].set_color(yellow)
+        eq7[0][55].set_color(yellow)
+        eq7[0][58].set_color(yellow)
+        eq7[0][9:11].set_color(yellow)
+        eq7[0][12:14].set_color(yellow)
+        eq7[0][25:27].set_color(yellow)
+        eq7[0][28:30].set_color(yellow)
+        eq7[0][34:36].set_color(yellow)
+        eq7[0][37:39].set_color(yellow)
         eq7[0][42:44].set_color(yellow)
-        eq7[0][55:57].set_color(yellow)
-        eq7[0][58:60].set_color(yellow)
+        eq7[0][47:49].set_color(yellow)
+        eq7[0][51:53].set_color(yellow)
+        eq7[0][63:65].set_color(yellow)
+        eq7[0][66:68].set_color(yellow)
 
-        eq7[0][12].set_color(blue)
-        eq7[0][28].set_color(blue)
-        eq7[0][37].set_color(blue)
-        eq7[0][53].set_color(blue)
+        eq7[0][7].set_color(blue)
+        eq7[0][23].set_color(blue)
+        eq7[0][32].set_color(blue)
+        eq7[0][41].set_color(blue)
+        eq7[0][46].set_color(blue)
+        eq7[0][50].set_color(blue)
+        eq7[0][61].set_color(blue)
 
         self.play(Write(eq7))
 

@@ -99,7 +99,7 @@ class Plane(MovingCameraScene, PrimeScene):
         # nul A
         matrix_a_2 = MathTex(
             r"""{\renewcommand{\arraystretch}{1.45}
-            \textbf{Nul A} = \left[\begin{array}{ccc|c}
+            \text{Computing } \operatorname{Nul} A:  \left[\begin{array}{ccc|c}
             -1 & 1 & 0 & 0\\
             1 & -2 & 1 & 0\\
             0 & 1 & -1 & 0
@@ -177,9 +177,6 @@ class Plane(MovingCameraScene, PrimeScene):
         # indices = index_labels(x_eq1[0])
         # self.add(indices)
 
-        # self.play(ReplacementTransform(x_eq1, x_eq2))
-        # self.wait(1)
-
         # create x labels and dashed lines
         x1_text = MathTex("x_1", font_size=60, color=yellow).move_to(
             left_square.get_center() + [0, -2.95 * UNIT, 0]
@@ -190,76 +187,6 @@ class Plane(MovingCameraScene, PrimeScene):
         x3_text = MathTex("x_3", font_size=60, color=yellow).move_to(
             right_square.get_center() + [0, -2.95 * UNIT, 0]
         )
-
-        ##################################################
-
-        # setup dashed lines s.t. they align with one another even when starting from different places
-
-        dash_len = 0.14
-        gap_len = 0.07
-        stroke_w = 3
-        color = yellow
-
-        top_left = left_square.get_bottom()[1]
-        top_center = center_square.get_bottom()[1]
-        top_right = right_square.get_bottom()[1]
-
-        bottom_left = top_left - 1.7 * UNIT
-        bottom_center = top_center - 0.95 * UNIT
-        bottom_right = top_right - 1.7 * UNIT
-
-        y_ref = max(top_left, top_center, top_right) + 0.001
-
-        def build_aligned_dashed_line(
-            x,
-            top_y,
-            bottom_y,
-            y_ref,
-            dash_len=dash_len,
-            gap_len=gap_len,
-            stroke_w=stroke_w,
-        ):
-            step = dash_len + gap_len
-            segments = VGroup()
-
-            y = y_ref
-
-            while y - dash_len >= bottom_y - 1e-6:
-                seg_top = y
-                seg_bottom = y - dash_len
-
-                vis_top = min(seg_top, top_y)
-                vis_bottom = max(seg_bottom, bottom_y)
-                if vis_top > vis_bottom:
-                    segments.add(
-                        Line(
-                            start=[x, vis_top, 0],
-                            end=[x, vis_bottom, 0],
-                            stroke_width=stroke_w,
-                        )
-                    )
-                y -= step
-
-                if len(segments) > 1000:
-                    break
-            segments.set_color(color)
-            return segments
-
-        dashed_1 = build_aligned_dashed_line(
-            left_square.get_bottom()[0], top_left, bottom_left, y_ref
-        )
-        dashed_2 = build_aligned_dashed_line(
-            center_square.get_bottom()[0], top_center, bottom_center, y_ref
-        )
-        dashed_3 = build_aligned_dashed_line(
-            right_square.get_bottom()[0], top_right, bottom_right, y_ref
-        )
-
-        self.play(Write(dashed_1), Write(dashed_2), Write(dashed_3))
-
-        ##################################################
-
-        self.play(Write(x1_text), Write(x2_text), Write(x3_text))
 
         self.wait(1)
 
@@ -284,64 +211,22 @@ class Plane(MovingCameraScene, PrimeScene):
             GrowFromPoint(arrow1, point2),
             GrowFromPoint(arrow2, point1),
             GrowFromPoint(arrow3, point3),
-            x1_text.animate.shift(0.65 * RIGHT),
-            x2_text.animate.shift(0.65 * RIGHT),
-            x3_text.animate.shift(0.65 * RIGHT),
         )
-
-        # # Add a tracker so the 1 goes to 0 when the system moves back
-        # vt = ValueTracker(1.0)
-
-        # num1 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x1_text.get_center())
-        # num2 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x2_text.get_center())
-        # num3 = MathTex(r"1.00", font_size=50, color=yellow).move_to(x3_text.get_center())
-
-        # # Updaters that replace contents each frame while preserving center position
-        # def make_updater(num_mob):
-        #     def updater(m):
-        #         new_tex = MathTex(f"{vt.get_value():.2f}", font_size=50, color=yellow)
-        #         new_tex.move_to(m.get_center())
-        #         m.become(new_tex)
-        #     return updater
-
-        # # replace x's with 1
-        # self.play(
-        #     ReplacementTransform(x1_text, num1),
-        #     ReplacementTransform(x2_text, num2),
-        #     ReplacementTransform(x3_text, num3))
-
-        # num1.add_updater(make_updater(num1))
-        # num2.add_updater(make_updater(num2))
-        # num3.add_updater(make_updater(num3))
 
         self.wait(2)
 
-        # shift system back to starting position, the numbers go from 1 to 0
         self.play(
             system.animate.shift(0.9 * LEFT * UNIT),
             arrow1.animate.put_start_and_end_on(point2, point2),
             arrow2.animate.put_start_and_end_on(point1, point1),
             arrow3.animate.put_start_and_end_on(point3, point3),
-            x1_text.animate.shift(0.5 * LEFT),
-            x2_text.animate.shift(0.5 * LEFT),
-            x3_text.animate.shift(0.5 * LEFT),
-            # vt.animate.set_value(0.0),
             run_time=2,
         )
         self.wait(1)
 
-        # num1.clear_updaters()
-        # num2.clear_updaters()
-        # num3.clear_updaters()
-
         self.play(
-            FadeOut(x1_text),
-            FadeOut(x2_text),
-            FadeOut(x3_text),
-            FadeOut(dashed_1),
-            FadeOut(dashed_2),
-            FadeOut(dashed_3),
             FadeOut(x_eq1),
+            FadeOut(system)
         )
         self.wait(2)
 
@@ -349,8 +234,8 @@ class Plane(MovingCameraScene, PrimeScene):
         col_text = MathTex(
             r"""
             {\renewcommand{\arraystretch}{1.45}
-            Col A = span \left( {{\begin{bmatrix}
-             -1 \\ 1 \\ 0 \end{bmatrix}}}
+            \operatorname{Col} A = \operatorname{span} \left( {{\begin{bmatrix}
+             -1 \\ 1 \\ 0 \end{bmatrix}}},
             {{\begin{bmatrix}
              1 \\ -2 \\ 1 \end{bmatrix}}} \right)
              """,
@@ -360,10 +245,10 @@ class Plane(MovingCameraScene, PrimeScene):
         col_text = MathTex(
             r"""
             {\renewcommand{\arraystretch}{1.45}
-            Col A = span \left( """
+             \operatorname{Col} A = \operatorname{span} \left( """
             + r"""{{\begin{bmatrix}
              -1 \\ 1 \\ 0 \end{bmatrix}}}"""
-            + r"""
+            + r""",
             {{\begin{bmatrix}
              1 \\ -2 \\ 1 \end{bmatrix}}}"""
             + r""" \right)
@@ -382,7 +267,7 @@ class Plane(MovingCameraScene, PrimeScene):
         col_text2 = MathTex(
             r"""
             {\renewcommand{\arraystretch}{1.45}
-            = span \left( \begin{bmatrix}
+            = \operatorname{span} \left( \begin{bmatrix}
              -1 \\ 1 \\ 0 \end{bmatrix}
             \begin{bmatrix}
              0 \\ -1 \\ 1 \end{bmatrix} \right)
@@ -394,7 +279,7 @@ class Plane(MovingCameraScene, PrimeScene):
         col_text3 = MathTex(
             r"""
             {\renewcommand{\arraystretch}{1.45}
-            = span \left( \begin{bmatrix}
+            = \operatorname{span} \left( \begin{bmatrix}
              -1 \\ 1 \\ 0 \end{bmatrix}
             \begin{bmatrix}
              -1 \\ 0 \\ 1 \end{bmatrix} \right)
@@ -439,7 +324,7 @@ class Plane(MovingCameraScene, PrimeScene):
         col_textA = MathTex(
             r"""
             {\renewcommand{\arraystretch}{1.45}
-            Col A = span \left( \begin{bmatrix}
+            \operatorname{Col} A = \operatorname{span} \left( \begin{bmatrix}
              -1 \\ 1 \end{bmatrix}
             \right)
              """,
@@ -450,231 +335,32 @@ class Plane(MovingCameraScene, PrimeScene):
         # DEBUG
         # indices = index_labels(col_calc[0])
         # self.add(col_calc, indices)
-        self.play(Write(col_calc.shift(2.05 * DOWN)))
 
-        col_text[0][:].set_color(dark_blue)
-        col_text.shift(20 * RIGHT * UNIT + 2.05 * DOWN)
+        self.play(Write(col_calc))
 
         self.wait(1)
+
+        # self.play(FadeOut(col_calc))
+
+        col_text[0][:].set_color(dark_blue)
+        col_text.shift(20 * RIGHT * UNIT)
+
         self.play(
             col_calc.animate.shift(20 * LEFT * UNIT),
             col_text.animate.shift(20 * LEFT * UNIT),
         )
 
-        # DEBUG
-        # indices = index_labels(col_text[0])
-        # self.add(col_text, indices)
+        # # DEBUG
+        # # indices = index_labels(col_text[0])
+        # # self.add(col_text, indices)
 
-        self.wait(1)
+        self.wait(2)
 
-        col_text2.set_opacity(0)
-        col_text2.move_to(col_text.get_center())
-        self.add(col_text2)
+        self.play(FadeOut(col_text), FadeOut(col_calc))
 
-        combined = VGroup(col_text.copy(), col_text2.copy()).arrange(RIGHT, buff=0.1)
-        combined.shift(2.05 * DOWN)
 
         com = Dot(system.get_center(), radius=0.08, color=dark_blue)
-        self.play(FadeIn(com))
-
-        self.play(
-            col_text.animate.move_to(combined[0].get_center()),
-            col_text2.animate.set_opacity(1).move_to(combined[1].get_center()),
-        )
-
-        # DEBUG
-        # indices = index_labels(col_text2[0])
-        # self.add(indices)
-
-        self.wait(1)
-        self.play(
-            col_text2[0][15:18].animate.set_color(green),
-            col_text2[0][30:33].animate.set_color(yellow),
-        )
-
-        point1 = left_square.get_right()
-        point2 = center_square.get_center()
-        point3 = right_square.get_left()
-
-        def out_and_back(t):
-            return 2 * t if t <= 0.5 else 2 * (1 - t)
-
-        start_pos = center_square.get_center()
-
-        def update_center(mob):
-            alpha = tracker.get_value()
-            if alpha <= 0.25:
-                progress = alpha / 0.25
-                offset = -0.25 * progress
-            elif alpha <= 0.75:
-                progress = (alpha - 0.25) / 0.5
-                offset = -0.25 + 0.5 * progress
-            else:
-                progress = (alpha - 0.75) / 0.25
-                offset = 0.25 - 0.25 * progress
-
-            mob.move_to(start_pos + offset * RIGHT)
-
-        tracker = ValueTracker(0)
-        center_square.add_updater(update_center)
-
-        # create and add arrows to model motion
-        left_arrow_1 = Line(
-            start=point1 + 2 * DOWN,
-            end=point1 + 2 * DOWN + 1 * LEFT,
-            color=green,
-            buff=0,
-        )
-        left_arrow_1.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        left_arrow_2 = Line(
-            start=point2 + 2 * DOWN + 0.1 * LEFT,
-            end=point2 + 2 * DOWN + 1.1 * LEFT,
-            color=yellow,
-            buff=0,
-        )
-        left_arrow_2.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        right_arrow_1 = Line(
-            start=point3 + 2 * DOWN,
-            end=point3 + 2 * DOWN + 1 * RIGHT,
-            color=yellow,
-            buff=0,
-        )
-        right_arrow_1.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        right_arrow_2 = Line(
-            start=point2 + 2 * DOWN + 0.1 * RIGHT,
-            end=point2 + 2 * DOWN + 1.1 * RIGHT,
-            color=green,
-            buff=0,
-        )
-        right_arrow_2.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        self.play(
-            GrowFromPoint(left_arrow_1, point1 + 2 * DOWN),
-            GrowFromPoint(right_arrow_1, point3 + 2 * DOWN),
-            GrowFromPoint(left_arrow_2, point2 + 2 * DOWN + 0.1 * LEFT),
-            GrowFromPoint(right_arrow_2, point2 + 2 * DOWN + 0.1 * RIGHT),
-            AnimationGroup(
-                left_square.animate.shift(0.5 * LEFT),
-                right_square.animate.shift(0.5 * RIGHT),
-                rate_func=out_and_back,
-                lag_ratio=0,
-            ),
-            tracker.animate.set_value(1),
-            run_time=2,
-        )
-        center_square.remove_updater(update_center)
-        spring_right.shift(0.5 * LEFT + 0.5 * RIGHT)
-        spring_left.shift(0.5 * RIGHT + 0.5 * LEFT)
-        right_square.shift(0.5 * LEFT)
-        left_square.shift(0.5 * RIGHT)
-
-        # self.play(
-        #     GrowFromPoint(left_arrow_1,point1),
-        #     GrowFromPoint(right_arrow_1, point3),
-        #     GrowFromPoint(left_arrow_2,point2+0.5*DOWN + 0.1*LEFT),
-        #     GrowFromPoint(right_arrow_2,point2+0.5*DOWN + 0.1*RIGHT),
-        #     duration=3
-        #     )
-
-        self.wait(2)
-
-        # remove arrows
-        self.play(
-            left_arrow_1.animate.scale(0.01)
-            .set_opacity(0)
-            .set_stroke(width=0)
-            .set_fill(opacity=0),
-            left_arrow_2.animate.scale(0.01)
-            .set_opacity(0)
-            .set_stroke(width=0)
-            .set_fill(opacity=0),
-            right_arrow_1.animate.scale(0.01)
-            .set_opacity(0)
-            .set_stroke(width=0)
-            .set_fill(opacity=0),
-            right_arrow_2.animate.scale(0.01)
-            .set_opacity(0)
-            .set_stroke(width=0)
-            .set_fill(opacity=0),
-            run_time=1,
-        )
-        self.wait(1)
-
-        col_text3.move_to(combined[1].get_center())
-
-        self.play(ReplacementTransform(col_text2, col_text3))
-
-        self.play(
-            col_text3[0][15:18].animate.set_color(green),
-            col_text3[0][29:31].animate.set_color(yellow),
-            col_text3[0][32].animate.set_color(yellow),
-        )
-
-        # add arrows to model new motion
-
-        point1 = point1 + 2 * DOWN
-        point2 = point2 + 2 * DOWN
-        point3 = point3 + 2 * DOWN
-
-        left_arrow_3 = Line(start=point1, end=point1 + LEFT, color=green, buff=0)
-        left_arrow_3.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        left_arrow_4 = Line(
-            start=point1 + 1.1 * LEFT, end=point1 + 2.1 * LEFT, color=yellow, buff=0
-        )
-        left_arrow_4.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        right_arrow_3 = Line(start=point3, end=point3 + RIGHT, color=yellow, buff=0)
-        right_arrow_3.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        right_arrow_4 = Line(start=point2, end=point2 + 1 * RIGHT, color=green, buff=0)
-        right_arrow_4.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
-
-        self.play(
-            AnimationGroup(
-                left_square.animate.shift(1 * UNIT * LEFT),
-                right_square.animate.shift(0.5 * UNIT * RIGHT),
-                center_square.animate.shift(0.5 * UNIT * RIGHT),
-                run_time=0.7,
-            ),
-            GrowFromPoint(left_arrow_3, point1),
-            GrowFromPoint(right_arrow_3, point3),
-            GrowFromPoint(left_arrow_4, point1 + 1.1 * LEFT),
-            GrowFromPoint(right_arrow_4, point2),
-        )
-        self.play(
-            AnimationGroup(
-                left_square.animate.shift(1 * UNIT * RIGHT),
-                right_square.animate.shift(0.5 * UNIT * LEFT),
-                center_square.animate.shift(0.5 * UNIT * LEFT),
-                run_time=0.7,
-            ),
-        )
-
-        # self.play(
-        #     GrowFromPoint(left_arrow_3,point1),
-        #     GrowFromPoint(right_arrow_3, point3),
-        #     GrowFromPoint(left_arrow_4,point1 + 1.1*LEFT),
-        #     GrowFromPoint(right_arrow_4,point2+0.5*DOWN),
-        #     duration=3
-        #     )
-        self.wait(2)
-
-        # remove entire system
-        self.play(
-            FadeOut(left_arrow_3),
-            FadeOut(left_arrow_4),
-            FadeOut(right_arrow_3),
-            FadeOut(right_arrow_4),
-            FadeOut(system),
-            FadeOut(com),
-            FadeOut(combined),
-            FadeOut(col_text3),
-            FadeOut(col_text),
-        )
+       
 
         ##########################################################################
         ##############################2 Mass System###############################
@@ -752,14 +438,14 @@ class Plane(MovingCameraScene, PrimeScene):
         # self.add(indices)
         # self.wait(2)
 
-        self.play(col_textA[0][13:16].animate.set_color(yellow))
+        self.play(col_textA[0][13:15].animate.set_color(yellow),col_textA[0][15:16].animate.set_color(green))
 
         point4 = left_square2.get_bottom() + 1.8 * UNIT * LEFT
         point5 = right_square2.get_bottom() + 1.8 * UNIT * RIGHT
 
         left_arrow_6 = Line(
             start=point4 + 0.5 * DOWN + 2.5 * RIGHT * UNIT,
-            end=point4 + 0.5 * DOWN + 1 * RIGHT * UNIT,
+            end=point4 + 0.5 * DOWN + 0.5 * LEFT * UNIT,
             color=yellow,
             buff=0,
         )
@@ -767,8 +453,8 @@ class Plane(MovingCameraScene, PrimeScene):
 
         right_arrow_6 = Line(
             start=point5 + 0.5 * DOWN + 2.5 * LEFT * UNIT,
-            end=point5 + 0.5 * DOWN + 1 * LEFT * UNIT,
-            color=yellow,
+            end=point5 + 0.5 * DOWN + 0.5 * RIGHT * UNIT,
+            color=green,
             buff=0,
         )
         right_arrow_6.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
@@ -782,20 +468,80 @@ class Plane(MovingCameraScene, PrimeScene):
             GrowFromPoint(right_arrow_6, point5 + 0.5 * DOWN + 2.5 * LEFT * UNIT),
             run_time=1,
         )
+
+        self.play(
+            left_square2.animate.shift(0.7 * UNIT * RIGHT),
+            m1_text.animate.shift(0.7 * UNIT * RIGHT),
+            right_square2.animate.shift(0.7 * UNIT * LEFT),
+            m2_text.animate.shift(0.7 * UNIT * LEFT),
+            run_time=0.5,
+        )
+
+        self.play(
+            left_square2.animate.shift(0.7 * UNIT * LEFT),
+            m1_text.animate.shift(0.7 * UNIT * LEFT),
+            right_square2.animate.shift(0.7 * UNIT * RIGHT),
+            m2_text.animate.shift(0.7 * UNIT * RIGHT),
+            run_time=0.3,
+        )
+
+        self.play(
+            left_square2.animate.shift(0.7 * UNIT * RIGHT),
+            m1_text.animate.shift(0.7 * UNIT * RIGHT),
+            right_square2.animate.shift(0.7 * UNIT * LEFT),
+            m2_text.animate.shift(0.7 * UNIT * LEFT),
+            run_time=0.2,
+        )
+
+        self.play(
+            left_square2.animate.shift(0.7 * UNIT * LEFT),
+            m1_text.animate.shift(0.7 * UNIT * LEFT),
+            right_square2.animate.shift(0.7 * UNIT * RIGHT),
+            m2_text.animate.shift(0.7 * UNIT * RIGHT),
+            run_time=0.2,
+        )
+
+        self.play(
+            left_square2.animate.shift(0.7 * UNIT * RIGHT),
+            m1_text.animate.shift(0.7 * UNIT * RIGHT),
+            right_square2.animate.shift(0.7 * UNIT * LEFT),
+            m2_text.animate.shift(0.7 * UNIT * LEFT),
+            run_time=0.2,
+        )
+
+        self.play(
+            left_square2.animate.shift(0.7 * UNIT * LEFT),
+            m1_text.animate.shift(0.7 * UNIT * LEFT),
+            right_square2.animate.shift(0.7 * UNIT * RIGHT),
+            m2_text.animate.shift(0.7 * UNIT * RIGHT),
+            run_time=0.2,
+        )
+        self.play(
+            left_square2.animate.shift(0.7 * UNIT * RIGHT),
+            m1_text.animate.shift(0.7 * UNIT * RIGHT),
+            right_square2.animate.shift(0.7 * UNIT * LEFT),
+            m2_text.animate.shift(0.7 * UNIT * LEFT),
+            run_time=0.3,
+        )
+
+        self.play(
+            left_square2.animate.shift(0.7 * UNIT * LEFT),
+            m1_text.animate.shift(0.7 * UNIT * LEFT),
+            right_square2.animate.shift(0.7 * UNIT * RIGHT),
+            m2_text.animate.shift(0.7 * UNIT * RIGHT),
+            run_time=0.5,
+        )
+
         self.play(
             left_square2.animate.shift(1 * UNIT * RIGHT),
             m1_text.animate.shift(1 * UNIT * RIGHT),
             right_square2.animate.shift(1 * UNIT * LEFT),
             m2_text.animate.shift(1 * UNIT * LEFT),
+            right_arrow_6.animate.put_start_and_end_on(point5 + 0.5 * DOWN + 2.5 * LEFT * UNIT,point5 + 0.5 * DOWN + 2.5 * LEFT * UNIT),
+            left_arrow_6.animate.put_start_and_end_on(point4 + 0.5 * DOWN + 2.5 * RIGHT * UNIT,point4 + 0.5 * DOWN + 2.5 * RIGHT * UNIT),
             run_time=1,
         )
-        self.wait(1)
-
-        # self.play(
-        #     GrowFromPoint(left_arrow_6,point4+0.5*DOWN + 3.6 * RIGHT * UNIT),
-        #     GrowFromPoint(right_arrow_6, point5+0.5*DOWN + 3.6 * LEFT * UNIT),
-        #     duration=3)
-        self.wait(1)
+        self.wait(2)
 
         self.play(
             FadeOut(
@@ -818,14 +564,13 @@ class Plane(MovingCameraScene, PrimeScene):
         point2 = left_square.get_center() + 2.5 * DOWN * UNIT
         point3 = right_square.get_center() + 2.5 * DOWN * UNIT
 
+        # DEBUG
+        # indices = index_labels(col_text[0])
+        # indices.move_to(col_text.get_center())
+        # self.add(indices)
+
         col_text.move_to(col_textA[0].get_center())
         self.play(FadeIn(system), FadeIn(com), FadeIn(col_text))
-
-        self.play(
-            col_text[0][33].animate.set_color(yellow),
-            col_text[0][36].animate.set_color(yellow),
-            col_text[0][34:36].animate.set_color(green),
-        )
 
         left_arrow_3 = Line(start=point1, end=point1 + LEFT, color=green, buff=0)
         left_arrow_3.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
@@ -842,28 +587,151 @@ class Plane(MovingCameraScene, PrimeScene):
         right_arrow_4.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
         self.play(
-            AnimationGroup(
-                left_square.animate.shift(0.5 * UNIT * RIGHT),
-                right_square.animate.shift(0.5 * UNIT * RIGHT),
-                center_square.animate.shift(1 * UNIT * LEFT),
-                run_time=1.3,
-            ),
-            GrowFromPoint(left_arrow_3, point1),
-            GrowFromPoint(right_arrow_3, point3),
-            GrowFromPoint(left_arrow_4, point1 + 1.1 * LEFT),
-            GrowFromPoint(right_arrow_4, point2),
+            col_text[0][34].animate.set_color(yellow),
         )
 
-        self.wait(1)
+
+        
+
         self.play(
-            AnimationGroup(
-                left_square.animate.shift(0.5 * UNIT * LEFT),
-                right_square.animate.shift(0.5 * UNIT * LEFT),
-                center_square.animate.shift(1 * UNIT * RIGHT),
-                run_time=1.3,
-            ),
+            GrowFromPoint(right_arrow_4, point2),
+            left_square.animate.shift(0.5 * UNIT * RIGHT),
         )
-        # DEBUG
-        # indices = index_labels(col_text[0])
-        # self.add(indices)
-        self.wait(2)
+
+        self.play(
+            left_square.animate.shift(0.5 * UNIT * LEFT),
+            run_time=0.5
+        )
+        self.play(
+            left_square.animate.shift(0.5 * UNIT * RIGHT),
+            run_time=0.3
+        )
+        self.play(
+            left_square.animate.shift(0.5 * UNIT * LEFT),
+            run_time=0.2
+        )
+        self.play(
+            left_square.animate.shift(0.5 * UNIT * RIGHT),
+            run_time=0.2
+        )
+        self.play(
+            left_square.animate.shift(0.5 * UNIT * LEFT),
+            run_time=0.2
+        )
+        self.play(
+            left_square.animate.shift(0.5 * UNIT * RIGHT),
+            run_time=0.2
+        )
+        self.play(
+            left_square.animate.shift(0.5 * UNIT * LEFT),
+            run_time=0.3
+        )
+        self.play(
+            left_square.animate.shift(0.5 * UNIT * RIGHT),
+            run_time=0.5
+        )
+
+        self.play(                
+            left_square.animate.shift(0.5 * UNIT * LEFT),
+            right_arrow_4.animate.put_start_and_end_on(point2, point2),
+        )
+
+        self.play(LaggedStart(
+            col_text[0][34].animate.set_color(dark_blue),
+            col_text[0][35:37].animate.set_color(green),lag_ratio=0.3)
+        )
+
+        self.play(
+            center_square.animate.shift(1 * UNIT * LEFT),
+            GrowFromPoint(left_arrow_3, point1),
+            GrowFromPoint(left_arrow_4, point1 + 1.1 * LEFT),
+        )
+
+        self.play(
+            center_square.animate.shift(0.5*UNIT * RIGHT),
+            run_time=0.5
+        )
+        self.play(
+            center_square.animate.shift(0.5*UNIT * LEFT),
+            run_time=0.3
+        )
+        self.play(
+            center_square.animate.shift(0.5*UNIT * RIGHT),
+            run_time=0.2
+        )
+        self.play(
+            center_square.animate.shift(0.5*UNIT * LEFT),
+            run_time=0.2
+        )
+        self.play(
+            center_square.animate.shift(0.5*UNIT * RIGHT),
+            run_time=0.2
+        )
+        self.play(
+            center_square.animate.shift(0.5*UNIT * LEFT),
+            run_time=0.2
+        )
+        self.play(
+            center_square.animate.shift(0.5*UNIT * RIGHT),
+            run_time=0.3
+        )
+        self.play(
+            center_square.animate.shift(0.5*UNIT * LEFT),
+            run_time=0.5
+        )
+
+        self.play(
+            left_arrow_3.animate.put_start_and_end_on(point1, point1),
+            left_arrow_4.animate.put_start_and_end_on(point1 + 1.1 * LEFT, point1 + 1.1 * LEFT),
+            center_square.animate.shift(1 * UNIT * RIGHT),
+        )
+
+
+        self.play(LaggedStart(
+            col_text[0][35:37].animate.set_color(dark_blue),
+            col_text[0][37].animate.set_color(yellow),lag_ratio=0.3)
+        )
+
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * RIGHT),
+            GrowFromPoint(right_arrow_3, point3),
+        )
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * LEFT),
+            run_time=0.5,
+        )
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * RIGHT),
+            run_time=0.3,
+        )
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * LEFT),
+            run_time=0.2,
+        )
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * RIGHT),
+            run_time=0.2,
+        )
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * LEFT),
+            run_time=0.2,
+        )
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * RIGHT),
+            run_time=0.2,
+        )
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * LEFT),
+            run_time=0.3,
+        )
+        self.play(
+            right_square.animate.shift(0.5 * UNIT * RIGHT),
+            run_time=0.5,
+        )
+
+
+        self.play(
+            right_arrow_3.animate.put_start_and_end_on(point3, point3),
+            right_square.animate.shift(0.5 * UNIT * LEFT),
+        )
+
