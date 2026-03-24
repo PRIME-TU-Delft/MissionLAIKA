@@ -97,6 +97,15 @@ class Plane(MovingCameraScene, PrimeScene):
         )
 
         # nul A
+        recap_A = MathTex(
+            r"""{\renewcommand{\arraystretch}{1.45}
+            M \mathbf{x}'' = kA \mathbf{x}""",
+            color=dark_blue,
+            font_size=50,
+        )
+
+        recap_A[0].shift(recap_A[0][0].get_bottom()[1] * DOWN)
+
         matrix_a_2 = MathTex(
             r"""{\renewcommand{\arraystretch}{1.45}
             \text{Computing } \operatorname{Nul} A:  \left[\begin{array}{ccc|c}
@@ -171,8 +180,11 @@ class Plane(MovingCameraScene, PrimeScene):
         self.wait()
 
         # add nul A
-        self.play(Write(matrix_a_2.shift(2 * UNIT * DOWN), run_time=3))
-        self.wait(1)
+        self.play(Write(recap_A.shift(2 * UNIT * DOWN)))
+        self.wait(2)
+        matrix_a_2.shift(20 * UNIT * RIGHT + 2 * UNIT * DOWN)
+        self.play(matrix_a_2.animate.shift(20* LEFT * UNIT), recap_A.animate.shift(20*UNIT*LEFT))
+        self.wait(2)
 
         # shift nul A and add x equations
         self.add(x_eq1.shift(20 * RIGHT * UNIT + 2 * DOWN * UNIT))
@@ -180,6 +192,7 @@ class Plane(MovingCameraScene, PrimeScene):
             matrix_a_2.animate.shift(20 * LEFT * UNIT),
             x_eq1.animate.shift(20 * LEFT * UNIT),
         )
+        self.remove(recap_A)
         self.wait(1)
         self.play(x_eq1[0][37:40].animate.set_color(yellow))
         self.wait(1)
@@ -216,6 +229,12 @@ class Plane(MovingCameraScene, PrimeScene):
 
         self.wait(2)
 
+        self.play(system.animate.shift(0.9 * LEFT * UNIT), run_time=2)
+        self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
+        self.play(system.animate.shift(0.9 * LEFT * UNIT), run_time=2)
+        self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
+
+
         self.play(
             system.animate.shift(0.9 * LEFT * UNIT),
             run_time=2,
@@ -235,10 +254,10 @@ class Plane(MovingCameraScene, PrimeScene):
         col_text = MathTex(
             r"""
             {\renewcommand{\arraystretch}{1.45}
-            \operatorname{Col} A = \operatorname{span} \left( \begin{bmatrix}
-             -1 \\ 1 \\ 0 \end{bmatrix}
+            \operatorname{Col} A = \operatorname{Span} \Biggl\{ \begin{bmatrix}
+             -1 \\ 1 \\ 0 \end{bmatrix},
             \begin{bmatrix}
-             0 \\ -1 \\ 1 \end{bmatrix} \right)
+             0 \\ 1 \\ -1 \end{bmatrix} \Biggr\}
              """,
             font_size=40,
             color=dark_blue,
@@ -286,9 +305,9 @@ class Plane(MovingCameraScene, PrimeScene):
         col_textA = MathTex(
             r"""
             {\renewcommand{\arraystretch}{1.45}
-            \operatorname{Col} A = \operatorname{span} \left( \begin{bmatrix}
+            \operatorname{Col} A = \operatorname{Span} \Biggl\{ \begin{bmatrix}
              -1 \\ 1 \end{bmatrix}
-            \right)
+            \Biggr\}
              """,
             font_size=50,
             color=dark_blue,
@@ -297,7 +316,7 @@ class Plane(MovingCameraScene, PrimeScene):
         col_textA[0].shift(col_textA[0][0].get_bottom()[1] * DOWN)
 
         # DEBUG
-        # indices = index_labels(col_calc[0])
+        # indices = index_labels(col_textA[0])
         # self.add(col_calc, indices)
 
         self.play(Write(col_calc))
@@ -385,16 +404,15 @@ class Plane(MovingCameraScene, PrimeScene):
         self.wait(1)
 
         self.play(system2.animate.shift(2.5 * UP * UNIT))
-
-        # a_matrix.move_to(system2.get_bottom() +  2.5*DOWN)
         self.play(Write(a_matrix.shift(2 * DOWN * UNIT)))
         self.wait(1)
 
         col_textA.shift(2 * DOWN * UNIT)
+        col_textA.shift(4 * RIGHT * UNIT)
         self.play(a_matrix.animate.scale(0.8))
         self.play(
             a_matrix.animate.shift(4 * LEFT * UNIT),
-            col_textA.animate.shift(4 * RIGHT * UNIT),
+            Write(col_textA),
         )
         self.wait(1)
 
@@ -405,8 +423,8 @@ class Plane(MovingCameraScene, PrimeScene):
         # self.wait(2)
 
         self.play(
-            col_textA[0][13:15].animate.set_color(yellow),
-            col_textA[0][15:16].animate.set_color(green),
+            col_textA[0][12:14].animate.set_color(yellow),
+            col_textA[0][14].animate.set_color(green),
         )
 
         point4 = left_square2.get_bottom() + 1.8 * UNIT * LEFT
@@ -429,10 +447,6 @@ class Plane(MovingCameraScene, PrimeScene):
         right_arrow_6.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
         self.play(
-            # left_square2.animate.shift(1 * UNIT * LEFT),
-            # m1_text.animate.shift(1 * UNIT * LEFT),
-            # right_square2.animate.shift(1 * UNIT * RIGHT),
-            # m2_text.animate.shift(1 * UNIT * RIGHT),
             GrowFromPoint(left_arrow_6, point4 + 0.5 * DOWN + 3.3 * RIGHT * UNIT),
             GrowFromPoint(right_arrow_6, point5 + 0.5 * DOWN + 3.3 * LEFT * UNIT),
             run_time=1,
@@ -532,110 +546,31 @@ class Plane(MovingCameraScene, PrimeScene):
         left_arrow_3 = Line(start=point1, end=point1 + RIGHT, color=yellow, buff=0)
         left_arrow_3.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
-        left_arrow_4 = Line(start=point1, end=point1 + 1 * LEFT, color=green, buff=0)
+        left_arrow_4 = Line(start=point1, end=point1 + 1 * RIGHT, color=green, buff=0)
         left_arrow_4.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
-        right_arrow_3 = Line(start=point3, end=point3 + RIGHT, color=yellow, buff=0)
+        right_arrow_3 = Line(start=point3, end=point3 + LEFT, color=yellow, buff=0)
         right_arrow_3.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
         right_arrow_4 = Line(start=point2, end=point2 + 1 * LEFT, color=green, buff=0)
         right_arrow_4.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
-        # self.play(
-        #     col_text[0][19:21].animate.set_color(green),
-        # )
-
-        # self.play(GrowFromPoint(right_arrow_4, point2), run_time=1)
-
-        # left_eq = left_square.get_center()
-
-        # direction = LEFT
-
-        # # --- Time Tracker ---
-        # time_tracker = ValueTracker(0)
-        # dummy = Mobject()
-        # dummy.add_updater(lambda m, dt: time_tracker.increment_value(dt))
-        # self.add(dummy)
-
-        # left_square.add_updater(
-        #     lambda m: m.move_to(
-        #         left_eq + direction * (0.5 * np.sin((PI) * time_tracker.get_value()))
-        #     )
-        # )
-
-        # self.wait(4)
-
-        # left_square.clear_updaters()
-        # center_square.clear_updaters()
-        # right_square.clear_updaters()
-        # dummy.clear_updaters()
-
-        # self.play(
-        #     right_arrow_4.animate.put_start_and_end_on(point2, point2), run_time=1
-        # )
-
-        # self.play(
-        #     LaggedStart(
-        #         col_text[0][19:21].animate.set_color(dark_blue),
-        #         col_text[0][21].animate.set_color(yellow),
-        #         lag_ratio=0.3,
-        #     )
-        # )
-
-        # self.play(
-        #     GrowFromPoint(left_arrow_3, point1),
-        #     # GrowFromPoint(left_arrow_4, point1 + 1.1 * LEFT),
-        #     run_time=1,
-        # )
-
-        # center_eq = center_square.get_center()
-
-        # direction = RIGHT
-
-        # # --- Time Tracker ---
-        # time_tracker = ValueTracker(0)
-        # dummy = Mobject()
-        # dummy.add_updater(lambda m, dt: time_tracker.increment_value(dt))
-        # self.add(dummy)
-
-        # center_square.add_updater(
-        #     lambda m: m.move_to(
-        #         center_eq + direction * (0.5 * np.sin((PI) * time_tracker.get_value()))
-        #     )
-        # )
-
-        # self.wait(4)
-
-        # left_square.clear_updaters()
-        # center_square.clear_updaters()
-        # right_square.clear_updaters()
-        # dummy.clear_updaters()
-
-        # self.play(
-        #     left_arrow_3.animate.put_start_and_end_on(point1, point1),
-        #     # left_arrow_4.animate.put_start_and_end_on(
-        #     #     point1 + 1.1 * LEFT, point1 + 1.1 * LEFT
-        #     # ),
-        #     run_time=1,
-        # )
-
         self.play(
             LaggedStart(
                 col_text[0][21].animate.set_color(dark_blue),
-                col_text[0][34:36].animate.set_color(green),
+                col_text[0][31].animate.set_color(green),
                 lag_ratio=0.3,
             )
         )
 
         self.play(
             GrowFromPoint(left_arrow_4, point1),
-            # GrowFromPoint(left_arrow_4, point1 + 1.1 * LEFT),
             run_time=1,
         )
 
         center_eq = center_square.get_center()
 
-        direction = LEFT
+        direction = RIGHT
 
         # --- Time Tracker ---
         time_tracker = ValueTracker(0)
@@ -658,16 +593,13 @@ class Plane(MovingCameraScene, PrimeScene):
 
         self.play(
             left_arrow_4.animate.put_start_and_end_on(point1, point1),
-            # left_arrow_4.animate.put_start_and_end_on(
-            #     point1 + 1.1 * LEFT, point1 + 1.1 * LEFT
-            # ),
             run_time=1,
         )
 
         self.play(
             LaggedStart(
-                col_text[0][34:46].animate.set_color(dark_blue),
-                col_text[0][36].animate.set_color(yellow),
+                col_text[0][31].animate.set_color(dark_blue),
+                col_text[0][32:34].animate.set_color(yellow),
                 lag_ratio=0.3,
             )
         )
@@ -676,7 +608,7 @@ class Plane(MovingCameraScene, PrimeScene):
 
         right_eq = right_square.get_center()
 
-        direction = RIGHT
+        direction = LEFT
 
         # --- Time Tracker ---
         time_tracker = ValueTracker(0)
@@ -700,44 +632,3 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(
             right_arrow_3.animate.put_start_and_end_on(point3, point3), run_time=1
         )
-
-        # time_tracker.set_value(0)
-
-        # time_tracker = ValueTracker(0)
-        # dummy = Mobject()
-        # dummy.add_updater(lambda m, dt: time_tracker.increment_value(dt))
-        # self.add(dummy)
-        # direction = RIGHT
-
-        # left_square.add_updater(
-        #     lambda m: m.move_to(
-        #         left_eq +  direction * (
-        #                0.3 * np.sin((PI) * time_tracker.get_value())
-        #         )
-        #     )
-        # )
-
-        # right_square.add_updater(
-        #     lambda m: m.move_to(
-        #         right_eq + direction * (
-        #                0.3 * np.sin((PI) * time_tracker.get_value())
-        #         )
-        #     )
-        # )
-
-        # direction=LEFT
-
-        # center_square.add_updater(
-        #     lambda m: m.move_to(
-        #         center_eq + direction * (
-        #                0.6 * np.sin((PI) * time_tracker.get_value())
-        #         )
-        #     )
-        # )
-
-        # self.wait(4)
-
-        # left_square.clear_updaters()
-        # center_square.clear_updaters()
-        # right_square.clear_updaters()
-        # dummy.clear_updaters()
