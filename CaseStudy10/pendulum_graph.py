@@ -31,17 +31,27 @@ def pendulum_graph(scene):
     T = 2 * PI / w
 
     # damped angular freq
-    wd = np.sqrt(max(w**2 - (b / 2) ** 2, 0))
+
+    alpha = b / 2
+    wd = np.sqrt(max(w**2 - alpha**2, 0))
 
     def theta_func(t):
-        return theta_max * np.exp(-b * t / 2) * np.sin(wd * t)
+        return theta_max * np.exp(-alpha * t) * (
+            np.cos(wd * t) + (alpha / wd) * np.sin(wd * t)
+        )
 
     def theta_dot_func(t):
-        return (
-            theta_max
-            * np.exp(-b * t / 2)
-            * (wd * np.cos(wd * t) - (b / 2) * np.sin(wd * t))
-        )
+        return -theta_max * (w**2 / wd) * np.exp(-alpha * t) * np.sin(wd * t)
+
+    # def theta_func(t):
+    #     return theta_max * np.exp(-b * t / 2) * np.sin(wd * t)
+
+    # def theta_dot_func(t):
+    #     return (
+    #         theta_max
+    #         * np.exp(-b * t / 2)
+    #         * (wd * np.cos(wd * t) - (b / 2) * np.sin(wd * t))
+    #     )
 
     # shift pendulum placement
     p_x = 3
@@ -107,11 +117,20 @@ def pendulum_graph(scene):
         theta_dot_label.next_to(phase_axes, UP, buff=0.1),
     )
 
+    # phase_point = always_redraw(
+    #     lambda: Dot(color=yellow).move_to(
+    #         phase_axes.c2p(
+    #             theta_func(time.get_value()), theta_dot_func(time.get_value())
+    #         )
+    #     )
+    # )
+
+    v_scale = 0.6  # smaller = wider-looking ellipse
+
     phase_point = always_redraw(
         lambda: Dot(color=yellow).move_to(
-            phase_axes.c2p(
-                theta_func(time.get_value()), theta_dot_func(time.get_value())
-            )
+            phase_axes.c2p(theta_func(time.get_value()),
+                        theta_dot_func(time.get_value()) * v_scale)
         )
     )
 

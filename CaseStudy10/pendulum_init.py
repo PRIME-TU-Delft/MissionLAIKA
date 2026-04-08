@@ -270,8 +270,8 @@ def pendulum_init(scene):
     self.wait(1)
 
     # tension arrow
-    tension_arrow_start = ball.get_bottom()
-    tension_arrow_end = ball.get_bottom() + 0.5 * DOWN * UNIT + 1.4 * LEFT * UNIT
+    tension_arrow_start = ball.get_center()
+    tension_arrow_end = ball.get_center() + 0.5 * DOWN * UNIT + 1.4 * LEFT * UNIT
     tension_arrow = Line(
         start=tension_arrow_start, end=tension_arrow_end, color=red, buff=0
     )
@@ -291,7 +291,7 @@ def pendulum_init(scene):
     self.add(tension_arrow)
 
     self.play(
-        GrowFromPoint(tension_arrow, ball.get_bottom()), Write(tension_arrow_label)
+        GrowFromPoint(tension_arrow, ball.get_center()), Write(tension_arrow_label)
     )
 
     self.wait(1)
@@ -299,7 +299,7 @@ def pendulum_init(scene):
     # write triangle
     theta_now = theta.get_value()
 
-    A = gravity_arrow_start
+    A = ball.get_center()
     B = gravity_arrow_end
     H = np.linalg.norm(B - A)
 
