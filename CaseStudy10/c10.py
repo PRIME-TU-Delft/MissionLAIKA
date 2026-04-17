@@ -3,6 +3,7 @@ import pendulum_graph_no_fric
 import pendulum_graph
 import pendulum_init
 import pendulum_formula
+import pendulum_double_pane
 from primescene import *
 
 config.background_color = ManimColor("#FFFFFF")
@@ -31,7 +32,8 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(Write(grid))
         self.wait(1)
 
-        pendulum_init.pendulum_init(self)
-        pendulum_graph.pendulum_graph(self)
+        # pendulum_init.pendulum_init(self)
+        # pendulum_graph.pendulum_graph(self)
         pendulum_graph_no_fric.pendulum_graph_no_fric(self)
         pendulum_formula.pendulum_formula(self)
+        pendulum_double_pane.pendulum_double_pane(self)

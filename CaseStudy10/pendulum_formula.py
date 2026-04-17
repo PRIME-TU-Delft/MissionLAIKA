@@ -127,3 +127,6 @@ def pendulum_formula(scene):
 
     self.wait(1)
 
+    self.play(FadeOut(plus),FadeOut(bar),FadeOut(friction_addition),FadeOut(friction_addition),
+             FadeOut(theta_formula2), FadeOut(theta_label), FadeOut(friction_formula_squared))
+

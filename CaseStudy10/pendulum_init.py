@@ -496,8 +496,10 @@ def pendulum_init(scene):
         DOWN * UNIT
     )
 
-    self.play(ReplacementTransform(theta_eqs, theta_matrix_calc))
-    self.wait(0.5)
+    # self.play(ReplacementTransform(theta_eqs, theta_matrix_calc))
+    self.play(FadeOut(theta_eqs))
+    self.play(Write(theta_matrix_calc))
+    self.wait(1)
     self.play(FadeIn(underbrace))
     self.wait(0.5)
 
