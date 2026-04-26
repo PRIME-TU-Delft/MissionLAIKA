@@ -487,20 +487,28 @@ def pendulum_init(scene):
     ).shift(3 * UP * UNIT)
 
     underbrace = MathTex(
-        r"\underbrace{\qquad\qquad}_{\text{}}",
+        r"\overbrace{\qquad\qquad}_{\text{}}",
         color=dark_blue,
         font_size=40,
     )
 
     underbrace.move_to(theta_matrix_calc[0][7], aligned_edge=LEFT).shift(
-        DOWN * UNIT
+        UP * UNIT
     )
+
+    a_label = MathTex(
+        r"A",
+        color=dark_blue,
+        font_size=40,
+    )
+    
+    a_label.move_to(underbrace,aligned_edge=UP).shift(0.5 * UP * UNIT)
 
     # self.play(ReplacementTransform(theta_eqs, theta_matrix_calc))
     self.play(FadeOut(theta_eqs))
     self.play(Write(theta_matrix_calc))
     self.wait(1)
-    self.play(FadeIn(underbrace))
+    self.play(FadeIn(underbrace),FadeIn(a_label))
     self.wait(0.5)
 
     # DEBUG
@@ -513,24 +521,22 @@ def pendulum_init(scene):
     A_calc = (
         MathTex(
             r"""{\renewcommand{\arraystretch}{1.45}
-        \text{A: } \lambda = -\frac{b}{2} 
+        \text{Eigenvalues of A: } \lambda = -\frac{b}{2} 
         \pm i \sqrt{\frac{g}{L}-\frac{b^2}{4}}""",
             color=dark_blue,
             font_size=40,
         )
-        .move_to(underbrace, aligned_edge=LEFT)
-        .shift(1 * UNIT * DOWN)
-    )
+    ).shift(1 * UNIT * UP)
 
     A_calc2 = (
         MathTex(
             r"""{\renewcommand{\arraystretch}{1.45}
-        = -\frac{b^2}{2}} \pm is""",
+        = -\frac{b}{2}} \pm is""",
             color=dark_blue,
             font_size=40,
         )
         .move_to(A_calc[0][8], aligned_edge=LEFT)
-        .shift(1.5 * UNIT * DOWN + 1.59 * LEFT * UNIT)
+        .shift(1.5 * UNIT * DOWN + 2.8 * RIGHT * UNIT)
     )
 
     self.play(Write(A_calc))
@@ -551,7 +557,7 @@ def pendulum_init(scene):
 
     theta_d_formula = MathTex(
         r"""{\renewcommand{\arraystretch}{1.45}
-        \theta ' = e^{-\frac{b}{2}t} (- C_1 \sin(st)+C_2 s \cos(st) - \frac{b}{2}C_1 \cos(st) - \frac{b}{2} C_2 \sin(st))""",
+        \theta ' = e^{-\frac{b}{2}t} (- C_1 s \sin(st)+C_2 s \cos(st) - \frac{b}{2}C_1 \cos(st) - \frac{b}{2} C_2 \sin(st))""",
         color=dark_blue,
         font_size=40,
     ).shift(3.5 * UNIT * DOWN)
@@ -568,5 +574,6 @@ def pendulum_init(scene):
         FadeOut(A_calc),
         FadeOut(A_calc2),
         FadeOut(underbrace),
+        FadeOut(a_label),
         FadeOut(theta_matrix_calc),
     )

@@ -31,7 +31,6 @@ def pendulum_graph(scene):
     T = 2 * PI / w
 
     # damped angular freq
-
     alpha = b / 2
     wd = np.sqrt(max(w**2 - alpha**2, 0))
 
@@ -80,7 +79,7 @@ def pendulum_graph(scene):
 
     # background theta calculation
     theta = DecimalNumber().set_color(dark_blue).move_to(10 * RIGHT)
-    theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
+    theta.set_value(0)
     self.add(theta)
 
     phase_axes = (
@@ -104,11 +103,6 @@ def pendulum_graph(scene):
         .shift(UP * 0.2)
     )
 
-    # phase_labels = phase_axes.get_axis_labels(
-    #     MathTex(r"\theta", color=dark_blue),
-    #     MathTex(r"\theta'", color=dark_blue),
-    # )
-
     theta_label = MathTex(r"\theta", color=dark_blue)
     theta_dot_label = MathTex(r"\theta'", color=dark_blue)
 
@@ -117,20 +111,14 @@ def pendulum_graph(scene):
         theta_dot_label.next_to(phase_axes, UP, buff=0.1),
     )
 
-    # phase_point = always_redraw(
-    #     lambda: Dot(color=yellow).move_to(
-    #         phase_axes.c2p(
-    #             theta_func(time.get_value()), theta_dot_func(time.get_value())
-    #         )
-    #     )
-    # )
-
     v_scale = 0.6  # smaller = wider-looking ellipse
 
     phase_point = always_redraw(
         lambda: Dot(color=yellow).move_to(
-            phase_axes.c2p(theta_func(time.get_value()),
-                        theta_dot_func(time.get_value()) * v_scale)
+            phase_axes.c2p(
+                theta_func(time.get_value()),
+                theta_dot_func(time.get_value()) * v_scale,
+            )
         )
     )
 
@@ -175,7 +163,6 @@ def pendulum_graph(scene):
         lambda: get_ball(l * np.sin(theta.get_value()), -l * np.cos(theta.get_value()))
     )
 
-
     self.wait(1)
     # add pendulum
     self.play(
@@ -189,6 +176,21 @@ def pendulum_graph(scene):
         Write(phase_labels),
     )
     self.wait(1)
+
+    prep_theta = ValueTracker(0)
+
+    theta.clear_updaters()
+    theta.add_updater(lambda m: m.set_value(prep_theta.get_value()))
+
+    self.play(
+        prep_theta.animate.set_value(theta_max),
+        run_time=1.2,
+        rate_func=smooth,
+    )
+
+    time.set_value(0)
+    theta.clear_updaters()
+    theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
 
     self.add(phase_trace, phase_point)
     self.play(time.animate.set_value(8 * T), rate_func=linear, run_time=8 * T)

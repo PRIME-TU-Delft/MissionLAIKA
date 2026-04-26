@@ -21,7 +21,7 @@ def pendulum_formula(scene):
         r"""{\renewcommand{\arraystretch}{1.45}
         \begin{cases}
         \theta = e^{-\frac{b}{2}t} ( C_1 \cos(st)+ C_2 \sin(st)) \\
-        \theta ' = e^{-\frac{b}{2}t} (- C_1 \sin(st)+C_2 s \cos(st) - \frac{b}{2}C_1 \cos(st) - \frac{b}{2} C_2 \sin(st))
+        \theta ' = e^{-\frac{b}{2}t} (- C_1 s \sin(st)+C_2 s \cos(st) - \frac{b}{2}C_1 \cos(st) - \frac{b}{2} C_2 \sin(st))
         \end{cases}
         """,
         color=dark_blue,
@@ -85,7 +85,7 @@ def pendulum_formula(scene):
         r"""{\renewcommand{\arraystretch}{1.15}
         \begin{cases}
         (s\theta)^2 = e^{-bt}(C_1^2s^2 \cos(st)^2+C_2^2s^2\sin(st)^2+2C_1C_2s^2\cos(st)\sin(st)) \\
-        (\theta' + \frac{b}{2}\theta)^2 = e^{-bt}(C_1^2s^2\sin(st)^2+C_2^2s^2\cos(st)^2-2C_1C_2s^2\cos(st\sin(st)))
+        (\theta' + \frac{b}{2}\theta)^2 = e^{-bt}(C_1^2s^2\sin(st)^2+C_2^2s^2\cos(st)^2-2C_1C_2s^2\cos(st)\sin(st))
         \end{cases}
         """,
         color=dark_blue,

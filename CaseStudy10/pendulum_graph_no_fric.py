@@ -181,9 +181,8 @@ def pendulum_graph_no_fric(scene):
     theta_ref = 45 / 180 * PI
     theta_max_tracker = ValueTracker(15 * PI / 180)
 
-
-    theta_max = 15/ 180 * PI
-    scale = theta_max/theta_ref
+    theta_max = 15 / 180 * PI
+    scale = theta_max / theta_ref
 
     # length of pendulum
     l = 3
@@ -201,7 +200,6 @@ def pendulum_graph_no_fric(scene):
     T = 2 * PI / w
 
     # damped angular freq
-
     alpha = b / 2
     wd = np.sqrt(max(w**2 - alpha**2, 0))
 
@@ -240,7 +238,7 @@ def pendulum_graph_no_fric(scene):
 
     # background theta calculation
     theta = DecimalNumber().set_color(dark_blue).move_to(10 * RIGHT)
-    theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
+    theta.set_value(0)
     self.add(theta)
 
     phase_axes = (
@@ -281,11 +279,12 @@ def pendulum_graph_no_fric(scene):
 
     phase_point = always_redraw(
         lambda: Dot(color=yellow).move_to(
-            phase_axes.c2p(scale *theta_func(time.get_value()),
-                        scale * theta_dot_func(time.get_value()) * v_scale)
+            phase_axes.c2p(
+                scale * theta_func(time.get_value()),
+                scale * theta_dot_func(time.get_value()) * v_scale,
+            )
         )
     )
-
 
     phase_trace = TracedPath(
         phase_point.get_center,
@@ -329,7 +328,6 @@ def pendulum_graph_no_fric(scene):
     )
 
     self.wait(1)
-
     # add pendulum
     self.play(
         LaggedStart(
@@ -343,19 +341,19 @@ def pendulum_graph_no_fric(scene):
     )
     self.wait(1)
 
-    no_friction_text = (
-        MathTex(
-            r"""{\renewcommand{\arraystretch}{1.45}
-        \text{No friction: }
-        """,
-            color=dark_blue,
-            font_size=40,
-        )
-        .move_to(phase_axes, DOWN)
-        .shift(1 * DOWN * UNIT)
+    prep_theta = ValueTracker(0)
+
+    theta.clear_updaters()
+    theta.add_updater(lambda m: m.set_value(prep_theta.get_value()))
+
+    self.play(
+        prep_theta.animate.set_value(theta_max_tracker.get_value()),
+        run_time=1.2,
+        rate_func=smooth,
     )
 
-    self.play(Write(no_friction_text))
+    theta.clear_updaters()
+    theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
 
     self.add(phase_trace, phase_point)
     self.play(time.animate.set_value(3 * T), rate_func=linear, run_time=3 * T)
@@ -376,8 +374,8 @@ def pendulum_graph_no_fric(scene):
     self.remove(phase_point)
     self.wait(1)
 
-        # after the first motion finishes
-    end_theta = theta_max_tracker.get_value()   # should be 15*pi/180
+    # after the first motion finishes
+    end_theta = theta_max_tracker.get_value() 
 
     prep_theta = ValueTracker(end_theta)
 
@@ -390,8 +388,8 @@ def pendulum_graph_no_fric(scene):
             Line(
                 start=ORIGIN + shift_req,
                 end=ORIGIN + shift_req
-                    + l * np.sin(prep_theta.get_value()) * RIGHT
-                    - l * np.cos(prep_theta.get_value()) * UP,
+                + l * np.sin(prep_theta.get_value()) * RIGHT
+                - l * np.cos(prep_theta.get_value()) * UP,
                 color=dark_blue,
             )
         )
@@ -432,8 +430,8 @@ def pendulum_graph_no_fric(scene):
             Line(
                 start=ORIGIN + shift_req,
                 end=ORIGIN + shift_req
-                    + l * np.sin(theta_func_2(time2.get_value())) * RIGHT
-                    - l * np.cos(theta_func_2(time2.get_value())) * UP,
+                + l * np.sin(theta_func_2(time2.get_value())) * RIGHT
+                - l * np.cos(theta_func_2(time2.get_value())) * UP,
                 color=dark_blue,
             )
         )
@@ -449,8 +447,6 @@ def pendulum_graph_no_fric(scene):
             .scale(l)
         )
     )
-
-
 
     theta_max = 45 / 180 * PI
 
@@ -470,7 +466,6 @@ def pendulum_graph_no_fric(scene):
     T = 2 * PI / w
 
     # damped angular freq
-
     alpha = b / 2
     wd = np.sqrt(max(w**2 - alpha**2, 0))
 
@@ -481,14 +476,15 @@ def pendulum_graph_no_fric(scene):
 
     def theta_dot_func_2(t):
         return -theta_max * (w**2 / wd) * np.exp(-alpha * t) * np.sin(wd * t)
-    
+
     phase_point2 = always_redraw(
         lambda: Dot(color=yellow).move_to(
-            phase_axes.c2p(0.33 *theta_func_2(time2.get_value()),
-                        0.33 *theta_dot_func_2(time2.get_value()) * v_scale)
+            phase_axes.c2p(
+                0.33 * theta_func_2(time2.get_value()),
+                0.33 * theta_dot_func_2(time2.get_value()) * v_scale,
+            )
         )
     )
-
 
     phase_trace2 = TracedPath(
         phase_point2.get_center,
@@ -498,11 +494,11 @@ def pendulum_graph_no_fric(scene):
 
     self.add(phase_trace2, phase_point2)
     self.play(time2.animate.set_value(3 * T), rate_func=linear, run_time=3 * T)
-    
+
     frozen_ellipse2 = ParametricFunction(
         lambda u: phase_axes.c2p(
             0.33 * theta_max * np.cos(u),
-            0.33 * - theta_max * w * np.sin(u) * v_scale,
+            0.33 * -theta_max * w * np.sin(u) * v_scale,
         ),
         t_range=[0, TAU],
         color=yellow,
@@ -512,7 +508,6 @@ def pendulum_graph_no_fric(scene):
     self.remove(phase_point2)
 
     # self.wait(1)
-
 
     line.clear_updaters()
     ball.clear_updaters()
@@ -528,7 +523,7 @@ def pendulum_graph_no_fric(scene):
         FadeOut(phase_point2),
         FadeOut(phase_trace2),
         FadeOut(friction_addition),
-        FadeOut(no_friction_text),
+        # FadeOut(no_friction_text),
         FadeOut(frozen_ellipse),
         FadeOut(frozen_ellipse2),
         FadeOut(phase_trace_frozen)
