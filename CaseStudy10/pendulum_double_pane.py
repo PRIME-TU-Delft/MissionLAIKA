@@ -71,7 +71,7 @@ def pendulum_double_pane(scene):
             tips=False,
         )
         .to_edge(LEFT)
-        .shift(UP * 0.2+0.3*LEFT*UNIT)
+        .shift(0.3*LEFT*UNIT)
     )
 
 
@@ -103,12 +103,12 @@ def pendulum_double_pane(scene):
             "include_numbers": True,
         },
         tips=False,
-    ).next_to(phase_axes, RIGHT).shift(LEFT * 5.5 * UNIT)
+    ).next_to(phase_axes, RIGHT).shift(LEFT * 5.25 * UNIT)
 
     time_labels = time_axes.get_axis_labels(
         MathTex(r"t", color=dark_blue),
         MathTex(r"", color=yellow),
-    ).shift(1*LEFT*UNIT+0.5*DOWN*UNIT)
+    ).shift(1.75*LEFT*UNIT+0.5*DOWN*UNIT)
 
     theta_time_dot = always_redraw(
         lambda: Dot(color=theta_color).move_to(

@@ -100,7 +100,7 @@ def pendulum_graph(scene):
             tips=False,
         )
         .to_edge(LEFT)
-        .shift(UP * 0.2)
+        # .shift(UP * 0.2)
     )
 
     theta_label = MathTex(r"\theta", color=dark_blue)

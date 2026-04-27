@@ -188,7 +188,6 @@ def pendulum_init(scene):
     self.play(Write(line_vertical), Write(line), FadeIn(ball), FadeIn(angle))
     self.play(Write(ball_label), Write(length_label))
     self.wait(1)
-
     # add pendulum at rest
     self.play(Write(pendulum_at_rest.shift(5 * RIGHT * UNIT)))
 
@@ -242,6 +241,8 @@ def pendulum_init(scene):
         .shift(5 * LEFT * UNIT)
     )
 
+    force_gravity[0].shift(force_gravity[0][0].get_bottom()[1] * DOWN)
+    force_tension[0].shift(force_tension[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
     self.play(Write(forces_eqs))
 
     self.wait(1)
@@ -349,6 +350,9 @@ def pendulum_init(scene):
         .shift(5 * LEFT * UNIT)
     )
 
+    newton[0].shift(newton[0][0].get_bottom()[1] * DOWN + 0.1 * UP *UNIT)
+    theta_accel[0].shift(theta_accel[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
+
     self.play(ReplacementTransform(forces_eqs, newton))
     self.wait(1)
 
@@ -379,14 +383,14 @@ def pendulum_init(scene):
         font_size=40,
     ).next_to(arc_length, DOWN)
 
+    arc_length[0].shift(arc_length[0][0].get_bottom()[1] * DOWN + 3 * DOWN * UNIT)
+    arc_accel[0].shift(arc_accel[0][0].get_bottom()[1] * DOWN + 4 * DOWN * UNIT)
+
     self.play(Write(arc_length))
 
     self.wait(1)
     self.play(Write(arc_accel))
 
-    # DEBUG
-    # indices = index_labels(theta_accel[0])
-    # self.add(indices)
 
     self.wait(1)
     self.play(Write(theta_accel))
@@ -450,6 +454,11 @@ def pendulum_init(scene):
     theta_eqs = VGroup(
         theta_accel2, small_theta, theta_approx, theta_friction
     ).arrange(DOWN)
+    theta_accel2[0].shift(theta_accel2[0][0].get_bottom()[1] * DOWN + 3 * UP * UNIT)
+    small_theta[0].shift(small_theta[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
+    theta_approx[0].shift(theta_approx[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
+    theta_friction[0].shift(theta_friction[0][0].get_bottom()[1] * DOWN + 3 * DOWN * UNIT)
+
 
     self.play(theta_accel.animate.move_to(theta_accel2.get_center()))
     self.add(theta_accel2)
@@ -485,6 +494,9 @@ def pendulum_init(scene):
         color=dark_blue,
         font_size=40,
     ).shift(3 * UP * UNIT)
+
+    theta_matrix_calc[0].shift(theta_matrix_calc[0][0].get_bottom()[1] * DOWN + 2 * UP * UNIT)
+
 
     underbrace = MathTex(
         r"\overbrace{\qquad\qquad}_{\text{}}",
@@ -528,6 +540,9 @@ def pendulum_init(scene):
         )
     ).shift(1 * UNIT * UP)
 
+    A_calc[0].shift(A_calc[0][0].get_bottom()[1] * DOWN)
+
+
     A_calc2 = (
         MathTex(
             r"""{\renewcommand{\arraystretch}{1.45}
@@ -553,6 +568,9 @@ def pendulum_init(scene):
         font_size=40,
     ).shift(2 * UNIT * DOWN)
 
+    theta_formula[0].shift(theta_formula[0][0].get_bottom()[1] * DOWN + 3 * DOWN * UNIT)
+
+
     self.play(Write(theta_formula))
 
     theta_d_formula = MathTex(
@@ -561,6 +579,9 @@ def pendulum_init(scene):
         color=dark_blue,
         font_size=40,
     ).shift(3.5 * UNIT * DOWN)
+
+    theta_d_formula[0].shift(theta_d_formula[0][0].get_bottom()[1] * DOWN + 4 * DOWN * UNIT)
+
 
     self.wait(1)
 

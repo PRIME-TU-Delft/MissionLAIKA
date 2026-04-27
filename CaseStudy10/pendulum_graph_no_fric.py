@@ -5,9 +5,9 @@ def pendulum_graph_no_fric(scene):
     self = scene
     UNIT = 3 / 4
     dark_blue = ManimColor("#0C2340")
-    red = ManimColor("#E03C31")  # ManimColor('#FF5132')
-    yellow = ManimColor("#cc9316")  # ManimColor('#FFCC12')
-    blue = ManimColor("#0076C2")  # ManimColor('#46A6FF')
+    red = ManimColor("#E03C31")
+    yellow = ManimColor("#cc9316")
+    blue = ManimColor("#0076C2")
     green = ManimColor("#009B77")
 
     friction_text = MathTex(
@@ -16,80 +16,48 @@ def pendulum_graph_no_fric(scene):
         color=dark_blue,
         font_size=50,
     ).shift(3 * UNIT * UP)
-    friction_formula = MathTex(
-        r"""{\renewcommand{\arraystretch}{1.15}
-        \begin{cases}
-        \theta = C_1 \cos(st) + C_2 \sin(st) \\
-        \theta' = - C_1s \sin(st) + C_2s \cos(st)
-        \end{cases}
-        """,
+
+
+
+    # Split the formula into separate objects so only the first line transforms.
+    old_theta_line = MathTex(
+        r"\theta = C_1 \cos(st) + C_2 \sin(st)",
         color=dark_blue,
         font_size=40,
     )
 
-    friction_formula_s1 = MathTex(
-        r"""{\renewcommand{\arraystretch}{1.15}
-        \begin{cases}
-        s \theta = C_1 \cos(st) + C_2  \sin(st) \\
-        \theta' = - C_1s \sin(st) + C_2s \cos(st)
-        \end{cases}
-        """,
+    theta_dot_line = MathTex(
+        r"\theta' = - C_1s \sin(st) + C_2s \cos(st)",
         color=dark_blue,
         font_size=40,
     )
 
-    friction_formula_s2 = MathTex(
-        r"""{\renewcommand{\arraystretch}{1.15}
-        \begin{cases}
-        s \theta = C_1 s \cos(st) + C_2 \sin(st) \\
-        \theta' = - C_1s \sin(st) + C_2s \cos(st)
-        \end{cases}
-        """,
-        color=dark_blue,
-        font_size=40,
+    formula_lines = VGroup(old_theta_line, theta_dot_line).arrange(
+        DOWN, aligned_edge=LEFT, buff=0.25
     )
 
-    friction_formula_s3 = MathTex(
-        r"""{\renewcommand{\arraystretch}{1.15}
-        \begin{cases}
-        s \theta = C_1 s \cos(st) + C_2 s \sin(st) \\
-        \theta' = - C_1s \sin(st) + C_2s \cos(st)
-        \end{cases}
-        """,
+    # brace = MathTex(r"\left\{", color=dark_blue, font_size=70).next_to(
+    #     formula_lines, LEFT, buff=0.2
+    # )
+    brace = MathTex(r"\bigg\{", color=dark_blue, font_size=40)
+    brace.match_height(formula_lines)
+    brace.next_to(formula_lines, LEFT, buff=0.12)    
+    # brace = Brace(formula_lines, LEFT, buff=0.15, color=dark_blue)
+
+    friction_formula = VGroup(brace, formula_lines)
+    brace[0].shift(brace[0][0].get_bottom()[1] * DOWN)
+    formula_lines[0].shift(formula_lines[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
+
+    old_theta_line[0].shift(old_theta_line[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
+    theta_dot_line[0].shift(theta_dot_line[0][0].get_bottom()[1] * DOWN)
+
+
+    # This is the target for the replacement transform.
+    new_theta_line = MathTex(
+        r"s\theta = C_1 s \cos(st) + C_2 s \sin(st)",
         color=dark_blue,
         font_size=40,
-    )
-
-    friction_formula_s1[0][1].set_color(red)
-
-    # DEBUG
-    # self.add(friction_formula)
-    # indices = index_labels(friction_formula[0])
-    # self.add(indices)
-    # self.wait(1)
-    # self.remove(friction_formula)
-    # self.remove(indices)
-
-    friction_formula_s2[0][1].set_color(red)
-    friction_formula_s2[0][6].set_color(red)
-
-    # self.add(friction_formula_s2)
-    # indices = index_labels(friction_formula_s2[0])
-    # self.add(indices)
-    # self.wait(1)
-    # self.remove(friction_formula_s2)
-    # self.remove(indices)
-
-    friction_formula_s3[0][1].set_color(red)
-    friction_formula_s3[0][6].set_color(red)
-    friction_formula_s3[0][17].set_color(red)
-
-    # self.add(friction_formula_s3)
-    # indices = index_labels(friction_formula_s3[0])
-    # self.add(indices)
-    # self.wait(1)
-    # self.remove(friction_formula_s3)
-    # self.remove(indices)
+    ).move_to(old_theta_line, aligned_edge=LEFT)
 
     friction_formula_squared = MathTex(
         r"""{\renewcommand{\arraystretch}{1.15}
@@ -119,61 +87,64 @@ def pendulum_graph_no_fric(scene):
         color=dark_blue,
         font_size=40,
     )
+
+    # 0 5 16
+
+    new_theta_line[0][0].set_color(red)
+    new_theta_line[0][5].set_color(red)
+    new_theta_line[0][16].set_color(red)
+
     main_group = VGroup(
         friction_formula, friction_formula_squared, bar, friction_addition
     ).arrange(DOWN, buff=0.45)
 
-    self.play(Write(friction_text.shift(5.5 * UNIT * LEFT + 1 * UNIT * UP)))
+    friction_text[0].shift(friction_text[0][0].get_bottom()[1] * DOWN + 5.5 * UNIT * LEFT + 4 * UP * UNIT)
+
+
+    self.play(Write(friction_text))
     self.play(Write(friction_formula))
-    friction_formula_s1.move_to(friction_formula, aligned_edge=LEFT)
-    friction_formula_s2.move_to(friction_formula, aligned_edge=LEFT)
-    friction_formula_s3.move_to(friction_formula, aligned_edge=LEFT)
 
-    self.play(
-        ReplacementTransform(friction_formula[0][0], friction_formula_s3[0][0]),
-        ReplacementTransform(friction_formula[0][1], friction_formula_s3[0][1:3]),
-        ReplacementTransform(friction_formula[0][2:4], friction_formula_s3[0][3:4]),
-        ReplacementTransform(friction_formula[0][4:6], friction_formula_s3[0][4:7]),
-        ReplacementTransform(friction_formula[0][6:15], friction_formula_s3[0][7:15]),
-        ReplacementTransform(friction_formula[0][15:17], friction_formula_s3[0][15:18]),
-        ReplacementTransform(friction_formula[0][17:], friction_formula_s3[0][18:]),
-    )
+    # Only replace the first line; the theta' line stays still.
+    new_theta_line.move_to(old_theta_line, aligned_edge=LEFT)
+    self.play(ReplacementTransform(old_theta_line, new_theta_line))
+
+    # indices = index_labels(new_theta_line[0])
+    # self.add(indices)
+
     self.wait(0.5)
 
-    # self.play(
-    #     ReplacementTransform(friction_formula_s1[0][:4], friction_formula_s2[0][:4]),
-    #     ReplacementTransform(friction_formula_s1[0][4:6], friction_formula_s2[0][4:7]),
-    #     ReplacementTransform(friction_formula_s1[0][6:], friction_formula_s2[0][7:])
-    # )
-    # self.wait(0.5)
-    # self.play(
-    #     ReplacementTransform(friction_formula_s2[0][:15], friction_formula_s3[0][:15]),
-    #     ReplacementTransform(friction_formula_s2[0][15:17], friction_formula_s3[0][15:18]),
-    #     ReplacementTransform(friction_formula_s2[0][17:], friction_formula_s3[0][18:])
-    # )
     self.wait(0.5)
+    friction_formula_squared[0].shift(friction_formula_squared[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
+    plus[0].shift(plus[0][0].get_bottom()[1] * DOWN)
+    bar[0].shift(bar[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
+
     self.play(
         Write(friction_formula_squared),
-        Write(plus.shift(0.7 * UNIT * DOWN)),
-        Write(bar.shift(0.3 * UNIT * UP)),
+        Write(plus.shift(0.5 * DOWN * UNIT)),
+        Write(bar),
     )
+
+    friction_addition[0].shift(friction_addition[0][0].get_bottom()[1] * DOWN + 2 * DOWN * UNIT + 4 * LEFT * UNIT)
+
+    
     self.play(Write(friction_addition))
 
-    # self.play(FadeOut(friction_formula), FadeOut(friction_formula_s[0][15:18]), FadeOut(friction_formula_s[0][4:7]), FadeOut(friction_formula_s[0][1:3]), FadeOut(plus), FadeOut(bar), FadeOut(friction_text), FadeOut(friction_formula_squared))
     self.play(
         FadeOut(
             VGroup(
                 friction_text,
-                # friction_formula,
-                friction_formula_s3,
+                brace,
+                new_theta_line,
+                theta_dot_line,
                 friction_formula_squared,
                 plus,
                 bar,
             )
         )
     )
-    # self.remove(friction_formula_s, friction_formula)
-    self.play(friction_addition.animate.shift(1 * UNIT * DOWN + 2 * UNIT * RIGHT))
+
+    self.play(friction_addition.animate.shift(2 * UNIT * DOWN + 4 * UNIT * RIGHT))
+
     # pendulum 2:
     time = ValueTracker(0)
 
@@ -259,7 +230,7 @@ def pendulum_graph_no_fric(scene):
             tips=False,
         )
         .to_edge(LEFT)
-        .shift(UP * 0.2)
+        # .shift(UP * 0.2)
     )
 
     # phase_labels = phase_axes.get_axis_labels(
@@ -328,7 +299,6 @@ def pendulum_graph_no_fric(scene):
     )
 
     self.wait(1)
-    # add pendulum
     self.play(
         LaggedStart(
             *(FadeIn(hatch_lines[i]) for i in range(8)), Create(wall), lag_ratio=0
@@ -374,12 +344,10 @@ def pendulum_graph_no_fric(scene):
     self.remove(phase_point)
     self.wait(1)
 
-    # after the first motion finishes
-    end_theta = theta_max_tracker.get_value() 
+    end_theta = theta_max_tracker.get_value()
 
     prep_theta = ValueTracker(end_theta)
 
-    # make the pendulum follow prep_theta temporarily
     line.clear_updaters()
     ball.clear_updaters()
 
@@ -450,22 +418,11 @@ def pendulum_graph_no_fric(scene):
 
     theta_max = 45 / 180 * PI
 
-    #   length of pendulum
     l = 3
-
-    # gravity
     g = 9.81
-
-    # angular freq
     w = np.sqrt(g / l)
-
-    # damping
     b = 0
-
-    # time period
     T = 2 * PI / w
-
-    # damped angular freq
     alpha = b / 2
     wd = np.sqrt(max(w**2 - alpha**2, 0))
 
@@ -507,8 +464,6 @@ def pendulum_graph_no_fric(scene):
     self.add(frozen_ellipse2)
     self.remove(phase_point2)
 
-    # self.wait(1)
-
     line.clear_updaters()
     ball.clear_updaters()
     self.play(
@@ -523,7 +478,6 @@ def pendulum_graph_no_fric(scene):
         FadeOut(phase_point2),
         FadeOut(phase_trace2),
         FadeOut(friction_addition),
-        # FadeOut(no_friction_text),
         FadeOut(frozen_ellipse),
         FadeOut(frozen_ellipse2),
         FadeOut(phase_trace_frozen)

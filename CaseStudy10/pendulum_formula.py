@@ -32,6 +32,10 @@ def pendulum_formula(scene):
         theta_label, theta_formula
     ).arrange(DOWN, aligned_edge=LEFT, buff=0.45)
 
+    theta_label[0].shift(theta_label[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
+    theta_formula[0].shift(theta_formula[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
+
+
     self.play(Write(theta_label))
     self.play(Write(theta_formula))
 
@@ -77,8 +81,8 @@ def pendulum_formula(scene):
 
     self.wait(1)
 
-    self.play(theta_label.animate.shift(3*UNIT*UP),
-              theta_formula2.animate.shift(3*UNIT*UP))
+    self.play(theta_label.animate.shift(2*UNIT*UP),
+              theta_formula2.animate.shift(2*UNIT*UP))
 
 
     friction_formula_squared = MathTex(
@@ -116,14 +120,23 @@ def pendulum_formula(scene):
 
     self.wait(0.5)
 
+    bar[0].shift(bar[0][0].get_bottom()[1] * DOWN + 2 * DOWN * UNIT)
+    friction_formula_squared[0].shift(friction_formula_squared[0][0].get_bottom()[1] * DOWN + 2 * DOWN * UNIT)
+    plus[0].shift(plus[0][0].get_bottom()[1] * DOWN )
+
+
+
 
     self.wait(0.5)
     self.play(
         Write(friction_formula_squared),
-        Write(plus.shift(0.4 * UNIT * DOWN)),
-        Write(bar.shift(0.3 * UNIT * UP)),
+        Write(plus.shift(1.6 * UNIT * DOWN)),
+        Write(bar),
     )
-    self.play(Write(friction_addition.shift(3.42*UNIT*LEFT+0.5*UNIT*UP)))
+
+    friction_addition[0].shift(friction_addition[0][0].get_bottom()[1] * DOWN )
+
+    self.play(Write(friction_addition.shift(3.42*UNIT*LEFT + 3 * DOWN * UNIT)))
 
     self.wait(1)
 
