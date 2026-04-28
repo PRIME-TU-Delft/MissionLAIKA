@@ -41,7 +41,7 @@ def pendulum_formula(scene):
 
     self.wait(1)
 
-    self.play(theta_formula[0][62:74].animate.set_color(yellow),theta_formula[0][75:87].animate.set_color(yellow))
+    self.play(theta_formula[0][63:75].animate.set_color(yellow),theta_formula[0][76:88].animate.set_color(yellow))
     self.wait(0.5)
 
     # DEBUG
