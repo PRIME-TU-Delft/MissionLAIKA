@@ -18,6 +18,16 @@ def pendulum_init(scene):
             color=dark_blue,
             font_size=50,
         )
+    
+    pendulum_at_motion = MathTex(
+            r"""{\renewcommand{\arraystretch}{1.15}
+           \begin{cases}
+            \theta = \theta_0 \\
+            \theta ' = 0 \\
+            \end{cases}""",
+            color=dark_blue,
+            font_size=50,
+        )
 
     time = ValueTracker(0)
 
@@ -192,9 +202,15 @@ def pendulum_init(scene):
     self.play(Write(pendulum_at_rest.shift(5 * RIGHT * UNIT)))
 
     self.wait(2)
-
+    pendulum_at_motion.move_to(pendulum_at_rest, aligned_edge=LEFT)
+    theta_label_0 = MathTex(r"\theta_0", color=yellow, font_size=28).shift(UP * 1 * UNIT + 0.3 * RIGHT * UNIT)
     self.play(FadeOut(pendulum_at_rest))
-
+    time.set_value(T / 4)
+    self.wait(0.5)
+    self.play(FadeIn(pendulum_at_motion),FadeIn(theta_label_0))
+    
+    self.wait(1)
+    self.play(FadeOut(pendulum_at_motion),FadeOut(theta_label_0))
     self.play(time.animate.set_value(3.25 * T), rate_func=linear, run_time=3.25 * T)
     self.play(
         FadeIn(
@@ -271,8 +287,8 @@ def pendulum_init(scene):
     self.wait(1)
 
     # tension arrow
-    tension_arrow_start = ball.get_center()
-    tension_arrow_end = ball.get_center() + 0.5 * DOWN * UNIT + 1.4 * LEFT * UNIT
+    tension_arrow_start = ball.get_center() + 0.1 * DOWN * UNIT
+    tension_arrow_end = ball.get_center() + 0.56 * DOWN * UNIT + 1.4 * LEFT * UNIT
     tension_arrow = Line(
         start=tension_arrow_start, end=tension_arrow_end, color=red, buff=0
     )
@@ -533,7 +549,7 @@ def pendulum_init(scene):
     A_calc = (
         MathTex(
             r"""{\renewcommand{\arraystretch}{1.45}
-        \text{Eigenvalues of A: } \lambda = -\frac{b}{2} 
+        \text{Eigenvalues of $A$: } \lambda = -\frac{b}{2} 
         \pm i \sqrt{\frac{g}{L}-\frac{b^2}{4}}""",
             color=dark_blue,
             font_size=40,

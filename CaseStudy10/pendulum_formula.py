@@ -55,7 +55,7 @@ def pendulum_formula(scene):
         r"""{\renewcommand{\arraystretch}{1.45}
         \begin{cases}
         \theta = e^{-\frac{b}{2}t} ( C_1 \cos(st)+ C_2 \sin(st)) \\
-        \theta ' + \frac{b}{2}\theta = e^{-\frac{b}{2}t} (- C_1 \sin(st)+C_2 s \cos(st))
+        \theta ' + \frac{b}{2}\theta = e^{-\frac{b}{2}t} (- C_1 s \sin(st)+C_2 s \cos(st))
         \end{cases}
         """,
         color=dark_blue,
@@ -108,10 +108,10 @@ def pendulum_formula(scene):
 
     friction_addition = MathTex(
         r"""{\renewcommand{\arraystretch}{1.15}
-        (s \theta)^2 + (\theta ' + \frac{b}{2}\theta)^2 = e^{-bt}s^2 (C_1^2 + C_2^2)
+        (s \theta)^2 + \left( \theta ' + \frac{b}{2}\theta \right) ^2 = e^{-bt}s^2 (C_1^2 + C_2^2)
         """,
         color=dark_blue,
-        font_size=40,
+        font_size=35,
     ).shift(2*UNIT*LEFT)
     main_group = VGroup(
         friction_formula_squared, bar, friction_addition

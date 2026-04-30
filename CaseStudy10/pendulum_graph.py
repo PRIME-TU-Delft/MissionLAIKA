@@ -164,6 +164,16 @@ def pendulum_graph(scene):
     )
 
     self.wait(1)
+
+
+
+    theta.clear_updaters()
+    theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
+
+    # Set time to 0 so theta_func(0) = theta_max, positioning everything before fade-in
+    time.set_value(0)
+    theta.set_value(np.pi/2)
+    
     # add pendulum
     self.play(
         LaggedStart(
@@ -177,20 +187,6 @@ def pendulum_graph(scene):
     )
     self.wait(1)
 
-    prep_theta = ValueTracker(0)
-
-    theta.clear_updaters()
-    theta.add_updater(lambda m: m.set_value(prep_theta.get_value()))
-
-    self.play(
-        prep_theta.animate.set_value(theta_max),
-        run_time=1.2,
-        rate_func=smooth,
-    )
-
-    time.set_value(0)
-    theta.clear_updaters()
-    theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
 
     self.add(phase_trace, phase_point)
     self.play(time.animate.set_value(8 * T), rate_func=linear, run_time=8 * T)

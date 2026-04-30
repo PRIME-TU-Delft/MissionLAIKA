@@ -143,7 +143,28 @@ def pendulum_graph_no_fric(scene):
         )
     )
 
-    self.play(friction_addition.animate.shift(2 * UNIT * DOWN + 4 * UNIT * RIGHT))
+    
+
+    self.play(friction_addition.animate.shift(2 * UNIT * DOWN + 8.5 * UNIT * RIGHT))
+    friction_addition2 = MathTex(
+        r"""{\renewcommand{\arraystretch}{1.15}
+        \frac{(s \theta)^2 + (\theta ')^2}{s^2 (C_1^2 + C_2^2)} = 1
+        """,
+        color=dark_blue,
+        font_size=40,
+    ).move_to(friction_addition,aligned_edge=LEFT)
+    ellipse_formula = MathTex(
+        r"""{\renewcommand{\arraystretch}{1.45}
+        \frac{x^2}{a^2} + \frac{y^2}{b^2} = 1
+        """,
+        color=dark_blue,
+        font_size=40,
+    ).move_to(friction_addition,aligned_edge=LEFT).shift(6 * LEFT * UNIT)
+    self.play(Write(ellipse_formula))
+
+    self.wait(1)
+
+    self.play(ReplacementTransform(friction_addition, friction_addition2))
 
     # pendulum 2:
     time = ValueTracker(0)
@@ -311,16 +332,16 @@ def pendulum_graph_no_fric(scene):
     )
     self.wait(1)
 
-    prep_theta = ValueTracker(0)
+    # prep_theta = ValueTracker(0)
 
-    theta.clear_updaters()
-    theta.add_updater(lambda m: m.set_value(prep_theta.get_value()))
+    # theta.clear_updaters()
+    # theta.add_updater(lambda m: m.set_value(prep_theta.get_value()))
 
-    self.play(
-        prep_theta.animate.set_value(theta_max_tracker.get_value()),
-        run_time=1.2,
-        rate_func=smooth,
-    )
+    # self.play(
+    #     prep_theta.animate.set_value(theta_max_tracker.get_value()),
+    #     run_time=1.2,
+    #     rate_func=smooth,
+    # )
 
     theta.clear_updaters()
     theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
@@ -344,42 +365,42 @@ def pendulum_graph_no_fric(scene):
     self.remove(phase_point)
     self.wait(1)
 
-    end_theta = theta_max_tracker.get_value()
+    # end_theta = theta_max_tracker.get_value()
 
-    prep_theta = ValueTracker(end_theta)
+    # prep_theta = ValueTracker(end_theta)
 
-    line.clear_updaters()
-    ball.clear_updaters()
+    # line.clear_updaters()
+    # ball.clear_updaters()
 
-    line.add_updater(
-        lambda m: m.become(
-            Line(
-                start=ORIGIN + shift_req,
-                end=ORIGIN + shift_req
-                + l * np.sin(prep_theta.get_value()) * RIGHT
-                - l * np.cos(prep_theta.get_value()) * UP,
-                color=dark_blue,
-            )
-        )
-    )
+    # line.add_updater(
+    #     lambda m: m.become(
+    #         Line(
+    #             start=ORIGIN + shift_req,
+    #             end=ORIGIN + shift_req
+    #             + l * np.sin(prep_theta.get_value()) * RIGHT
+    #             - l * np.cos(prep_theta.get_value()) * UP,
+    #             color=dark_blue,
+    #         )
+    #     )
+    # )
 
-    ball.add_updater(
-        lambda m: m.become(
-            Dot(fill_color=red, fill_opacity=1)
-            .move_to(
-                ORIGIN + shift_req
-                + l * np.sin(prep_theta.get_value()) * RIGHT
-                - l * np.cos(prep_theta.get_value()) * UP
-            )
-            .scale(l)
-        )
-    )
+    # ball.add_updater(
+    #     lambda m: m.become(
+    #         Dot(fill_color=red, fill_opacity=1)
+    #         .move_to(
+    #             ORIGIN + shift_req
+    #             + l * np.sin(prep_theta.get_value()) * RIGHT
+    #             - l * np.cos(prep_theta.get_value()) * UP
+    #         )
+    #         .scale(l)
+    #     )
+    # )
 
-    self.play(
-        prep_theta.animate.set_value(45 * PI / 180),
-        run_time=1.2,
-        rate_func=smooth,
-    )
+    # self.play(
+    #     prep_theta.animate.set_value(45 * PI / 180),
+    #     run_time=1.2,
+    #     rate_func=smooth,
+    # )
 
     self.wait(1)
 
@@ -477,7 +498,8 @@ def pendulum_graph_no_fric(scene):
         FadeOut(phase_trace),
         FadeOut(phase_point2),
         FadeOut(phase_trace2),
-        FadeOut(friction_addition),
+        FadeOut(friction_addition2),
+        FadeOut(ellipse_formula),
         FadeOut(frozen_ellipse),
         FadeOut(frozen_ellipse2),
         FadeOut(phase_trace_frozen)
