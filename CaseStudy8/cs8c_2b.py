@@ -237,6 +237,10 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
         self.play(system.animate.shift(0.9 * LEFT * UNIT), run_time=2)
         self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
+        self.play(system.animate.shift(0.9 * LEFT * UNIT), run_time=2)
+        self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
+        self.play(system.animate.shift(0.9 * LEFT * UNIT), run_time=2)
+        self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
 
 
         self.play(
