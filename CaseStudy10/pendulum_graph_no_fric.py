@@ -332,16 +332,7 @@ def pendulum_graph_no_fric(scene):
     )
     self.wait(1)
 
-    # prep_theta = ValueTracker(0)
 
-    # theta.clear_updaters()
-    # theta.add_updater(lambda m: m.set_value(prep_theta.get_value()))
-
-    # self.play(
-    #     prep_theta.animate.set_value(theta_max_tracker.get_value()),
-    #     run_time=1.2,
-    #     rate_func=smooth,
-    # )
 
     theta.clear_updaters()
     theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
@@ -365,42 +356,6 @@ def pendulum_graph_no_fric(scene):
     self.remove(phase_point)
     self.wait(1)
 
-    # end_theta = theta_max_tracker.get_value()
-
-    # prep_theta = ValueTracker(end_theta)
-
-    # line.clear_updaters()
-    # ball.clear_updaters()
-
-    # line.add_updater(
-    #     lambda m: m.become(
-    #         Line(
-    #             start=ORIGIN + shift_req,
-    #             end=ORIGIN + shift_req
-    #             + l * np.sin(prep_theta.get_value()) * RIGHT
-    #             - l * np.cos(prep_theta.get_value()) * UP,
-    #             color=dark_blue,
-    #         )
-    #     )
-    # )
-
-    # ball.add_updater(
-    #     lambda m: m.become(
-    #         Dot(fill_color=red, fill_opacity=1)
-    #         .move_to(
-    #             ORIGIN + shift_req
-    #             + l * np.sin(prep_theta.get_value()) * RIGHT
-    #             - l * np.cos(prep_theta.get_value()) * UP
-    #         )
-    #         .scale(l)
-    #     )
-    # )
-
-    # self.play(
-    #     prep_theta.animate.set_value(45 * PI / 180),
-    #     run_time=1.2,
-    #     rate_func=smooth,
-    # )
 
     self.wait(1)
 

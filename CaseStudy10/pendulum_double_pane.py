@@ -75,13 +75,10 @@ def pendulum_double_pane(scene):
     )
 
 
-    # --- time graph on the right ---------------------------------
     theta1_color = blue 
     theta_color = red
 
     def theta1_func(t):
-        # Replace this with your actual theta1(t)
-        # For now, this is just an example:
         return 0.6 * theta_dot_func(t)
 
     max_time = 8 * T
@@ -89,7 +86,6 @@ def pendulum_double_pane(scene):
 
     time_axes = Axes(
         x_range=[0, max_time, T],
-        # y_range=[-max_y, max_y, theta_max / 2],
         y_range=[
                 -theta_max * wd * 1.2,
                 theta_max * wd * 1.2,
@@ -152,7 +148,6 @@ def pendulum_double_pane(scene):
 
     legend_group = VGroup(legend)
     legend_group.next_to(time_axes, DOWN).shift(1.5*UNIT*UP + 3.75 *UNIT*RIGHT)
-# -------------------------------------------------------------
 
 
     theta_label = MathTex(r"\theta", color=dark_blue)
@@ -206,7 +201,6 @@ def pendulum_double_pane(scene):
         theta1_time_dot,
     )
     self.play(time.animate.set_value(5 * T), rate_func=linear, run_time=5 * T)
-    # self.remove(phase_point, phase_trace, theta_time_trace, theta1_time_trace, theta_time_dot, theta1_time_dot)
     self.play(
         FadeOut(phase_axes),
         FadeOut(phase_labels),

@@ -234,8 +234,6 @@ def pendulum_init(scene):
     ball_angle.set_z_index(0)
     ball.set_z_index(1)
     self.play(Write(ball_angle))
-    # pendulum = VGroup(angle, ball, line_vertical, line, length_label, ball_label,midpoint,arc_text)
-    # self.play(pendulum.animate.shift(2*UNIT*RIGHT))
 
     force_gravity = MathTex(
         r"""{\renewcommand{\arraystretch}{1.45}

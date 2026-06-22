@@ -42,15 +42,7 @@ def pendulum_graph(scene):
     def theta_dot_func(t):
         return -theta_max * (w**2 / wd) * np.exp(-alpha * t) * np.sin(wd * t)
 
-    # def theta_func(t):
-    #     return theta_max * np.exp(-b * t / 2) * np.sin(wd * t)
 
-    # def theta_dot_func(t):
-    #     return (
-    #         theta_max
-    #         * np.exp(-b * t / 2)
-    #         * (wd * np.cos(wd * t) - (b / 2) * np.sin(wd * t))
-    #     )
 
     # shift pendulum placement
     p_x = 3
