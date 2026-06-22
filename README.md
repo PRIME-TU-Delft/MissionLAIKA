@@ -2,6 +2,8 @@
 
 Welcome to **Mission LAIKA**, a visual exploration of Linear Algebra through real-world applications in **kinematics** and **aerodynamics**. This project uses [Manim](https://www.manim.community/) to create mathematical animations that explain abstract concepts in a way that is easy to understand for **Aerospace Engineering** students.
 
+Some animations are accompanied by Python exercises run using Google Colab.
+
 ---
 
 ## Current Case Studies
@@ -10,7 +12,13 @@ The animations include:
 
 - Case Study 1: Cleared for take-off
 - Case Study 5: Pitch perfect
+- Case Study 8: Navigating Subspaces
+- Case Study 10: Swinging Back to Safety
 - Case Study 15: Will the wings fall off?
+
+The Python exercises include:
+- Case Study 15: Satellite Connection Back Online
+- Case Study 19: Will the Wings Fall off Revisited
 
 ---
 
@@ -23,6 +31,7 @@ Mission-LAIKA/
 ├── CaseStudy8/
 ├── CaseStudy10/
 ├── CaseStudy15/
+├── PythonExercises/        # Python notebooks to accompany animations
 ├── assets/                 # Images, SVGs used
 ├── requirements.txt        # Python dependencies
 └── README.md               # Project overview
