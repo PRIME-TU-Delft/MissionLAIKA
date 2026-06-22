@@ -20,6 +20,8 @@ The animations include:
 Mission-LAIKA/
 ├── CaseStudy1/
 ├── CaseStudy5/
+├── CaseStudy8/
+├── CaseStudy10/
 ├── CaseStudy15/
 ├── assets/                 # Images, SVGs used
 ├── requirements.txt        # Python dependencies
@@ -39,10 +41,14 @@ cd Mission-LAIKA
 
 ### 2. Set up your environment
 
-Install [Manim Community Edition](https://docs.manim.community/en/stable/installation.html) and dependencies:
-
+Install [Manim Community Edition](https://docs.manim.community/en/stable/installation.html) and dependencies. 
+For MacOS: 
 ```bash
 pip install -r requirements.txt
+```
+For Linux/WSL:
+```bash
+pip install -r requirements_linux.txt
 ```
 
 ### 3. Render an animation
@@ -67,6 +73,11 @@ manim -p beginning.py
 
 [Case Study 5: Pitch perfect](https://www.youtube.com/watch?v=yczylyVWd_8)
 
+[Case Study 8: Navigating Subspaces](https://youtu.be/f3VHGpBfLKM?si=c05aMTf-9tTvexS9)
+
+[Case Study 10: Swinging Back to Safety](https://youtu.be/03BW-PDf1yM?si=M5u0HAJGb7SAkwac)
+
+
 ---
 
 ## Contributing
@@ -77,6 +88,6 @@ Pull requests are welcome! If you have ideas for new scenes or applications, ope
 
 ## Author
 
-Animations made by [Jakub Fręchowicz](https://jakubfrechowicz.com)
+Animations made by [Jakub Fręchowicz](https://jakubfrechowicz.com) and Stella Schultz
 
 Feel free to reach out!
