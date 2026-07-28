@@ -87,19 +87,19 @@ def pendulum_graph(scene):
             axis_config={
                 "color": dark_blue,
                 "stroke_width": 3,
-                "include_numbers": True,
+                "include_numbers": False,
             },
             tips=False,
         )
         .to_edge(LEFT)
         # .shift(UP * 0.2)
-    )
+    ).shift(2*RIGHT*UNIT)
 
     theta_label = MathTex(r"\theta", color=dark_blue)
     theta_dot_label = MathTex(r"\theta'", color=dark_blue)
 
     phase_labels = VGroup(
-        theta_label.next_to(phase_axes, RIGHT, buff=0.1).shift(1.5 * UNIT * LEFT),
+        theta_label.next_to(phase_axes, RIGHT, buff=0.1),
         theta_dot_label.next_to(phase_axes, UP, buff=0.1),
     )
 

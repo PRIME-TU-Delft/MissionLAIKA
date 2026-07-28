@@ -246,11 +246,11 @@ def pendulum_graph_no_fric(scene):
             axis_config={
                 "color": dark_blue,
                 "stroke_width": 3,
-                "include_numbers": True,
+                "include_numbers": False,
             },
             tips=False,
         )
-        .to_edge(LEFT)
+        .to_edge(LEFT).shift(2.2  * RIGHT *UNIT)
         # .shift(UP * 0.2)
     )
 
@@ -263,7 +263,7 @@ def pendulum_graph_no_fric(scene):
     theta_dot_label = MathTex(r"\theta'", color=dark_blue)
 
     phase_labels = VGroup(
-        theta_label.next_to(phase_axes, RIGHT, buff=0.1).shift(1.5 * UNIT * LEFT),
+        theta_label.next_to(phase_axes, RIGHT, buff=0.1).shift(0.2 * RIGHT * UNIT),
         theta_dot_label.next_to(phase_axes, UP, buff=0.1),
     )
 

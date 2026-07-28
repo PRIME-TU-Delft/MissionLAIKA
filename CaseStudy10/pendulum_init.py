@@ -206,7 +206,19 @@ def pendulum_init(scene):
     theta_label_0 = MathTex(r"\theta_0", color=yellow, font_size=28).shift(UP * 1 * UNIT + 0.3 * RIGHT * UNIT)
     self.play(FadeOut(pendulum_at_rest))
     time.set_value(T / 4)
-    self.wait(0.5)
+    self.wait(4)
+    p = MathTex(
+            r"""{\renewcommand{\arraystretch}{1.15}
+           \begin{cases}
+            \theta = \theta_0 \\
+            \theta ' = 0 \\
+            \end{cases}""",
+            color=dark_blue,
+            font_size=50,
+        ).shift(RIGHT * 25 * UNIT)
+    
+    self.play(FadeIn(p))
+    self.wait(4)
     self.play(FadeIn(pendulum_at_motion),FadeIn(theta_label_0))
     
     self.wait(1)
@@ -233,7 +245,14 @@ def pendulum_init(scene):
     ball_angle = DashedVMobject(ball_angle_no_dash)
     ball_angle.set_z_index(0)
     ball.set_z_index(1)
-    self.play(Write(ball_angle))
+    
+
+    force_tot = MathTex(
+        r"""{\renewcommand{\arraystretch}{1.45}
+        F_{total} = ma""",
+        color=dark_blue,
+        font_size=50,
+    )
 
     force_gravity = MathTex(
         r"""{\renewcommand{\arraystretch}{1.45}
@@ -250,15 +269,17 @@ def pendulum_init(scene):
     )
 
     forces_eqs = (
-        VGroup(force_gravity, force_tension)
+        VGroup(force_tot, force_gravity, force_tension)
         .arrange(DOWN, aligned_edge=LEFT)
         .shift(5 * LEFT * UNIT)
     )
 
     force_gravity[0].shift(force_gravity[0][0].get_bottom()[1] * DOWN)
     force_tension[0].shift(force_tension[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
-    self.play(Write(forces_eqs))
+    force_tot[0].shift(force_tot[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
 
+    # self.play(Write(forces_eqs))
+    self.play(Write(force_tot))
     self.wait(1)
 
     # gravity arrow
@@ -281,6 +302,15 @@ def pendulum_init(scene):
     self.play(
         GrowFromPoint(gravity_arrow, ball.get_bottom()), Write(gravity_arrow_label)
     )
+
+    self.wait(1)
+
+    self.play(Write(force_gravity))
+
+    self.wait(1)
+
+    # write arch
+    self.play(Write(ball_angle))
 
     self.wait(1)
 
@@ -308,6 +338,9 @@ def pendulum_init(scene):
     self.play(
         GrowFromPoint(tension_arrow, ball.get_center()), Write(tension_arrow_label)
     )
+
+    self.wait(1)
+
 
     self.wait(1)
 
@@ -367,8 +400,12 @@ def pendulum_init(scene):
     newton[0].shift(newton[0][0].get_bottom()[1] * DOWN + 0.1 * UP *UNIT)
     theta_accel[0].shift(theta_accel[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
 
-    self.play(ReplacementTransform(forces_eqs, newton))
     self.wait(1)
+
+    self.play(Write(force_tension))
+
+    self.wait(1)
+
 
     self.play(
         FadeOut(leg1),
@@ -405,6 +442,9 @@ def pendulum_init(scene):
     self.wait(1)
     self.play(Write(arc_accel))
 
+    self.wait(1)
+    self.play(ReplacementTransform(forces_eqs, newton))
+    self.wait(1)
 
     self.wait(1)
     self.play(Write(theta_accel))
@@ -414,7 +454,7 @@ def pendulum_init(scene):
         Wiggle(ball_angle, scale_value=1.5),
     )
 
-    self.wait()
+    self.wait(1)
 
     self.play(FadeOut(newton))
     self.play(
@@ -441,9 +481,17 @@ def pendulum_init(scene):
         font_size=40,
     )
 
+    small_t_text = MathTex(
+        r"""{\renewcommand{\arraystretch}{1.45}
+        \text{small } \theta:
+        """,
+        color=dark_blue,
+        font_size=40,
+    )
+
     small_theta = MathTex(
         r"""{\renewcommand{\arraystretch}{1.45}
-        \text{small } \theta: \sin(\theta) \approx \theta 
+        \sin(\theta) \approx \theta 
         """,
         color=dark_blue,
         font_size=40,
@@ -466,10 +514,11 @@ def pendulum_init(scene):
     )
 
     theta_eqs = VGroup(
-        theta_accel2, small_theta, theta_approx, theta_friction
+        theta_accel2, small_theta, small_t_text, theta_approx, theta_friction
     ).arrange(DOWN)
     theta_accel2[0].shift(theta_accel2[0][0].get_bottom()[1] * DOWN + 3 * UP * UNIT)
     small_theta[0].shift(small_theta[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
+    small_t_text[0].shift(small_t_text[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
     theta_approx[0].shift(theta_approx[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
     theta_friction[0].shift(theta_friction[0][0].get_bottom()[1] * DOWN + 3 * DOWN * UNIT)
 
@@ -477,8 +526,18 @@ def pendulum_init(scene):
     self.play(theta_accel.animate.move_to(theta_accel2.get_center()))
     self.add(theta_accel2)
     self.remove(theta_accel)
+
+    self.wait(2)
+
+    # indices = index_labels(small_theta[0])
+    # self.add(indices)
+    # self.wait()
+    # self.play(Write(small_theta[0][7:]))
     self.play(Write(small_theta))
 
+    self.wait(2)
+
+    self.play(Write(small_t_text.shift(1.5*LEFT*UNIT)),small_theta.animate.shift(1.5 * UNIT * RIGHT))
     self.wait(1)
 
     self.play(Write(theta_approx))

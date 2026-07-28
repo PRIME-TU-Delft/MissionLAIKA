@@ -66,12 +66,12 @@ def pendulum_double_pane(scene):
             axis_config={
                 "color": dark_blue,
                 "stroke_width": 3,
-                "include_numbers": True,
+                "include_numbers": False,
             },
             tips=False,
         )
         .to_edge(LEFT)
-        .shift(0.3*LEFT*UNIT)
+        .shift(2 * RIGHT *UNIT)
     )
 
 
@@ -96,15 +96,15 @@ def pendulum_double_pane(scene):
         axis_config={
             "color": dark_blue,
             "stroke_width": 3,
-            "include_numbers": True,
+            "include_numbers": False,
         },
         tips=False,
-    ).next_to(phase_axes, RIGHT).shift(LEFT * 5.25 * UNIT)
+    ).next_to(phase_axes, RIGHT).shift(1 * RIGHT * UNIT)
 
     time_labels = time_axes.get_axis_labels(
         MathTex(r"t", color=dark_blue),
         MathTex(r"", color=yellow),
-    ).shift(1.75*LEFT*UNIT+0.5*DOWN*UNIT)
+    ).shift(0.5*DOWN*UNIT)
 
     theta_time_dot = always_redraw(
         lambda: Dot(color=theta_color).move_to(
@@ -154,7 +154,7 @@ def pendulum_double_pane(scene):
     theta_dot_label = MathTex(r"\theta'", color=dark_blue)
 
     phase_labels = VGroup(
-        theta_label.next_to(phase_axes, RIGHT, buff=0.1).shift(1.5 * UNIT * LEFT),
+        theta_label.next_to(phase_axes, RIGHT, buff=0.1),
         theta_dot_label.next_to(phase_axes, UP, buff=0.1),
     )
 
@@ -200,7 +200,7 @@ def pendulum_double_pane(scene):
         theta_time_dot,
         theta1_time_dot,
     )
-    self.play(time.animate.set_value(5 * T), rate_func=linear, run_time=5 * T)
+    self.play(time.animate.set_value(7 * T), rate_func=linear, run_time=7 * T)
     self.play(
         FadeOut(phase_axes),
         FadeOut(phase_labels),
