@@ -33,7 +33,7 @@ class Plane(MovingCameraScene, PrimeScene):
         self.wait(1)
 
         pendulum_init.pendulum_init(self)
-        pendulum_graph.pendulum_graph(self)
-        pendulum_graph_no_fric.pendulum_graph_no_fric(self)
-        pendulum_formula.pendulum_formula(self)
-        pendulum_double_pane.pendulum_double_pane(self)
+        # pendulum_graph.pendulum_graph(self)
+        # pendulum_graph_no_fric.pendulum_graph_no_fric(self)
+        # pendulum_formula.pendulum_formula(self)
+        # pendulum_double_pane.pendulum_double_pane(self)

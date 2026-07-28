@@ -79,7 +79,7 @@ class Plane(MovingCameraScene, PrimeScene):
         system = Group(
             spring_left, spring_right, left_square, right_square, center_square
         )
-        system.scale(0.9)
+        # system.scale(0.9)
 
         # mass labels
         m1_text = MathTex("m_1", font_size=60, color=red).move_to(
@@ -104,7 +104,7 @@ class Plane(MovingCameraScene, PrimeScene):
             font_size=50,
         )
 
-        recap_A[0].shift(recap_A[0][0].get_bottom()[1] * DOWN)
+        recap_A[0].shift(recap_A[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
 
         matrix_a_2 = MathTex(
             r"""{\renewcommand{\arraystretch}{1.45}
@@ -123,7 +123,7 @@ class Plane(MovingCameraScene, PrimeScene):
             color=dark_blue,
             font_size=40,
         )
-        matrix_a_2[0].shift(matrix_a_2[0][0].get_bottom()[1] * DOWN)
+        matrix_a_2[0].shift(matrix_a_2[0][0].get_bottom()[1] * DOWN + 1 * UNIT * DOWN)
 
         x_eq1 = MathTex(
             r"""{\renewcommand{\arraystretch}{1.15}
@@ -149,7 +149,7 @@ class Plane(MovingCameraScene, PrimeScene):
         # indices = index_labels(x_eq1[0])
         # self.add(indices)
 
-        x_eq1[0].shift(x_eq1[0][10].get_bottom()[1] * DOWN)
+        x_eq1[0].shift(x_eq1[0][10].get_bottom()[1] * DOWN  + 1 * UNIT * DOWN)
 
         x_eq2 = MathTex(
             r"""{\renewcommand{\arraystretch}{1.15}
@@ -162,7 +162,7 @@ class Plane(MovingCameraScene, PrimeScene):
             font_size=50,
         )
 
-        x_eq2[0].shift(x_eq2[0][0].get_bottom()[1] * DOWN)
+        x_eq2[0].shift(x_eq2[0][0].get_bottom()[1] * DOWN  + 1 * UNIT * DOWN)
 
         # add masses and springs
         self.play(
@@ -175,11 +175,11 @@ class Plane(MovingCameraScene, PrimeScene):
         )
         self.play(Write(spring_left), Write(spring_right))
         self.wait(2)
-        self.play(Wiggle(center_square))
+        self.play(Indicate(center_square))
         self.wait(2)
-        self.play(Wiggle(left_square), Wiggle(right_square))
+        self.play(Indicate(left_square), Indicate(right_square))
         self.wait(2)
-        self.play(system.animate.shift(2.5 * UP * UNIT))
+        self.play(system.animate.shift(2 * UP * UNIT))
 
         self.wait()
 
@@ -241,7 +241,8 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
         self.play(system.animate.shift(0.9 * LEFT * UNIT), run_time=2)
         self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
-
+        self.play(system.animate.shift(0.9 * LEFT * UNIT), run_time=2)
+        self.play(system.animate.shift(0.9 * RIGHT * UNIT), run_time=2)
 
         self.play(
             system.animate.shift(0.9 * LEFT * UNIT),
@@ -359,15 +360,14 @@ class Plane(MovingCameraScene, PrimeScene):
         ##########################################################################
 
         # Create Mass spring system (2 masses, 1 spring)
-        left_square2 = Square(color=red, side_length=4 * 0.9 * UNIT).shift(
-            LEFT * UNIT * 3
+        left_square2 = Square(color=red, side_length=3 * UNIT).shift(
+            LEFT * UNIT * 2.5
         )
-        right_square2 = Square(color=red, side_length=4 * 0.9 * UNIT).shift(
-            RIGHT * UNIT * 3
+        right_square2 = Square(color=red, side_length=3 * UNIT).shift(
+            RIGHT * UNIT * 2.5
         )
 
         # Springs
-        spring_center = spring_left.copy()
 
         spring_color = blue
 
@@ -548,7 +548,7 @@ class Plane(MovingCameraScene, PrimeScene):
         # indices.move_to(col_text.get_center())
         # self.add(indices)
 
-        col_text.move_to(col_textA[0].get_center() + 4 * LEFT * UNIT)
+        col_text.move_to(col_textA[0].get_center() + 4 * LEFT * UNIT + 1 * DOWN * UNIT)
         self.play(FadeIn(system), FadeIn(com), FadeIn(col_text))
 
         left_arrow_3 = Line(start=point1, end=point1 + RIGHT, color=yellow, buff=0)
@@ -603,7 +603,7 @@ class Plane(MovingCameraScene, PrimeScene):
         )
 
         
-        self.wait(4)
+        self.wait(12)
 
         left_square.clear_updaters()
         center_square.clear_updaters()
