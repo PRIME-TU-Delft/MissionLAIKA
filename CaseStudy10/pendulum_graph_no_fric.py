@@ -148,11 +148,12 @@ def pendulum_graph_no_fric(scene):
     self.play(friction_addition.animate.shift(2 * UNIT * DOWN + 8.5 * UNIT * RIGHT))
     friction_addition2 = MathTex(
         r"""{\renewcommand{\arraystretch}{1.15}
-        \frac{(s \theta)^2 + (\theta ')^2}{s^2 (C_1^2 + C_2^2)} = 1
+        \frac{(s \theta)^2}{s^2 (C_1^2 + C_2^2)} + \frac{(\theta ')^2}{s^2 (C_1^2 + C_2^2)} = 1
         """,
         color=dark_blue,
         font_size=40,
     ).move_to(friction_addition,aligned_edge=LEFT)
+    friction_addition2[0].shift(0.09 * DOWN * UNIT + 1 * LEFT * UNIT)
     ellipse_formula = MathTex(
         r"""{\renewcommand{\arraystretch}{1.45}
         \frac{x^2}{a^2} + \frac{y^2}{b^2} = 1
