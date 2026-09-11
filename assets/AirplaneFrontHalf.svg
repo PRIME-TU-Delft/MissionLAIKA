@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="1920px" height="1080px" viewBox="0 0 1920 1080" style="enable-background:new 0 0 1920 1080;">
+  <style type="text/css">
+	.st0{fill:none;stroke:#FFFFFF;stroke-width:11;stroke-miterlimit:10;}
+	.st1{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#FFFFFF;stroke-width:10;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+  <g id="Layer_2">
+    <path style="fill: none; stroke-width: 11px; stroke: rgb(255, 255, 255);" d="M 967.36 674.783 C 967.36 674.783 1035.115 676.722 1044.629 630.545 C 1073.132 492.205 964.086 500.133 964.086 500.133"/>
+    <circle class="st0" cx="1096.97" cy="562.2" r="39.5"/>
+  </g>
+  <g id="Layer_3">
+    <polygon class="st1" points="961.489990234375 313.55999755859375 968.510009765625 497.25"/>
+  </g>
+  <g id="Layer_4">
+    <line class="st2" x1="1225.56" y1="473.12" x2="1001.56" y2="506.34"/>
+  </g>
+  <g id="Layer_5">
+    <polyline class="st3" points="1040.08,642.84 1743.32,611.55 1014.56,665.48 &#9;"/>
+  </g>
+  <g id="Layer_6"/>
+</svg>
