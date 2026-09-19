@@ -12,6 +12,8 @@ class Plane(MovingCameraScene, PrimeScene):
         yellow = ManimColor("#cc9316")  # 6CC24A       cc9316
         blue = ManimColor("#0076C2")  # 0076C2       0076C2
 
+        UNIT = 3 / 4
+
         # Wheel
         outer_circle = Circle(stroke_color=dark_blue, radius=1.7)
         inner_circle = Circle(stroke_color=dark_blue, radius=0.9)
@@ -43,18 +45,17 @@ class Plane(MovingCameraScene, PrimeScene):
 
         self.add(*ground_lines)
 
-        self.wait(1)
+        self.wait(1);
+  
         grid = NumberPlane(
-            background_line_style={
-                "stroke_color": dark_blue,
-                "stroke_width": 1,
-                "stroke_opacity": 0.15,
-            },
-            x_range=(1, 50, 1),
-            y_range=(1, 25, 1),
-            x_length=30,
-            y_length=15,
-        )
+                            background_line_style={
+                                "stroke_color": dark_blue,
+                                "stroke_width": 1,
+                                "stroke_opacity": 0.15,
+                            },
+                            x_range=(0, 72, 1),
+                            y_range=(0, 36, 1),
+                        ).scale(UNIT)
 
         self.play(Write(grid))
 
@@ -121,15 +122,21 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(GrowFromPoint(k2_text, Point([0, 0.9, 0])))
         self.wait(1)
 
-        damping = SVGMobject(
-            "../assets/damping.svg", stroke_color=dark_blue, stroke_width=3
-        ).scale(0.63)
+
+        m2group_1 = Group(plane, plane_text)
+        self.wait()
+        self.play(k2_text.animate.shift(0.2*DOWN),m2group_1.animate.shift(0.3*DOWN), spring2.animate.stretch(0.75, dim=1, about_edge=DOWN))
+        self.play(k2_text.animate.shift(0.6*UP),m2group_1.animate.shift(0.88*UP), spring2.animate.stretch(23/12, dim=1, about_edge=DOWN))
+        self.play(k2_text.animate.shift(0.4*DOWN),m2group_1.animate.shift(0.58*DOWN), spring2.animate.stretch(16/23, dim=1, about_edge=DOWN))
+
+
+        self.wait()
+
+
+
+        damping = SVGMobject("../assets/damping.svg", stroke_color=dark_blue, stroke_width=3).scale(0.63)
         damping.shift(0.88 * UP + 0.5 * LEFT)
-        self.play(
-            LaggedStart(
-                spring2.animate.shift(RIGHT * 0.5), Write(damping), LaggedStart=0.9
-            )
-        )
+        self.play(LaggedStart(spring2.animate.shift(RIGHT * 0.5), Write(damping), lag_ratio=0.9))
         self.wait(1)
         gamma = MathTex("\gamma", font_size=60, color=dark_blue).move_to(
             damping.get_left() + LEFT
@@ -166,15 +173,8 @@ class Plane(MovingCameraScene, PrimeScene):
         xs = Group(x1_text, x2_text)
         self.play(Write(dashed_1), Write(dashed_2))
 
-        x_axis = Arrow(
-            start=4 * LEFT + 3.25 * DOWN,
-            end=4 * LEFT + 4 * UP,
-            color=dark_blue,
-            stroke_width=4,
-        )
-        x_axis_label = MathTex("x", font_size=60, color=dark_blue).move_to(
-            x_axis.get_top() + 0.5 * LEFT + 0.5 * DOWN
-        )
+        x_axis = Arrow(start=5*LEFT* UNIT + 3.25* DOWN, end=5*LEFT * UNIT + 4*UP, color=dark_blue, stroke_width=4)
+        x_axis_label = MathTex("x", font_size=60, color=dark_blue).move_to(x_axis.get_top() + 0.5 *LEFT + 0.5 *DOWN)
         self.play(GrowArrow(x_axis))
         self.play(Write(x_axis_label))
         self.wait(1)
@@ -254,49 +254,44 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(self.camera.frame.animate.move_to(center))
         self.wait()
 
-        # write the spring force and write newtons second law
-        eq0 = MathTex("F_{\\text{spring}} = -kx", color=dark_blue)[0].shift(
-            8 * RIGHT + 3 * UP
-        )
-        eq02 = MathTex("F_{\\text{gravity}}=-mg", color=dark_blue)[0].shift(
-            8 * RIGHT + 2 * UP
-        )
+        #write the spring force and write newtons second law
+        eq0 = MathTex("F_{\\text{spring}} = -kx", color = dark_blue)[0]
+        eq0.shift(eq0[0][0].get_bottom()[1] * DOWN + 8*RIGHT +3*UP)
+        eq02 = MathTex("F_{\\text{gravity}}=-mg", color = dark_blue)[0]
+        eq02.shift(eq02[0][0].get_bottom()[1] * DOWN + 8*RIGHT + 3 * UP * UNIT)
         eq0[9].set_color(blue)
         eq0[10].set_color(yellow)
         eq02[10].set_color(red)
 
-        eq1p = MathTex("F_{\\text{total}} = ma = mx'' ", color=dark_blue)[0].shift(
-            8 * RIGHT
-        )
+        eq1p = MathTex("F_{\\text{total}} = ma = mx'' ", color = dark_blue)[0]
+        eq1p.shift(eq1p[0][0].get_bottom()[1] * DOWN + 8 * RIGHT + 1 * UP * UNIT)
         eq1p[7].set_color(red)
         eq1p[10].set_color(red)
         eq1p[11].set_color(yellow)
 
-        eq1p2 = MathTex("F_{\\text{total}} = mx'' ", color=dark_blue)[0].shift(
-            8.1 * RIGHT
-        )
+        eq1p2 = MathTex("F_{\\text{total}} = mx'' ", color=dark_blue)[0]
+        eq1p2.shift(eq1p2[0][0].get_bottom()[1] * DOWN + 8.1 * RIGHT + 1 * UP * UNIT)
         eq1p2[7].set_color(red)
         eq1p2[8].set_color(yellow)
 
         eq1p3p = MathTex("F_{\\text{damping}} = - \\gamma x' = 0", color=dark_blue)[0]
-        eq1p3p[: len(eq1p3p) - 2].shift(8.35 * RIGHT + UP)
-        eq1p3p[len(eq1p3p) - 2 :].shift(8.15 * RIGHT + UP)
+        eq1p3p.shift(eq1p3p[0][0].get_bottom()[1] * DOWN)
+        eq1p3p[:len(eq1p3p)-2].shift(8.35 * RIGHT + 2 * UP  *UNIT)
+        eq1p3p[len(eq1p3p)-2:].shift(8.15 * RIGHT + 2* UP * UNIT)
         eq1p3p[11].set_color(yellow)
-        eq1p3 = MathTex("F_{\\text{damping}} = 0", color=dark_blue)[0].shift(
-            7.45 * RIGHT + UP
-        )
+        eq1p3 = MathTex("F_{\\text{damping}} = 0", color=dark_blue)[0]
+        eq1p3.shift(eq1p3[0][0].get_bottom()[1] * DOWN + 7.45 * RIGHT + 2 * UP * UNIT)
 
-        eq1 = MathTex("mx'' = F_{\\text{total}}", color=dark_blue)[0].shift(8.2 * RIGHT)
+        eq1 = MathTex("mx'' = F_{\\text{total}}", color = dark_blue)[0]
+        eq1.shift(eq1[0][0].get_bottom()[1] * DOWN + 8.2*RIGHT + 1 * UP * UNIT)
         eq1[0].set_color(red)
         eq1[1].set_color(yellow)
         eq1c = eq1.copy()
         eq1c2 = eq1.copy()
-        eq2 = MathTex("m_1x_1'' = F_{\\text{total}_1}", color=dark_blue)[0].shift(
-            4.35 * RIGHT + 1.15 * DOWN
-        )
-        eq3 = MathTex("m_2x_2'' = F_{\\text{total}_2}", color=dark_blue)[0].shift(
-            4.35 * RIGHT + 1.85 * DOWN
-        )
+        eq2 = MathTex("m_1x_1'' = F_{\\text{total}_1}", color = dark_blue)[0]
+        eq2.shift(eq2[0][0].get_bottom()[1] * DOWN + 4.35*RIGHT +1 *DOWN * UNIT)
+        eq3 = MathTex("m_2x_2'' = F_{\\text{total}_2}", color = dark_blue)[0]
+        eq3.shift(eq3[0][0].get_bottom()[1] * DOWN +4.35 * RIGHT + 2*DOWN*UNIT)
         eq2[0:2].set_color(red)
         eq2[2].set_color(yellow)
         eq2[5].set_color(yellow)
@@ -312,9 +307,15 @@ class Plane(MovingCameraScene, PrimeScene):
         self.wait()
         self.play(Wiggle(eq0[10], scale_value=1.5))
         self.wait()
-        self.play(Wiggle(eq1p3p[11], scale_value=1.5))
+        self.play(Wiggle(eq1p3p[11:13], scale_value=1.5))
         self.wait()
-        self.play(Write(eq1p))
+        self.play(Write(eq1p[:9]))
+        self.wait()
+
+        self.play(Wiggle(eq1p[7:9], scale_value=1.5))
+
+        self.wait()
+        self.play(Write(eq1p[9:]))
         self.wait()
         self.play(
             ReplacementTransform(eq1p[0:7], eq1p2[0:7]),
@@ -349,14 +350,10 @@ class Plane(MovingCameraScene, PrimeScene):
         self.wait(2)
 
         # totals to gravity and spring
-        eq21 = MathTex(
-            "m_1x_1'' = F_{\\text{gravity}_1} + F_{\\text{spring}_1} - F_{\\text{damping}}",
-            color=dark_blue,
-        )[0].shift(6.45 * RIGHT + 1.13 * DOWN)
-        eq31 = MathTex(
-            "m_2x_2'' = F_{\\text{gravity}_2} + F_{\\text{spring}_2} + F_{\\text{damping}}",
-            color=dark_blue,
-        )[0].shift(6.45 * RIGHT + 1.83 * DOWN)
+        eq21 = MathTex("m_1x_1'' = F_{\\text{gravity}_1} + F_{\\text{spring}_1} - F_{\\text{damping}}", color=dark_blue)[0]
+        eq21.shift(eq21[0][0].get_bottom()[1] * DOWN +6.45 * RIGHT+1 * DOWN * UNIT)
+        eq31 = MathTex("m_2x_2'' = F_{\\text{gravity}_2} + F_{\\text{spring}_2} + F_{\\text{damping}}", color=dark_blue)[0]
+        eq31.shift(eq31[0][0].get_bottom()[1] * DOWN + 6.45 * RIGHT + 2*DOWN*UNIT)
         eq21[0:2].set_color(red)
         eq21[2].set_color(yellow)
         eq21[5].set_color(yellow)
@@ -383,8 +380,9 @@ class Plane(MovingCameraScene, PrimeScene):
         )
         self.wait()
 
-        # total = 0
-        eq5 = MathTex("mx'' = F_{total} = 0", color=dark_blue)[0].shift(8 * RIGHT)
+        #total = 0
+        eq5 = MathTex("mx'' = F_{total} = 0", color=dark_blue)[0]
+        eq5.shift(eq5[0][0].get_bottom()[1] * DOWN +8 * RIGHT + 1 * UP *UNIT)
         eq5[0].set_color(red)
         eq5[1].set_color(yellow)
 
@@ -392,12 +390,12 @@ class Plane(MovingCameraScene, PrimeScene):
             ReplacementTransform(eq1, eq5[: len(eq1)]), GrowFromCenter(eq5[len(eq1) :])
         )
 
-        eq22 = MathTex(
-            "0 = F_{\\text{gravity}_1} + F_{\\text{spring}_1} - 0", color=dark_blue
-        )[0].shift(6 * RIGHT + 1.15 * DOWN)
-        eq32 = MathTex(
-            "0 = F_{\\text{gravity}_2} + F_{\\text{spring}_2} + 0", color=dark_blue
-        )[0].shift(6 * RIGHT + 1.85 * DOWN)
+        eq22 = MathTex("0 = F_{\\text{gravity}_1} + F_{\\text{spring}_1} - 0", color=dark_blue)[0]
+        eq22.shift(eq22[0][0].get_bottom()[1] * DOWN +
+            6 * RIGHT + 1 * DOWN * UNIT)
+        eq32 = MathTex("0 = F_{\\text{gravity}_2} + F_{\\text{spring}_2} + 0", color=dark_blue)[
+            0]
+        eq32.shift(eq32[0][0].get_bottom()[1] * DOWN + 6 * RIGHT + 2 * DOWN * UNIT)
 
         self.play(
             LaggedStart(
@@ -423,9 +421,9 @@ class Plane(MovingCameraScene, PrimeScene):
             r"\begin{cases}"
             r"0 = -m_1 g- k_1x_1 + k_2(x_2-x_1) \\"
             r"0 = -m_2 g- k_2(x_2-x_1) "
-            r"\end{cases}",
-            color=dark_blue,
-        )[0].shift(6.5 * RIGHT + 1.5 * DOWN)
+            r"\end{cases}", color=dark_blue
+        )[0]
+        eq6.shift(eq6[0][0].get_bottom()[1] * DOWN + 6.5*RIGHT+ 2 * DOWN * UNIT)
 
         eq6[4:6].set_color(red)
         eq6[8:10].set_color(blue)
@@ -458,9 +456,9 @@ class Plane(MovingCameraScene, PrimeScene):
             r"\begin{cases}"
             r"m_1g = - k_1x_1 + k_2(x_2-x_1) \\"
             r"m_2g = - k_2(x_2-x_1) "
-            r"\end{cases}",
-            color=dark_blue,
-        )[0].shift(6.5 * RIGHT + 1.5 * DOWN)
+            r"\end{cases}", color = dark_blue
+        )[0]
+        eq7.shift(eq7[0][0].get_bottom()[1] * DOWN +6.5*RIGHT+ 2 * DOWN * UNIT)
         self.wait(1)
         eq7[1:3].set_color(red)
         eq7[6:8].set_color(blue)
@@ -494,9 +492,9 @@ class Plane(MovingCameraScene, PrimeScene):
             r"\begin{cases}"
             r"m_1g = (-k_1 -k_2)x_1+k_2x_2 \\"
             r"m_2g = k_2x_1 - k_2x_2 "
-            r"\end{cases}",
-            color=dark_blue,
-        )[0].shift(6.5 * RIGHT + 1.5 * DOWN)
+            r"\end{cases}", color = dark_blue
+        )[0]
+        eq8.shift(eq8[0][0].get_bottom()[1] * DOWN +6.5*RIGHT+ 2 * DOWN * UNIT)
 
         eq8[1:3].set_color(red)
         eq8[7:9].set_color(blue)
@@ -542,33 +540,8 @@ class Plane(MovingCameraScene, PrimeScene):
         self.remove(eq7, eq6, eq2, eq3, eq21, eq31, eq8, eq1, eq1c, eq1c2)
         self.add(eq8)
         self.wait()
-        everything = Group(
-            gamma,
-            damping,
-            ground,
-            *ground_lines,
-            plane,
-            outer_circle,
-            spring,
-            spring2,
-            x1_text,
-            x2_text,
-            dashed_2,
-            dashed_1,
-            k2_text,
-            k1_text,
-            plane_text,
-            wheel_text,
-        )
-        self.play(
-            LaggedStart(
-                ShrinkToCenter(eq0),
-                ShrinkToCenter(eq02),
-                ShrinkToCenter(eq1p3),
-                ShrinkToCenter(eq5),
-                lag_ratio=0.5,
-            )
-        )
-        self.play(everything.animate.shift(6 * DOWN + 6 * LEFT))
-        self.play(eq8.animate.shift(2.7 * LEFT + 1.5 * UP))
+        everything = Group(gamma, damping, ground, *ground_lines, plane, outer_circle, spring, spring2, x1_text, x2_text, dashed_2, dashed_1, k2_text, k1_text, plane_text, wheel_text)
+        self.play(LaggedStart(ShrinkToCenter(eq0),ShrinkToCenter(eq02), ShrinkToCenter(eq1p3), ShrinkToCenter(eq5),  lag_ratio=0.5))
+        self.play(everything.animate.shift(6*DOWN + 6*LEFT))
+        self.play(eq8.animate.shift(2.7*LEFT + 1 * UP * UNIT))
         self.play(eq8.animate.scale(1.5))
