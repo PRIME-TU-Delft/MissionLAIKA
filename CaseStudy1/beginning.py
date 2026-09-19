@@ -1,5 +1,6 @@
 from manim import *
 
+
 class Plane(MovingCameraScene):
     def construct(self):
         dark_blue = ManimColor("#FFFFFF")
