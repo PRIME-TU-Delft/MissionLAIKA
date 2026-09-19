@@ -1,42 +1,47 @@
 from manim import *
 from primescene import *
-config.background_color = ManimColor('#FFFFFF')
+
+config.background_color = ManimColor("#FFFFFF")
+
 
 class Plane(MovingCameraScene, PrimeScene):
     def construct(self):
         super().construct()
-        UNIT = 3/4
-        dark_blue = ManimColor('#0C2340')
-        red = ManimColor('#E03C31') #ManimColor('#FF5132')
-        yellow = ManimColor('#cc9316') #ManimColor('#FFCC12')
-        blue = ManimColor('#0076C2') #ManimColor('#46A6FF')
+        UNIT = 3 / 4
+        dark_blue = ManimColor("#0C2340")
+        red = ManimColor("#E03C31")  # ManimColor('#FF5132')
+        yellow = ManimColor("#cc9316")  # ManimColor('#FFCC12')
+        blue = ManimColor("#0076C2")  # ManimColor('#46A6FF')
 
-        grid = NumberPlane(background_line_style={
+        grid = NumberPlane(
+            background_line_style={
                 "stroke_color": dark_blue,
                 "stroke_width": 1,
-                "stroke_opacity": 0.15
+                "stroke_opacity": 0.15,
             },
-            x_range=(0,72,1),
+            x_range=(0, 72, 1),
             y_range=(0, 36, 1),
         ).scale(UNIT)
 
         self.play(Write(grid))
         self.wait(1)
 
-
         ##########################################################################
         ##############################3 Mass System###############################
         ##########################################################################
 
-
         # Create Mass spring system (3 masses, 2 springs)
-        #Masses
-        left_square = Square(color=red, side_length=2*UNIT).shift(LEFT * UNIT * 5)
-        center_square = Square(color=red, side_length=4*UNIT)
-        right_square = Square(color=red, side_length=2*UNIT).shift(RIGHT * UNIT * 5)
+        # Masses
+        left_square = Square(color=red, side_length=2 * UNIT).shift(LEFT * UNIT * 5)
+        center_square = Square(color=red, side_length=4 * UNIT)
+        right_square = Square(color=red, side_length=2 * UNIT).shift(RIGHT * UNIT * 5)
 
-        #Springs
-        spring_left = SVGMobject("../assets/Spring.svg", stroke_color=dark_blue, stroke_width=3).scale_to_fit_height(2*UNIT).rotate(PI/2)
+        # Springs
+        spring_left = (
+            SVGMobject("../assets/Spring.svg", stroke_color=dark_blue, stroke_width=3)
+            .scale_to_fit_height(2 * UNIT)
+            .rotate(PI / 2)
+        )
         spring_right = spring_left.copy()
 
         spring_left.shift(3 * LEFT * UNIT)
@@ -44,7 +49,7 @@ class Plane(MovingCameraScene, PrimeScene):
 
         spring_color = blue
 
-        #Add springs
+        # Add springs
         def get_spring():
             start = left_square.get_right()
             end = center_square.get_left()
@@ -70,24 +75,31 @@ class Plane(MovingCameraScene, PrimeScene):
         spring_left = always_redraw(get_spring)
         spring_right = always_redraw(get_spring2)
 
-        system = Group(spring_left, spring_right, left_square, right_square, center_square)
+        system = Group(
+            spring_left, spring_right, left_square, right_square, center_square
+        )
 
         # mass labels
-        m1_text = MathTex("m_1", font_size=60, color = red).move_to(Point([-3.75, 0, 0]))
-        m2_text = MathTex("m_2", font_size=60, color = red).move_to(Point([0, 0, 0]))
-        m3_text = MathTex("m_3", font_size=60, color = red).move_to(Point([3.75, 0, 0]))
-
+        m1_text = MathTex("m_1", font_size=60, color=red).move_to(Point([-3.75, 0, 0]))
+        m2_text = MathTex("m_2", font_size=60, color=red).move_to(Point([0, 0, 0]))
+        m3_text = MathTex("m_3", font_size=60, color=red).move_to(Point([3.75, 0, 0]))
 
         # spring labels
         k2_text = MathTex("k", font_size=60, color=blue).move_to(Point([2.25, 0.95, 0]))
-        k1_text = MathTex("k", font_size=60, color=blue).move_to(Point([-2.25, 0.95, 0]))
+        k1_text = MathTex("k", font_size=60, color=blue).move_to(
+            Point([-2.25, 0.95, 0])
+        )
 
         # m1 = m2
-        m1m2 = MathTex("m_1 = m_3",font_size=60, color=dark_blue).move_to(Point([0,2.4,0]))
+        m1m2 = MathTex("m_1 = m_3", font_size=60, color=dark_blue).move_to(
+            Point([0, 2.4, 0])
+        )
         m1m2[0][:2].set_color(red)
         m1m2[0][3:].set_color(red)
 
-        plane_svg = SVGMobject("../assets/AirplaneFront.svg", stroke_color=dark_blue, stroke_width=4).scale_to_fit_height(4*UNIT)
+        plane_svg = SVGMobject(
+            "../assets/AirplaneFront.svg", stroke_color=dark_blue, stroke_width=4
+        ).scale_to_fit_height(4 * UNIT)
         list = plane_svg.submobjects
         # labels = index_labels(plane_svg)
         # self.add(labels)
@@ -97,19 +109,20 @@ class Plane(MovingCameraScene, PrimeScene):
         self.remove(plane_svg)
         self.add(*list)  # add submobjects directly to the scene instead
 
-        self.play(LaggedStart(
-            ReplacementTransform(list[7], left_square),
-            ReplacementTransform(VGroup(*list[:6]), center_square),
-            ReplacementTransform(list[6], right_square),
-            lag_ratio=0.3
-        ))
+        self.play(
+            LaggedStart(
+                ReplacementTransform(list[7], left_square),
+                ReplacementTransform(VGroup(*list[:6]), center_square),
+                ReplacementTransform(list[6], right_square),
+                lag_ratio=0.3,
+            )
+        )
 
         # self.play(LaggedStart(Write(left_square), Write(center_square),Write(right_square),lag_ratio=0.3))
         self.wait(1)
 
-        self.play(Write(spring_left),Write(spring_right))
+        self.play(Write(spring_left), Write(spring_right))
         self.wait(1)
-
 
         self.play(Write(m2_text))
         self.wait(1)
@@ -125,20 +138,26 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(m1m2.animate.scale(1.2), duration=3)
         self.wait(1)
 
-        self.play(m1m2.animate.scale(1/1.2), duration=3)
+        self.play(m1m2.animate.scale(1 / 1.2), duration=3)
         self.wait(1)
-    
+
         self.play(Unwrite(m1m2))
         self.wait(1)
 
         self.play(Write(k1_text), Write(k2_text))
         self.wait(1)
 
-
-
         self.wait(2)
-        
-        self.play(FadeOut(system),FadeOut(m1_text),FadeOut(m2_text),FadeOut(m3_text),FadeOut(k1_text),FadeOut(k2_text),FadeOut(m1m2))
+
+        self.play(
+            FadeOut(system),
+            FadeOut(m1_text),
+            FadeOut(m2_text),
+            FadeOut(m3_text),
+            FadeOut(k1_text),
+            FadeOut(k2_text),
+            FadeOut(m1m2),
+        )
 
         self.wait(1)
 
@@ -183,16 +202,16 @@ class Plane(MovingCameraScene, PrimeScene):
             r"\begin{aligned}"
             r"m_1x_1'' &= k(x_2-x_1)\\[0pt]"
             r"m_2x_2'' &= - k(x_2-x_1) +k(x_3-x_2) = kx_1 - 2kx_2 +kx_3 \\[0pt]"
-            r"m_3x_3''&=-k(x_3-x_2) \end{aligned}", font_size=50, color = dark_blue
+            r"m_3x_3''&=-k(x_3-x_2) \end{aligned}",
+            font_size=50,
+            color=dark_blue,
         ).shift(UP * 0.27 * UNIT)
 
-        
         # # DEBUG
         # indices = index_labels(eq7[0])
         # indices.move_to(eq7.get_center())
         # self.add(indices)
         # self.wait(2)
-
 
         eq7[0][:2].set_color(red)
         eq7[0][15:17].set_color(red)
@@ -227,13 +246,13 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(Write(eq7))
 
         self.play(
-            ApplyWave(eq7[0][    2], amplitude=0.05),
-            ApplyWave(eq7[0][    5], amplitude=0.05),
-            ApplyWave(eq7[0][   17], amplitude=0.05),
-            ApplyWave(eq7[0][   20], amplitude=0.05),
-            ApplyWave(eq7[0][   55], amplitude=0.05),
-            ApplyWave(eq7[0][   58], amplitude=0.05),
-            ApplyWave(eq7[0][ 9:11], amplitude=0.05),
+            ApplyWave(eq7[0][2], amplitude=0.05),
+            ApplyWave(eq7[0][5], amplitude=0.05),
+            ApplyWave(eq7[0][17], amplitude=0.05),
+            ApplyWave(eq7[0][20], amplitude=0.05),
+            ApplyWave(eq7[0][55], amplitude=0.05),
+            ApplyWave(eq7[0][58], amplitude=0.05),
+            ApplyWave(eq7[0][9:11], amplitude=0.05),
             ApplyWave(eq7[0][12:14], amplitude=0.05),
             ApplyWave(eq7[0][25:27], amplitude=0.05),
             ApplyWave(eq7[0][28:30], amplitude=0.05),
@@ -244,7 +263,7 @@ class Plane(MovingCameraScene, PrimeScene):
             ApplyWave(eq7[0][51:53], amplitude=0.05),
             ApplyWave(eq7[0][63:65], amplitude=0.05),
             ApplyWave(eq7[0][66:68], amplitude=0.05),
-            run_time=2
+            run_time=2,
         )
 
         # self.play(
@@ -298,7 +317,3 @@ class Plane(MovingCameraScene, PrimeScene):
         # self.add(eq7, indices)
 
         self.wait(3)
-
-
-
-

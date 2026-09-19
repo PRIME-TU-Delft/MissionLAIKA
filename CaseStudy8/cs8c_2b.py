@@ -149,7 +149,7 @@ class Plane(MovingCameraScene, PrimeScene):
         # indices = index_labels(x_eq1[0])
         # self.add(indices)
 
-        x_eq1[0].shift(x_eq1[0][10].get_bottom()[1] * DOWN  + 1 * UNIT * DOWN)
+        x_eq1[0].shift(x_eq1[0][10].get_bottom()[1] * DOWN + 1 * UNIT * DOWN)
 
         x_eq2 = MathTex(
             r"""{\renewcommand{\arraystretch}{1.15}
@@ -162,7 +162,7 @@ class Plane(MovingCameraScene, PrimeScene):
             font_size=50,
         )
 
-        x_eq2[0].shift(x_eq2[0][0].get_bottom()[1] * DOWN  + 1 * UNIT * DOWN)
+        x_eq2[0].shift(x_eq2[0][0].get_bottom()[1] * DOWN + 1 * UNIT * DOWN)
 
         # add masses and springs
         self.play(
@@ -187,7 +187,10 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(Write(recap_A.shift(2 * UNIT * DOWN)))
         self.wait(2)
         matrix_a_2.shift(20 * UNIT * RIGHT + 2 * UNIT * DOWN)
-        self.play(matrix_a_2.animate.shift(20* LEFT * UNIT), recap_A.animate.shift(20*UNIT*LEFT))
+        self.play(
+            matrix_a_2.animate.shift(20 * LEFT * UNIT),
+            recap_A.animate.shift(20 * UNIT * LEFT),
+        )
         self.wait(2)
 
         # shift nul A and add x equations
@@ -360,9 +363,7 @@ class Plane(MovingCameraScene, PrimeScene):
         ##########################################################################
 
         # Create Mass spring system (2 masses, 1 spring)
-        left_square2 = Square(color=red, side_length=3 * UNIT).shift(
-            LEFT * UNIT * 2.5
-        )
+        left_square2 = Square(color=red, side_length=3 * UNIT).shift(LEFT * UNIT * 2.5)
         right_square2 = Square(color=red, side_length=3 * UNIT).shift(
             RIGHT * UNIT * 2.5
         )
@@ -564,10 +565,9 @@ class Plane(MovingCameraScene, PrimeScene):
         right_arrow_4.add_tip(tip_shape=StealthTip, tip_width=0.15, tip_length=0.15)
 
         self.play(
-                col_text[0][21].animate.set_color(dark_blue),
-                col_text[0][39].animate.set_color(green),
-                col_text[0][40:42].animate.set_color(yellow),
-
+            col_text[0][21].animate.set_color(dark_blue),
+            col_text[0][39].animate.set_color(green),
+            col_text[0][40:42].animate.set_color(yellow),
         )
 
         self.play(
@@ -588,13 +588,12 @@ class Plane(MovingCameraScene, PrimeScene):
 
         center_square.add_updater(
             lambda m: m.move_to(
-                center_eq + 0.4 * RIGHT * (0.5 * np.sin((PI) * time_tracker.get_value()))
+                center_eq
+                + 0.4 * RIGHT * (0.5 * np.sin((PI) * time_tracker.get_value()))
             )
         )
 
         right_eq = right_square.get_center()
-
-
 
         right_square.add_updater(
             lambda m: m.move_to(
@@ -602,7 +601,6 @@ class Plane(MovingCameraScene, PrimeScene):
             )
         )
 
-        
         self.wait(12)
 
         left_square.clear_updaters()
@@ -612,7 +610,8 @@ class Plane(MovingCameraScene, PrimeScene):
 
         self.play(
             left_arrow_4.animate.put_start_and_end_on(point1, point1),
-            right_arrow_3.animate.put_start_and_end_on(point3, point3), run_time=1,
+            right_arrow_3.animate.put_start_and_end_on(point3, point3),
+            run_time=1,
         )
 
         self.play(

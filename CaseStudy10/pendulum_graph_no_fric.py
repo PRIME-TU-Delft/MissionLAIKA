@@ -17,8 +17,6 @@ def pendulum_graph_no_fric(scene):
         font_size=50,
     ).shift(3 * UNIT * UP)
 
-
-
     # Split the formula into separate objects so only the first line transforms.
     old_theta_line = MathTex(
         r"\theta = C_1 \cos(st) + C_2 \sin(st)",
@@ -41,7 +39,7 @@ def pendulum_graph_no_fric(scene):
     # )
     brace = MathTex(r"\bigg\{", color=dark_blue, font_size=40)
     brace.match_height(formula_lines)
-    brace.next_to(formula_lines, LEFT, buff=0.12)    
+    brace.next_to(formula_lines, LEFT, buff=0.12)
     # brace = Brace(formula_lines, LEFT, buff=0.15, color=dark_blue)
 
     friction_formula = VGroup(brace, formula_lines)
@@ -50,7 +48,6 @@ def pendulum_graph_no_fric(scene):
 
     old_theta_line[0].shift(old_theta_line[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
     theta_dot_line[0].shift(theta_dot_line[0][0].get_bottom()[1] * DOWN)
-
 
     # This is the target for the replacement transform.
     new_theta_line = MathTex(
@@ -98,8 +95,9 @@ def pendulum_graph_no_fric(scene):
         friction_formula, friction_formula_squared, bar, friction_addition
     ).arrange(DOWN, buff=0.45)
 
-    friction_text[0].shift(friction_text[0][0].get_bottom()[1] * DOWN + 5.5 * UNIT * LEFT + 4 * UP * UNIT)
-
+    friction_text[0].shift(
+        friction_text[0][0].get_bottom()[1] * DOWN + 5.5 * UNIT * LEFT + 4 * UP * UNIT
+    )
 
     self.play(Write(friction_text))
     self.play(Write(friction_formula))
@@ -114,7 +112,9 @@ def pendulum_graph_no_fric(scene):
     self.wait(0.5)
 
     self.wait(0.5)
-    friction_formula_squared[0].shift(friction_formula_squared[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
+    friction_formula_squared[0].shift(
+        friction_formula_squared[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT
+    )
     plus[0].shift(plus[0][0].get_bottom()[1] * DOWN)
     bar[0].shift(bar[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
 
@@ -124,9 +124,12 @@ def pendulum_graph_no_fric(scene):
         Write(bar),
     )
 
-    friction_addition[0].shift(friction_addition[0][0].get_bottom()[1] * DOWN + 2 * DOWN * UNIT + 4 * LEFT * UNIT)
+    friction_addition[0].shift(
+        friction_addition[0][0].get_bottom()[1] * DOWN
+        + 2 * DOWN * UNIT
+        + 4 * LEFT * UNIT
+    )
 
-    
     self.play(Write(friction_addition))
 
     self.play(
@@ -143,8 +146,6 @@ def pendulum_graph_no_fric(scene):
         )
     )
 
-    
-
     self.play(friction_addition.animate.shift(2 * UNIT * DOWN + 8.5 * UNIT * RIGHT))
     friction_addition2 = MathTex(
         r"""{\renewcommand{\arraystretch}{1.15}
@@ -152,14 +153,18 @@ def pendulum_graph_no_fric(scene):
         """,
         color=dark_blue,
         font_size=40,
-    ).move_to(friction_addition,aligned_edge=LEFT)
-    ellipse_formula = MathTex(
-        r"""{\renewcommand{\arraystretch}{1.45}
+    ).move_to(friction_addition, aligned_edge=LEFT)
+    ellipse_formula = (
+        MathTex(
+            r"""{\renewcommand{\arraystretch}{1.45}
         \frac{x^2}{a^2} + \frac{y^2}{b^2} = 1
         """,
-        color=dark_blue,
-        font_size=40,
-    ).move_to(friction_addition,aligned_edge=LEFT).shift(6 * LEFT * UNIT)
+            color=dark_blue,
+            font_size=40,
+        )
+        .move_to(friction_addition, aligned_edge=LEFT)
+        .shift(6 * LEFT * UNIT)
+    )
     self.play(Write(ellipse_formula))
 
     self.wait(1)
@@ -196,12 +201,19 @@ def pendulum_graph_no_fric(scene):
     wd = np.sqrt(max(w**2 - alpha**2, 0))
 
     def theta_func(t):
-        return theta_max_tracker.get_value() * np.exp(-alpha * t) * (
-            np.cos(wd * t) + (alpha / wd) * np.sin(wd * t)
+        return (
+            theta_max_tracker.get_value()
+            * np.exp(-alpha * t)
+            * (np.cos(wd * t) + (alpha / wd) * np.sin(wd * t))
         )
 
     def theta_dot_func(t):
-        return -theta_max_tracker.get_value() * (w**2 / wd) * np.exp(-alpha * t) * np.sin(wd * t)
+        return (
+            -theta_max_tracker.get_value()
+            * (w**2 / wd)
+            * np.exp(-alpha * t)
+            * np.sin(wd * t)
+        )
 
     # shift pendulum placement
     p_x = 3
@@ -250,7 +262,8 @@ def pendulum_graph_no_fric(scene):
             },
             tips=False,
         )
-        .to_edge(LEFT).shift(2.2  * RIGHT *UNIT)
+        .to_edge(LEFT)
+        .shift(2.2 * RIGHT * UNIT)
         # .shift(UP * 0.2)
     )
 
@@ -332,8 +345,6 @@ def pendulum_graph_no_fric(scene):
     )
     self.wait(1)
 
-
-
     theta.clear_updaters()
     theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
 
@@ -356,7 +367,6 @@ def pendulum_graph_no_fric(scene):
     self.remove(phase_point)
     self.wait(1)
 
-
     self.wait(1)
 
     time2 = ValueTracker(0)
@@ -373,7 +383,8 @@ def pendulum_graph_no_fric(scene):
         lambda m: m.become(
             Line(
                 start=ORIGIN + shift_req,
-                end=ORIGIN + shift_req
+                end=ORIGIN
+                + shift_req
                 + l * np.sin(theta_func_2(time2.get_value())) * RIGHT
                 - l * np.cos(theta_func_2(time2.get_value())) * UP,
                 color=dark_blue,
@@ -384,7 +395,8 @@ def pendulum_graph_no_fric(scene):
         lambda m: m.become(
             Dot(fill_color=red, fill_opacity=1)
             .move_to(
-                ORIGIN + shift_req
+                ORIGIN
+                + shift_req
                 + l * np.sin(theta_func_2(time2.get_value())) * RIGHT
                 - l * np.cos(theta_func_2(time2.get_value())) * UP
             )
@@ -403,8 +415,10 @@ def pendulum_graph_no_fric(scene):
     wd = np.sqrt(max(w**2 - alpha**2, 0))
 
     def theta_func_2(t):
-        return theta_max * np.exp(-alpha * t) * (
-            np.cos(wd * t) + (alpha / wd) * np.sin(wd * t)
+        return (
+            theta_max
+            * np.exp(-alpha * t)
+            * (np.cos(wd * t) + (alpha / wd) * np.sin(wd * t))
         )
 
     def theta_dot_func_2(t):
@@ -457,5 +471,5 @@ def pendulum_graph_no_fric(scene):
         FadeOut(ellipse_formula),
         FadeOut(frozen_ellipse),
         FadeOut(frozen_ellipse2),
-        FadeOut(phase_trace_frozen)
+        FadeOut(phase_trace_frozen),
     )

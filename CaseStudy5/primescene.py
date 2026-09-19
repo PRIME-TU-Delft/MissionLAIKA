@@ -13,6 +13,7 @@ TITLE_SIZE = 45
 TEXT_SIZE = 30
 LEGEND_TEXT_SIZE = 25
 
+
 class PrimeScene(Scene):
     def construct(self):
         print("Installing PRIME template...")

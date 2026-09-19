@@ -1,5 +1,6 @@
 from manim import *
 
+
 def pendulum_init(scene):
     self = scene
     UNIT = 3 / 4
@@ -8,26 +9,26 @@ def pendulum_init(scene):
     yellow = ManimColor("#cc9316")  # ManimColor('#FFCC12')
     blue = ManimColor("#0076C2")  # ManimColor('#46A6FF')
     green = ManimColor("#009B77")
-    
+
     pendulum_at_rest = MathTex(
-            r"""{\renewcommand{\arraystretch}{1.15}
+        r"""{\renewcommand{\arraystretch}{1.15}
            \begin{cases}
             \theta = 0 \\
             \theta ' = 0 \\
             \end{cases}""",
-            color=dark_blue,
-            font_size=50,
-        )
-    
+        color=dark_blue,
+        font_size=50,
+    )
+
     pendulum_at_motion = MathTex(
-            r"""{\renewcommand{\arraystretch}{1.15}
+        r"""{\renewcommand{\arraystretch}{1.15}
            \begin{cases}
             \theta = \theta_0 \\
             \theta ' = 0 \\
             \end{cases}""",
-            color=dark_blue,
-            font_size=50,
-        )
+        color=dark_blue,
+        font_size=50,
+    )
 
     time = ValueTracker(0)
 
@@ -79,9 +80,7 @@ def pendulum_init(scene):
 
     # background theta calculation
     theta = DecimalNumber().set_color(dark_blue).move_to(10 * RIGHT)
-    theta.add_updater(
-        lambda m: m.set_value((theta_max) * np.sin(w * time.get_value()))
-    )
+    theta.add_updater(lambda m: m.set_value((theta_max) * np.sin(w * time.get_value())))
 
     self.add(theta)
 
@@ -98,9 +97,7 @@ def pendulum_init(scene):
         return line_here
 
     line = always_redraw(
-        lambda: get_line(
-            l * np.sin(theta.get_value()), -l * np.cos(theta.get_value())
-        )
+        lambda: get_line(l * np.sin(theta.get_value()), -l * np.cos(theta.get_value()))
     )
 
     line_vertical = DashedLine(
@@ -189,9 +186,7 @@ def pendulum_init(scene):
         return dot
 
     ball = always_redraw(
-        lambda: get_ball(
-            l * np.sin(theta.get_value()), -l * np.cos(theta.get_value())
-        )
+        lambda: get_ball(l * np.sin(theta.get_value()), -l * np.cos(theta.get_value()))
     )
 
     # add pendulum
@@ -203,32 +198,32 @@ def pendulum_init(scene):
 
     self.wait(2)
     pendulum_at_motion.move_to(pendulum_at_rest, aligned_edge=LEFT)
-    theta_label_0 = MathTex(r"\theta_0", color=yellow, font_size=28).shift(UP * 1 * UNIT + 0.3 * RIGHT * UNIT)
+    theta_label_0 = MathTex(r"\theta_0", color=yellow, font_size=28).shift(
+        UP * 1 * UNIT + 0.3 * RIGHT * UNIT
+    )
     self.play(FadeOut(pendulum_at_rest))
     time.set_value(T / 4)
     self.wait(4)
     p = MathTex(
-            r"""{\renewcommand{\arraystretch}{1.15}
+        r"""{\renewcommand{\arraystretch}{1.15}
            \begin{cases}
             \theta = \theta_0 \\
             \theta ' = 0 \\
             \end{cases}""",
-            color=dark_blue,
-            font_size=50,
-        ).shift(RIGHT * 25 * UNIT)
-    
+        color=dark_blue,
+        font_size=50,
+    ).shift(RIGHT * 25 * UNIT)
+
     self.play(FadeIn(p))
     self.wait(4)
-    self.play(FadeIn(pendulum_at_motion),FadeIn(theta_label_0))
-    
+    self.play(FadeIn(pendulum_at_motion), FadeIn(theta_label_0))
+
     self.wait(1)
-    self.play(FadeOut(pendulum_at_motion),FadeOut(theta_label_0))
+    self.play(FadeOut(pendulum_at_motion), FadeOut(theta_label_0))
     self.play(time.animate.set_value(3.25 * T), rate_func=linear, run_time=3.25 * T)
     self.play(
         FadeIn(
-            arc_text.move_to(angle, DOWN).shift(
-                DOWN * 0.5 * UNIT + RIGHT * 0.1 * UNIT
-            )
+            arc_text.move_to(angle, DOWN).shift(DOWN * 0.5 * UNIT + RIGHT * 0.1 * UNIT)
         )
     )
     self.wait(1)
@@ -245,7 +240,6 @@ def pendulum_init(scene):
     ball_angle = DashedVMobject(ball_angle_no_dash)
     ball_angle.set_z_index(0)
     ball.set_z_index(1)
-    
 
     force_tot = MathTex(
         r"""{\renewcommand{\arraystretch}{1.45}
@@ -341,7 +335,6 @@ def pendulum_init(scene):
 
     self.wait(1)
 
-
     self.wait(1)
 
     # write triangle
@@ -352,16 +345,12 @@ def pendulum_init(scene):
     H = np.linalg.norm(B - A)
 
     # corner chosen so the angle at A matches the pendulum angle theta_now
-    C = A + H * np.cos(theta_now) * (
-        np.sin(theta_now) * RIGHT - np.cos(theta_now) * UP
-    )
+    C = A + H * np.cos(theta_now) * (np.sin(theta_now) * RIGHT - np.cos(theta_now) * UP)
 
     leg1 = Line(A, C, color=dark_blue, buff=0)
     leg2 = Line(C, B, color=dark_blue, buff=0)
 
-    right_angle = RightAngle(
-        leg1, leg2, length=0.18, quadrant=(-1, 1), color=dark_blue
-    )
+    right_angle = RightAngle(leg1, leg2, length=0.18, quadrant=(-1, 1), color=dark_blue)
 
     theta_arc = Angle(gravity_arrow, leg1, radius=0.28, color=dark_blue)
     # theta_arc = DashedVMobject(theta_arc_nodash, num_dashes=30, color=dark_blue)
@@ -397,7 +386,7 @@ def pendulum_init(scene):
         .shift(5 * LEFT * UNIT)
     )
 
-    newton[0].shift(newton[0][0].get_bottom()[1] * DOWN + 0.1 * UP *UNIT)
+    newton[0].shift(newton[0][0].get_bottom()[1] * DOWN + 0.1 * UP * UNIT)
     theta_accel[0].shift(theta_accel[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
 
     self.wait(1)
@@ -405,7 +394,6 @@ def pendulum_init(scene):
     self.play(Write(force_tension))
 
     self.wait(1)
-
 
     self.play(
         FadeOut(leg1),
@@ -520,8 +508,9 @@ def pendulum_init(scene):
     small_theta[0].shift(small_theta[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
     small_t_text[0].shift(small_t_text[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
     theta_approx[0].shift(theta_approx[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
-    theta_friction[0].shift(theta_friction[0][0].get_bottom()[1] * DOWN + 3 * DOWN * UNIT)
-
+    theta_friction[0].shift(
+        theta_friction[0][0].get_bottom()[1] * DOWN + 3 * DOWN * UNIT
+    )
 
     self.play(theta_accel.animate.move_to(theta_accel2.get_center()))
     self.add(theta_accel2)
@@ -537,7 +526,10 @@ def pendulum_init(scene):
 
     self.wait(2)
 
-    self.play(Write(small_t_text.shift(1.5*LEFT*UNIT)),small_theta.animate.shift(1.5 * UNIT * RIGHT))
+    self.play(
+        Write(small_t_text.shift(1.5 * LEFT * UNIT)),
+        small_theta.animate.shift(1.5 * UNIT * RIGHT),
+    )
     self.wait(1)
 
     self.play(Write(theta_approx))
@@ -568,8 +560,9 @@ def pendulum_init(scene):
         font_size=40,
     ).shift(3 * UP * UNIT)
 
-    theta_matrix_calc[0].shift(theta_matrix_calc[0][0].get_bottom()[1] * DOWN + 2 * UP * UNIT)
-
+    theta_matrix_calc[0].shift(
+        theta_matrix_calc[0][0].get_bottom()[1] * DOWN + 2 * UP * UNIT
+    )
 
     underbrace = MathTex(
         r"\overbrace{\qquad\qquad}_{\text{}}",
@@ -577,23 +570,21 @@ def pendulum_init(scene):
         font_size=40,
     )
 
-    underbrace.move_to(theta_matrix_calc[0][7], aligned_edge=LEFT).shift(
-        UP * UNIT
-    )
+    underbrace.move_to(theta_matrix_calc[0][7], aligned_edge=LEFT).shift(UP * UNIT)
 
     a_label = MathTex(
         r"A",
         color=dark_blue,
         font_size=40,
     )
-    
-    a_label.move_to(underbrace,aligned_edge=UP).shift(0.5 * UP * UNIT)
+
+    a_label.move_to(underbrace, aligned_edge=UP).shift(0.5 * UP * UNIT)
 
     # self.play(ReplacementTransform(theta_eqs, theta_matrix_calc))
     self.play(FadeOut(theta_eqs))
     self.play(Write(theta_matrix_calc))
     self.wait(1)
-    self.play(FadeIn(underbrace),FadeIn(a_label))
+    self.play(FadeIn(underbrace), FadeIn(a_label))
     self.wait(0.5)
 
     # DEBUG
@@ -614,7 +605,6 @@ def pendulum_init(scene):
     ).shift(1 * UNIT * UP)
 
     A_calc[0].shift(A_calc[0][0].get_bottom()[1] * DOWN)
-
 
     A_calc2 = (
         MathTex(
@@ -643,7 +633,6 @@ def pendulum_init(scene):
 
     theta_formula[0].shift(theta_formula[0][0].get_bottom()[1] * DOWN + 3 * DOWN * UNIT)
 
-
     self.play(Write(theta_formula))
 
     theta_d_formula = MathTex(
@@ -653,8 +642,9 @@ def pendulum_init(scene):
         font_size=40,
     ).shift(3.5 * UNIT * DOWN)
 
-    theta_d_formula[0].shift(theta_d_formula[0][0].get_bottom()[1] * DOWN + 4 * DOWN * UNIT)
-
+    theta_d_formula[0].shift(
+        theta_d_formula[0][0].get_bottom()[1] * DOWN + 4 * DOWN * UNIT
+    )
 
     self.wait(1)
 

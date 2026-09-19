@@ -36,8 +36,10 @@ def pendulum_double_pane(scene):
     wd = np.sqrt(max(w**2 - alpha**2, 0))
 
     def theta_func(t):
-        return theta_max * np.exp(-alpha * t) * (
-            np.cos(wd * t) + (alpha / wd) * np.sin(wd * t)
+        return (
+            theta_max
+            * np.exp(-alpha * t)
+            * (np.cos(wd * t) + (alpha / wd) * np.sin(wd * t))
         )
 
     def theta_dot_func(t):
@@ -71,11 +73,10 @@ def pendulum_double_pane(scene):
             tips=False,
         )
         .to_edge(LEFT)
-        .shift(2 * RIGHT *UNIT)
+        .shift(2 * RIGHT * UNIT)
     )
 
-
-    theta1_color = blue 
+    theta1_color = blue
     theta_color = red
 
     def theta1_func(t):
@@ -84,27 +85,31 @@ def pendulum_double_pane(scene):
     max_time = 8 * T
     max_y = 1.2 * theta_max
 
-    time_axes = Axes(
-        x_range=[0, max_time, T],
-        y_range=[
+    time_axes = (
+        Axes(
+            x_range=[0, max_time, T],
+            y_range=[
                 -theta_max * wd * 1.2,
                 theta_max * wd * 1.2,
                 theta_max * wd / 2,
             ],
-        x_length=4.2,
-        y_length=4.5,
-        axis_config={
-            "color": dark_blue,
-            "stroke_width": 3,
-            "include_numbers": False,
-        },
-        tips=False,
-    ).next_to(phase_axes, RIGHT).shift(1 * RIGHT * UNIT)
+            x_length=4.2,
+            y_length=4.5,
+            axis_config={
+                "color": dark_blue,
+                "stroke_width": 3,
+                "include_numbers": False,
+            },
+            tips=False,
+        )
+        .next_to(phase_axes, RIGHT)
+        .shift(1 * RIGHT * UNIT)
+    )
 
     time_labels = time_axes.get_axis_labels(
         MathTex(r"t", color=dark_blue),
         MathTex(r"", color=yellow),
-    ).shift(0.5*DOWN*UNIT)
+    ).shift(0.5 * DOWN * UNIT)
 
     theta_time_dot = always_redraw(
         lambda: Dot(color=theta_color).move_to(
@@ -130,7 +135,6 @@ def pendulum_double_pane(scene):
         stroke_width=2,
     )
 
-
     # Legend for the time graph
     legend_theta = VGroup(
         Line(LEFT * 0.3, RIGHT * 0.3, color=theta_color, stroke_width=6),
@@ -142,13 +146,14 @@ def pendulum_double_pane(scene):
         MathTex(r"\theta'", color=theta1_color),
     ).arrange(RIGHT, buff=0.2)
 
-    legend = VGroup(legend_theta, legend_theta1).arrange(
-        DOWN, aligned_edge=LEFT, buff=0.15
-    ).next_to(time_axes, UP, buff=0.2)
+    legend = (
+        VGroup(legend_theta, legend_theta1)
+        .arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        .next_to(time_axes, UP, buff=0.2)
+    )
 
     legend_group = VGroup(legend)
-    legend_group.next_to(time_axes, DOWN).shift(1.5*UNIT*UP + 3.75 *UNIT*RIGHT)
-
+    legend_group.next_to(time_axes, DOWN).shift(1.5 * UNIT * UP + 3.75 * UNIT * RIGHT)
 
     theta_label = MathTex(r"\theta", color=dark_blue)
     theta_dot_label = MathTex(r"\theta'", color=dark_blue)
@@ -158,13 +163,13 @@ def pendulum_double_pane(scene):
         theta_dot_label.next_to(phase_axes, UP, buff=0.1),
     )
 
-
     v_scale = 0.6  # smaller = wider-looking ellipse
 
     phase_point = always_redraw(
         lambda: Dot(color=yellow).move_to(
-            phase_axes.c2p(theta_func(time.get_value()),
-                        theta_dot_func(time.get_value()) * v_scale)
+            phase_axes.c2p(
+                theta_func(time.get_value()), theta_dot_func(time.get_value()) * v_scale
+            )
         )
     )
 
@@ -173,12 +178,6 @@ def pendulum_double_pane(scene):
         stroke_color=yellow,
         stroke_width=2,
     )
-
-
-
-
-
-
 
     self.wait(1)
     # add pendulum
@@ -212,5 +211,5 @@ def pendulum_double_pane(scene):
         FadeOut(theta1_time_dot),
         FadeOut(time_axes),
         FadeOut(time_labels),
-        FadeOut(legend_group)
+        FadeOut(legend_group),
     )
