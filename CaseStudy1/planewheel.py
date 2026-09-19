@@ -105,6 +105,18 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(GrowFromPoint(k2_text, Point([0, 0.9, 0])))
         self.wait(1)
 
+
+        m2group_1 = Group(plane, plane_text)
+        self.wait()
+        self.play(k2_text.animate.shift(0.2*DOWN),m2group_1.animate.shift(0.3*DOWN), spring2.animate.stretch(0.75, dim=1, about_edge=DOWN))
+        self.play(k2_text.animate.shift(0.6*UP),m2group_1.animate.shift(0.88*UP), spring2.animate.stretch(23/12, dim=1, about_edge=DOWN))
+        self.play(k2_text.animate.shift(0.4*DOWN),m2group_1.animate.shift(0.58*DOWN), spring2.animate.stretch(16/23, dim=1, about_edge=DOWN))
+
+
+        self.wait()
+
+
+
         damping = SVGMobject("../assets/damping.svg", stroke_color=dark_blue, stroke_width=3).scale(0.63)
         damping.shift(0.88 * UP + 0.5 * LEFT)
         self.play(LaggedStart(spring2.animate.shift(RIGHT * 0.5), Write(damping), lag_ratio=0.9))
@@ -126,7 +138,7 @@ class Plane(MovingCameraScene, PrimeScene):
         xs = Group(x1_text, x2_text)
         self.play(Write(dashed_1), Write(dashed_2))
 
-        x_axis = Arrow(start=4*LEFT + 3.25* DOWN, end=4*LEFT + 4*UP, color=dark_blue, stroke_width=4)
+        x_axis = Arrow(start=5*LEFT* UNIT + 3.25* DOWN, end=5*LEFT * UNIT + 4*UP, color=dark_blue, stroke_width=4)
         x_axis_label = MathTex("x", font_size=60, color=dark_blue).move_to(x_axis.get_top() + 0.5 *LEFT + 0.5 *DOWN)
         self.play(GrowArrow(x_axis))
         self.play(Write(x_axis_label))

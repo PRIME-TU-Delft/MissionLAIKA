@@ -1,6 +1,5 @@
 from manim import *
 
-config.background_color = ManimColor('#00FF00')
 class Plane(MovingCameraScene):
     def construct(self):
         dark_blue = ManimColor('#FFFFFF')
