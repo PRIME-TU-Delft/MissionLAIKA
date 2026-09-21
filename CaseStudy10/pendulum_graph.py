@@ -35,14 +35,14 @@ def pendulum_graph(scene):
     wd = np.sqrt(max(w**2 - alpha**2, 0))
 
     def theta_func(t):
-        return theta_max * np.exp(-alpha * t) * (
-            np.cos(wd * t) + (alpha / wd) * np.sin(wd * t)
+        return (
+            theta_max
+            * np.exp(-alpha * t)
+            * (np.cos(wd * t) + (alpha / wd) * np.sin(wd * t))
         )
 
     def theta_dot_func(t):
         return -theta_max * (w**2 / wd) * np.exp(-alpha * t) * np.sin(wd * t)
-
-
 
     # shift pendulum placement
     p_x = 3
@@ -90,10 +90,9 @@ def pendulum_graph(scene):
                 "include_numbers": False,
             },
             tips=False,
-        )
-        .to_edge(LEFT)
+        ).to_edge(LEFT)
         # .shift(UP * 0.2)
-    ).shift(2*RIGHT*UNIT)
+    ).shift(2 * RIGHT * UNIT)
 
     theta_label = MathTex(r"\theta", color=dark_blue)
     theta_dot_label = MathTex(r"\theta'", color=dark_blue)
@@ -157,15 +156,13 @@ def pendulum_graph(scene):
 
     self.wait(1)
 
-
-
     theta.clear_updaters()
     theta.add_updater(lambda m: m.set_value(theta_func(time.get_value())))
 
     # Set time to 0 so theta_func(0) = theta_max, positioning everything before fade-in
     time.set_value(0)
-    theta.set_value(np.pi/2)
-    
+    theta.set_value(np.pi / 2)
+
     # add pendulum
     self.play(
         LaggedStart(
@@ -178,7 +175,6 @@ def pendulum_graph(scene):
         Write(phase_labels),
     )
     self.wait(1)
-
 
     self.add(phase_trace, phase_point)
     self.play(time.animate.set_value(8 * T), rate_func=linear, run_time=8 * T)

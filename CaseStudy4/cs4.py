@@ -1,22 +1,23 @@
 from manim import *
 import numpy as np
 
+
 class EllipseFlow2D(Scene):
     def construct(self):
         # Parameters for the ellipse (streamlined body) and flow
-        a, b = 1.5, 0.5      # semi-major and semi-minor axes
-        U_inf = -1.0         # free-stream velocity (negative: right→left)
+        a, b = 1.5, 0.5  # semi-major and semi-minor axes
+        U_inf = -1.0  # free-stream velocity (negative: right→left)
 
         # Create coordinate plane
         plane = NumberPlane(
             x_range=[-4, 4, 1],
             y_range=[-2, 2, 1],
-            axis_config={"stroke_color": GREY, "include_ticks": False}
+            axis_config={"stroke_color": GREY, "include_ticks": False},
         )
         self.add(plane)
 
         # Draw the ellipse representing the plane cross-section
-        ellipse = Ellipse(width=2*a, height=2*b, color=WHITE)
+        ellipse = Ellipse(width=2 * a, height=2 * b, color=WHITE)
         self.add(ellipse)
 
         # Velocity field around ellipse via circle mapping
@@ -30,11 +31,11 @@ class EllipseFlow2D(Scene):
                 return np.array([0.0, 0.0])
             r = np.sqrt(r2)
             # potential flow around unit circle
-            Ur = U_inf * (1 - 1/r2) * (u/r)
-            Utheta = -U_inf * (1 + 1/r2) * (v/r)
+            Ur = U_inf * (1 - 1 / r2) * (u / r)
+            Utheta = -U_inf * (1 + 1 / r2) * (v / r)
             # convert to (u,v) components
-            Uu = Ur * (u/r) - Utheta * (v/r)
-            Uv = Ur * (v/r) + Utheta * (u/r)
+            Uu = Ur * (u / r) - Utheta * (v / r)
+            Uv = Ur * (v / r) + Utheta * (u / r)
             # map back to physical (x,y)
             vx = a * Uu
             vy = b * Uv
@@ -44,7 +45,9 @@ class EllipseFlow2D(Scene):
         seeds = []
         for y0 in np.linspace(-1.0, 1.0, 20):  # more sparse  # dense
             seeds.append([4.0, y0])
-        for y0 in np.concatenate((np.linspace(-2.0, -1.2, 4), np.linspace(1.2, 2.0, 4))):  # more sparse  # sparse
+        for y0 in np.concatenate(
+            (np.linspace(-2.0, -1.2, 4), np.linspace(1.2, 2.0, 4))
+        ):  # more sparse  # sparse
             seeds.append([4.0, y0])
 
         # Compute streamlines
@@ -67,6 +70,7 @@ class EllipseFlow2D(Scene):
         self.play(LaggedStartMap(Create, streamlines, run_time=7, lag_ratio=0.015))
         self.wait(2)
 
+
 def ellipse_velocity(x, y, a=1.5, b=0.5, U_inf=-1.0):
     # map to unit-circle coords
     u = x / a
@@ -76,29 +80,36 @@ def ellipse_velocity(x, y, a=1.5, b=0.5, U_inf=-1.0):
         return np.array([0.0, 0.0])
     r = np.sqrt(r2)
     # potential flow around unit circle
-    Ur = U_inf * (1 - 1/r2) * (u/r)
-    Utheta = -U_inf * (1 + 1/r2) * (v/r)
+    Ur = U_inf * (1 - 1 / r2) * (u / r)
+    Utheta = -U_inf * (1 + 1 / r2) * (v / r)
     # convert to (u,v) components
-    Uu = Ur * (u/r) - Utheta * (v/r)
-    Uv = Ur * (v/r) + Utheta * (u/r)
+    Uu = Ur * (u / r) - Utheta * (v / r)
+    Uv = Ur * (v / r) + Utheta * (u / r)
     # map back to physical (x,y)
     vx = a * Uu
     vy = b * Uv
     return np.array([vx, vy])
 
+
 class EllipseFlowStreamlines(Scene):
     def construct(self):
         a, b = 1.5, 0.5
-        plane = NumberPlane(x_range=[-4,4,1], y_range=[-2,2,1], axis_config={"stroke_color":GREY, "include_ticks":False})
+        plane = NumberPlane(
+            x_range=[-4, 4, 1],
+            y_range=[-2, 2, 1],
+            axis_config={"stroke_color": GREY, "include_ticks": False},
+        )
         self.add(plane)
-        ellipse = Ellipse(width=2*a, height=2*b, color=WHITE)
+        ellipse = Ellipse(width=2 * a, height=2 * b, color=WHITE)
         self.add(ellipse)
 
         # seed points (sparser)
         seeds = []
         for y0 in np.linspace(-1.0, 1.0, 20):
             seeds.append([4.0, y0])
-        for y0 in np.concatenate((np.linspace(-2.0, -1.2, 4), np.linspace(1.2, 2.0, 4))):
+        for y0 in np.concatenate(
+            (np.linspace(-2.0, -1.2, 4), np.linspace(1.2, 2.0, 4))
+        ):
             seeds.append([4.0, y0])
 
         streamlines = VGroup()
@@ -119,12 +130,17 @@ class EllipseFlowStreamlines(Scene):
         self.play(LaggedStartMap(Create, streamlines, run_time=7, lag_ratio=0.015))
         self.wait(2)
 
+
 class EllipseFlowVectors(Scene):
     def construct(self):
         a, b = 1.5, 0.5
-        plane = NumberPlane(x_range=[-4,4,1], y_range=[-2,2,1], axis_config={"stroke_color":GREY, "include_ticks":False})
+        plane = NumberPlane(
+            x_range=[-4, 4, 1],
+            y_range=[-2, 2, 1],
+            axis_config={"stroke_color": GREY, "include_ticks": False},
+        )
         self.add(plane)
-        ellipse = Ellipse(width=2*a, height=2*b, color=WHITE)
+        ellipse = Ellipse(width=2 * a, height=2 * b, color=WHITE)
         self.add(ellipse)
 
         # sample grid points with increased density but shorter vectors
@@ -136,20 +152,20 @@ class EllipseFlowVectors(Scene):
             for y in ys:
                 vx, vy = 0.3 * ellipse_velocity(x, y, a, b)
                 # skip inside ellipse
-                if (x/a)**2 + (y/b)**2 < 1:
+                if (x / a) ** 2 + (y / b) ** 2 < 1:
                     continue
                 start = plane.c2p(x, y)
                 # shorter arrows for clarity
-                end = plane.c2p(x + 0.4*vx, y + 0.4*vy)  # increase arrow length
+                end = plane.c2p(x + 0.4 * vx, y + 0.4 * vy)  # increase arrow length
                 arrow = Arrow(
-                    start, end,
+                    start,
+                    end,
                     buff=0,
                     stroke_width=0.8,  # slightly thicker arrows,
                     tip_length=0.08,  # slightly larger tips,
-                    max_stroke_width_to_length_ratio=20
+                    max_stroke_width_to_length_ratio=20,
                 )
                 vectors.add(arrow)
 
         self.play(*(GrowArrow(i) for i in vectors), run_time=4)
         self.wait(2)
-

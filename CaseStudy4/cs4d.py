@@ -9,7 +9,8 @@ from manim import *
 from primescene import *
 
 
-config.background_color = ManimColor('#FFFFFF')
+config.background_color = ManimColor("#FFFFFF")
+
 
 def cosine_spacing(n: int) -> np.ndarray:
     k = np.arange(n)
@@ -17,23 +18,37 @@ def cosine_spacing(n: int) -> np.ndarray:
     return (1.0 - np.cos(theta)) * 0.5
 
 
-def naca4_coordinates(code: str, n: int = 201, chord: float = 2.0,
-                      cosine: bool = True, closed: bool = True) -> np.ndarray:
+def naca4_coordinates(
+    code: str,
+    n: int = 201,
+    chord: float = 2.0,
+    cosine: bool = True,
+    closed: bool = True,
+) -> np.ndarray:
     m = int(code[0]) / 100.0
     p = int(code[1]) / 10.0
     t = int(code[2:]) / 100.0
     x = cosine_spacing(n) if cosine else np.linspace(0.0, 1.0, n)
-    yt = 5 * t * (0.2969 * np.sqrt(
-        np.maximum(x, 1e-12)) - 0.1260 * x - 0.3516 * x ** 2 + 0.2843 * x ** 3 - 0.1015 * x ** 4)
+    yt = (
+        5
+        * t
+        * (
+            0.2969 * np.sqrt(np.maximum(x, 1e-12))
+            - 0.1260 * x
+            - 0.3516 * x**2
+            + 0.2843 * x**3
+            - 0.1015 * x**4
+        )
+    )
     yc = np.zeros_like(x)
     dyc_dx = np.zeros_like(x)
     for i, xi in enumerate(x):
         if p > 1e-12:
             if xi < p:
-                yc[i] = m / (p ** 2) * (2 * p * xi - xi ** 2)
-                dyc_dx[i] = 2 * m / (p ** 2) * (p - xi)
+                yc[i] = m / (p**2) * (2 * p * xi - xi**2)
+                dyc_dx[i] = 2 * m / (p**2) * (p - xi)
             else:
-                yc[i] = m / ((1 - p) ** 2) * ((1 - 2 * p) + 2 * p * xi - xi ** 2)
+                yc[i] = m / ((1 - p) ** 2) * ((1 - 2 * p) + 2 * p * xi - xi**2)
                 dyc_dx[i] = 2 * m / ((1 - p) ** 2) * (p - xi)
     theta = np.arctan(dyc_dx)
     x_u = x - yt * np.sin(theta)
@@ -107,29 +122,33 @@ def field_from_vortices(xv, yv, Gamma, U_inf, alpha_deg, X, Y, pts=None):
         v += -inv2pi * Gamma[j] * (dx / r2)
     if pts is not None:
         poly = Path(pts)
-        mask = poly.contains_points(np.vstack([X.ravel(), Y.ravel()]).T).reshape(X.shape)
+        mask = poly.contains_points(np.vstack([X.ravel(), Y.ravel()]).T).reshape(
+            X.shape
+        )
         u[mask] = 0.0
         v[mask] = 0.0
     return u, v
 
+
 class Lecture4Scene(PrimeScene, MovingCameraScene):
     def construct(self):
         super().construct()
-        UNIT = 3/4
-        dark_blue = ManimColor('#0C2340')
-        red = ManimColor('#E03C31')
-        yellow = ManimColor('#cc9316')
-        blue = ManimColor('#0076C2')
-        green = ManimColor('#009B77')
+        UNIT = 3 / 4
+        dark_blue = ManimColor("#0C2340")
+        red = ManimColor("#E03C31")
+        yellow = ManimColor("#cc9316")
+        blue = ManimColor("#0076C2")
+        green = ManimColor("#009B77")
 
-        grid = NumberPlane(background_line_style={
-            "stroke_color": dark_blue,
-            "stroke_width": 1,
-            "stroke_opacity": 0.15
-        },
+        grid = NumberPlane(
+            background_line_style={
+                "stroke_color": dark_blue,
+                "stroke_width": 1,
+                "stroke_opacity": 0.15,
+            },
             axis_config={
                 "stroke_color": dark_blue,  # axes color
-                "stroke_width": 2  # thicker lines
+                "stroke_width": 2,  # thicker lines
             },
             x_range=(0, 72, 1),
             y_range=(0, 36, 1),
@@ -139,7 +158,9 @@ class Lecture4Scene(PrimeScene, MovingCameraScene):
             r"J = \frac{\partial(u_1, u_2)}{\partial(x_1, x_2)} = \begin{bmatrix}\frac{\partial u_1}{\partial x_1}(\mathbf{x}_0) & "
             r"\frac{\partial u_1}{\partial x_2}(\mathbf{x}_0)\\\frac{\partial u_2}{\partial x_1}(\mathbf{x}_0)"
             r" & \frac{\partial u_2}{\partial x_2}(\mathbf{x}_0)\end{bmatrix}",
-            color=dark_blue, font_size=48)[0]
+            color=dark_blue,
+            font_size=48,
+        )[0]
         eq4a.shift(eq4a[0].get_bottom()[1] * DOWN + 3 * UNIT * DOWN)
         eq4a[4:6].set_color(yellow)
         eq4a[7:9].set_color(yellow)
@@ -158,22 +179,30 @@ class Lecture4Scene(PrimeScene, MovingCameraScene):
         eq4a[59:61].set_color(blue)
         eq4a[62:64].set_color(green)
 
-        eq6b = MathTex(r"\mathbf{x}_0+\Delta \mathbf{x}",
-                      color=dark_blue, font_size=60)[0]
-        eq6b.shift(eq6b[0].get_bottom()[1] * DOWN).shift(3*UNIT*RIGHT + 3*UNIT*UP)
+        eq6b = MathTex(
+            r"\mathbf{x}_0+\Delta \mathbf{x}", color=dark_blue, font_size=60
+        )[0]
+        eq6b.shift(eq6b[0].get_bottom()[1] * DOWN).shift(
+            3 * UNIT * RIGHT + 3 * UNIT * UP
+        )
         eq6b[:2].set_color(green)
         eq6b[4].set_color(blue)
 
-        eq7 = MathTex(r"\Delta \mathbf{x}=\begin{bmatrix} \Delta x_1 \\ \Delta x_2 \end{bmatrix}",
-                      color=dark_blue, font_size=60)[0]
-        eq7.shift(3*UNIT*UP + eq7[0].get_bottom()[1] * DOWN + 3*UNIT*LEFT)
+        eq7 = MathTex(
+            r"\Delta \mathbf{x}=\begin{bmatrix} \Delta x_1 \\ \Delta x_2 \end{bmatrix}",
+            color=dark_blue,
+            font_size=60,
+        )[0]
+        eq7.shift(3 * UNIT * UP + eq7[0].get_bottom()[1] * DOWN + 3 * UNIT * LEFT)
         eq7[1].set_color(blue)
         eq7[5:7].set_color(blue)
         eq7[8:10].set_color(blue)
 
-
-        eq9 = MathTex(r"\mathbf{u}(\mathbf{x}_0+\Delta \mathbf{x}) \approx \mathbf{u}(\mathbf{x}_0) + J \Delta \mathbf{x}",
-                      color=dark_blue, font_size=60)[0]
+        eq9 = MathTex(
+            r"\mathbf{u}(\mathbf{x}_0+\Delta \mathbf{x}) \approx \mathbf{u}(\mathbf{x}_0) + J \Delta \mathbf{x}",
+            color=dark_blue,
+            font_size=60,
+        )[0]
         eq9.shift(eq9[0].get_bottom()[1] * DOWN)
         eq9[0].set_color(yellow)
         eq9[2:4].set_color(green)
@@ -200,7 +229,10 @@ class Lecture4Scene(PrimeScene, MovingCameraScene):
         ys = np.linspace(-3.0, 3.0, 200)
         XX, YY = np.meshgrid(xs, ys)
         UU, VV = field_from_vortices(xv, yv, Gamma, U_inf, alpha_deg, XX, YY, pts=pts)
-        free_angle = np.arctan2(UV := U_inf * np.sin(np.deg2rad(alpha_deg)), -U_inf * np.cos(np.deg2rad(alpha_deg)))
+        free_angle = np.arctan2(
+            UV := U_inf * np.sin(np.deg2rad(alpha_deg)),
+            -U_inf * np.cos(np.deg2rad(alpha_deg)),
+        )
         angles = np.arctan2(VV, UU)
         divergence = np.abs(np.unwrap(angles - free_angle))
         max_div = divergence.max()
@@ -213,7 +245,9 @@ class Lecture4Scene(PrimeScene, MovingCameraScene):
 
         ax = Axes(x_range=[-5, 5, 1], y_range=[-3, 3, 0.5], x_length=14, y_length=8)
         airfoil_shape = VMobject(color=dark_blue)
-        airfoil_shape.set_points_smoothly([ax.coords_to_point(px, py) for px, py in pts])
+        airfoil_shape.set_points_smoothly(
+            [ax.coords_to_point(px, py) for px, py in pts]
+        )
 
         self.play(Write(airfoil_shape))
 
@@ -225,25 +259,33 @@ class Lecture4Scene(PrimeScene, MovingCameraScene):
         # Sample many points along the boundary (no duplicate corners)
         samples_per_side = 30
         # bottom: x from -half -> +half, y = -half
-        bottom = np.column_stack([
-            np.linspace(-half, +half, samples_per_side, endpoint=False),
-            np.full(samples_per_side, -half),
-        ])
+        bottom = np.column_stack(
+            [
+                np.linspace(-half, +half, samples_per_side, endpoint=False),
+                np.full(samples_per_side, -half),
+            ]
+        )
         # right: y from -half -> +half, x = +half
-        right = np.column_stack([
-            np.full(samples_per_side, +half),
-            np.linspace(-half, +half, samples_per_side, endpoint=False),
-        ])
+        right = np.column_stack(
+            [
+                np.full(samples_per_side, +half),
+                np.linspace(-half, +half, samples_per_side, endpoint=False),
+            ]
+        )
         # top: x from +half -> -half, y = +half
-        top = np.column_stack([
-            np.linspace(+half, -half, samples_per_side, endpoint=False),
-            np.full(samples_per_side, +half),
-        ])
+        top = np.column_stack(
+            [
+                np.linspace(+half, -half, samples_per_side, endpoint=False),
+                np.full(samples_per_side, +half),
+            ]
+        )
         # left: y from +half -> -half, x = -half
-        left = np.column_stack([
-            np.full(samples_per_side, -half),
-            np.linspace(+half, -half, samples_per_side, endpoint=False),
-        ])
+        left = np.column_stack(
+            [
+                np.full(samples_per_side, -half),
+                np.linspace(+half, -half, samples_per_side, endpoint=False),
+            ]
+        )
 
         boundary_world = np.vstack([bottom, right, top, left]) + square_center
 
@@ -264,7 +306,11 @@ class Lecture4Scene(PrimeScene, MovingCameraScene):
                 return
             xw, yw = ax.point_to_coords(m.get_center())
             vx, vy, _ = vfield_func(np.array([xw, yw, 0.0]))
-            m.move_to(ax.coords_to_point(xw + speed_scale * vx * dt, yw + speed_scale * vy * dt))
+            m.move_to(
+                ax.coords_to_point(
+                    xw + speed_scale * vx * dt, yw + speed_scale * vy * dt
+                )
+            )
 
         for m in markers:
             m.add_updater(advect_point)
@@ -304,9 +350,14 @@ class Lecture4Scene(PrimeScene, MovingCameraScene):
         self.wait()
         moving_shell.remove_updater(update_shell)
         self.wait(1)
-        self.play(self.camera.frame.animate.scale(4/3).shift(0.5 * UP))
+        self.play(self.camera.frame.animate.scale(4 / 3).shift(0.5 * UP))
         self.wait(1)
-        self.play(FadeOut(moving_shell), FadeOut(static_shell), FadeOut(airfoil_shape), eq4a.animate.shift(3*UNIT*UP))
+        self.play(
+            FadeOut(moving_shell),
+            FadeOut(static_shell),
+            FadeOut(airfoil_shape),
+            eq4a.animate.shift(3 * UNIT * UP),
+        )
         self.wait(1)
         self.play(FadeOut(eq4a))
         self.wait(2)

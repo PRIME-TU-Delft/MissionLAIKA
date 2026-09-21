@@ -9,7 +9,7 @@ def pendulum_formula(scene):
     yellow = ManimColor("#cc9316")  # ManimColor('#FFCC12')
     blue = ManimColor("#0076C2")  # ManimColor('#46A6FF')
     green = ManimColor("#009B77")
-    
+
     theta_label = MathTex(
         r"""{\renewcommand{\arraystretch}{1.45}
         \text{With friction: }
@@ -28,20 +28,22 @@ def pendulum_formula(scene):
         font_size=40,
     ).shift(2 * UNIT * DOWN)
 
-    main_group = VGroup(
-        theta_label, theta_formula
-    ).arrange(DOWN, aligned_edge=LEFT, buff=0.45)
+    main_group = VGroup(theta_label, theta_formula).arrange(
+        DOWN, aligned_edge=LEFT, buff=0.45
+    )
 
     theta_label[0].shift(theta_label[0][0].get_bottom()[1] * DOWN + 1 * UP * UNIT)
     theta_formula[0].shift(theta_formula[0][0].get_bottom()[1] * DOWN + 1 * DOWN * UNIT)
-
 
     self.play(Write(theta_label))
     self.play(Write(theta_formula))
 
     self.wait(1)
 
-    self.play(theta_formula[0][63:75].animate.set_color(yellow),theta_formula[0][76:88].animate.set_color(yellow))
+    self.play(
+        theta_formula[0][63:75].animate.set_color(yellow),
+        theta_formula[0][76:88].animate.set_color(yellow),
+    )
     self.wait(0.5)
 
     # DEBUG
@@ -74,16 +76,18 @@ def pendulum_formula(scene):
     # # self.remove(theta_formula)
     # self.remove(indices)
 
-    self.play(ReplacementTransform(theta_formula[0][:30], theta_formula2[0][:30]),
+    self.play(
+        ReplacementTransform(theta_formula[0][:30], theta_formula2[0][:30]),
         ReplacementTransform(theta_formula[0][30:32], theta_formula2[0][30:37]),
-        ReplacementTransform(theta_formula[0][32:], theta_formula2[0][37:]))
-    
+        ReplacementTransform(theta_formula[0][32:], theta_formula2[0][37:]),
+    )
 
     self.wait(1)
 
-    self.play(theta_label.animate.shift(2*UNIT*UP),
-              theta_formula2.animate.shift(2*UNIT*UP))
-
+    self.play(
+        theta_label.animate.shift(2 * UNIT * UP),
+        theta_formula2.animate.shift(2 * UNIT * UP),
+    )
 
     friction_formula_squared = MathTex(
         r"""{\renewcommand{\arraystretch}{1.15}
@@ -112,20 +116,20 @@ def pendulum_formula(scene):
         """,
         color=dark_blue,
         font_size=35,
-    ).shift(2*UNIT*LEFT)
-    main_group = VGroup(
-        friction_formula_squared, bar, friction_addition
-    ).arrange(DOWN, buff=0.45).shift(1.5*UNIT*DOWN)
-
+    ).shift(2 * UNIT * LEFT)
+    main_group = (
+        VGroup(friction_formula_squared, bar, friction_addition)
+        .arrange(DOWN, buff=0.45)
+        .shift(1.5 * UNIT * DOWN)
+    )
 
     self.wait(0.5)
 
     bar[0].shift(bar[0][0].get_bottom()[1] * DOWN + 2 * DOWN * UNIT)
-    friction_formula_squared[0].shift(friction_formula_squared[0][0].get_bottom()[1] * DOWN + 2 * DOWN * UNIT)
-    plus[0].shift(plus[0][0].get_bottom()[1] * DOWN )
-
-
-
+    friction_formula_squared[0].shift(
+        friction_formula_squared[0][0].get_bottom()[1] * DOWN + 2 * DOWN * UNIT
+    )
+    plus[0].shift(plus[0][0].get_bottom()[1] * DOWN)
 
     self.wait(0.5)
     self.play(
@@ -134,12 +138,18 @@ def pendulum_formula(scene):
         Write(bar),
     )
 
-    friction_addition[0].shift(friction_addition[0][0].get_bottom()[1] * DOWN )
+    friction_addition[0].shift(friction_addition[0][0].get_bottom()[1] * DOWN)
 
-    self.play(Write(friction_addition.shift(3.42*UNIT*LEFT + 3 * DOWN * UNIT)))
+    self.play(Write(friction_addition.shift(3.42 * UNIT * LEFT + 3 * DOWN * UNIT)))
 
     self.wait(1)
 
-    self.play(FadeOut(plus),FadeOut(bar),FadeOut(friction_addition),FadeOut(friction_addition),
-             FadeOut(theta_formula2), FadeOut(theta_label), FadeOut(friction_formula_squared))
-
+    self.play(
+        FadeOut(plus),
+        FadeOut(bar),
+        FadeOut(friction_addition),
+        FadeOut(friction_addition),
+        FadeOut(theta_formula2),
+        FadeOut(theta_label),
+        FadeOut(friction_formula_squared),
+    )

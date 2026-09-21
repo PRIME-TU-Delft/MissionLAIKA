@@ -1,21 +1,25 @@
 from manim import *
 from primescene import *
-config.background_color = ManimColor('#FFFFFF') #ManimColor('#002213')
+
+config.background_color = ManimColor("#FFFFFF")  # ManimColor('#002213')
+
+
 class Plane(MovingCameraScene, PrimeScene):
     def construct(self):
         super().construct()
-        UNIT = 3/4
-        dark_blue = ManimColor('#0C2340')
-        red = ManimColor('#E03C31') #ManimColor('#FF5132')
-        yellow = ManimColor('#cc9316') #ManimColor('#FFCC12')
-        blue = ManimColor('#0076C2') #ManimColor('#46A6FF')
+        UNIT = 3 / 4
+        dark_blue = ManimColor("#0C2340")
+        red = ManimColor("#E03C31")  # ManimColor('#FF5132')
+        yellow = ManimColor("#cc9316")  # ManimColor('#FFCC12')
+        blue = ManimColor("#0076C2")  # ManimColor('#46A6FF')
 
-        grid = NumberPlane(background_line_style={
+        grid = NumberPlane(
+            background_line_style={
                 "stroke_color": dark_blue,
                 "stroke_width": 1,
-                "stroke_opacity": 0.15
+                "stroke_opacity": 0.15,
             },
-            x_range=(0,72,1),
+            x_range=(0, 72, 1),
             y_range=(0, 36, 1),
         ).scale(UNIT)
 
@@ -23,20 +27,29 @@ class Plane(MovingCameraScene, PrimeScene):
 
         self.wait(1)
 
-        #Masses
-        left_square = Square(color=red, side_length=2*UNIT).shift(LEFT * UNIT * 5 + 20 * RIGHT * UNIT)
-        center_square = Square(color=red, side_length=4*UNIT). shift(20 * RIGHT * UNIT)
-        right_square = Square(color=red, side_length=2*UNIT).shift(RIGHT * UNIT * 5+ 20 * RIGHT * UNIT)
+        # Masses
+        left_square = Square(color=red, side_length=2 * UNIT).shift(
+            LEFT * UNIT * 5 + 20 * RIGHT * UNIT
+        )
+        center_square = Square(color=red, side_length=4 * UNIT).shift(20 * RIGHT * UNIT)
+        right_square = Square(color=red, side_length=2 * UNIT).shift(
+            RIGHT * UNIT * 5 + 20 * RIGHT * UNIT
+        )
 
-        #Springs
-        spring_left = SVGMobject("../assets/Spring.svg", stroke_color=dark_blue, stroke_width=3).scale_to_fit_height(2*UNIT).rotate(PI/2)
+        # Springs
+        spring_left = (
+            SVGMobject("../assets/Spring.svg", stroke_color=dark_blue, stroke_width=3)
+            .scale_to_fit_height(2 * UNIT)
+            .rotate(PI / 2)
+        )
         spring_right = spring_left.copy()
 
-        spring_left.shift(3 * LEFT * UNIT+ 20 * RIGHT * UNIT)
-        spring_right.shift(3 * RIGHT * UNIT+ 20 * RIGHT * UNIT)
+        spring_left.shift(3 * LEFT * UNIT + 20 * RIGHT * UNIT)
+        spring_right.shift(3 * RIGHT * UNIT + 20 * RIGHT * UNIT)
 
         spring_color = blue
-        #Add springs
+
+        # Add springs
         def get_spring():
             start = left_square.get_right()
             end = center_square.get_left()
@@ -61,42 +74,57 @@ class Plane(MovingCameraScene, PrimeScene):
 
         spring_left = always_redraw(get_spring)
         spring_right = always_redraw(get_spring2)
-        system = Group(spring_left, spring_right, left_square, right_square, center_square)
+        system = Group(
+            spring_left, spring_right, left_square, right_square, center_square
+        )
         self.add(system)
 
         self.play(system.animate.shift(20 * LEFT * UNIT))
         self.wait(1)
-        #horizontal movement
-        self.play(left_square.animate.shift(1 * UNIT * RIGHT), right_square.animate.shift(2 * UNIT * RIGHT), run_time=0.5)
-        self.play(left_square.animate.shift(3 * UNIT * LEFT), right_square.animate.shift(3 * UNIT * LEFT), run_time=0.5)
-        self.play(left_square.animate.shift(2 * UNIT * RIGHT), right_square.animate.shift(1 * UNIT * RIGHT), run_time=0.5)
+        # horizontal movement
+        self.play(
+            left_square.animate.shift(1 * UNIT * RIGHT),
+            right_square.animate.shift(2 * UNIT * RIGHT),
+            run_time=0.5,
+        )
+        self.play(
+            left_square.animate.shift(3 * UNIT * LEFT),
+            right_square.animate.shift(3 * UNIT * LEFT),
+            run_time=0.5,
+        )
+        self.play(
+            left_square.animate.shift(2 * UNIT * RIGHT),
+            right_square.animate.shift(1 * UNIT * RIGHT),
+            run_time=0.5,
+        )
 
-        a=11
-        b=21
+        a = 11
+        b = 21
 
         eq0 = MathTex(
             r"\begin{cases}"
             r"m_1 x_1'' = k(x_2-x_1) \\"
             r"m_2 x_2'' = -k(x_2-x_1) + k(x_3-x_2) \\"
             r"m_3 x_3'' = -k(x_3-x_2) \\"
-            r"\end{cases}", color=dark_blue
+            r"\end{cases}",
+            color=dark_blue,
         )[0]
         eq0.shift(20 * RIGHT * UNIT)
         eq0[5 + 3 + 4].set_color(blue)
-        eq0[5 + 5 + 4:5 + 7 + 4].set_color(yellow)
-        eq0[5 + 8 + 4:5 + 10 + 4].set_color(yellow)
+        eq0[5 + 5 + 4 : 5 + 7 + 4].set_color(yellow)
+        eq0[5 + 8 + 4 : 5 + 10 + 4].set_color(yellow)
         eq0[5 + a + 4 + 8].set_color(blue)
-        eq0[5 + a + 6 + 8:5 + a + 8 + 8].set_color(yellow)
-        eq0[5 + a + 9 + 8:5 + a + 11 + 8].set_color(yellow)
+        eq0[5 + a + 6 + 8 : 5 + a + 8 + 8].set_color(yellow)
+        eq0[5 + a + 9 + 8 : 5 + a + 11 + 8].set_color(yellow)
         eq0[5 + a + 13 + 8].set_color(blue)
-        eq0[5 + a + 15 + 8:5 + a + 17 + 8].set_color(yellow)
-        eq0[5 + a + 18 + 8:5 + a + 20 + 8].set_color(yellow)
+        eq0[5 + a + 15 + 8 : 5 + a + 17 + 8].set_color(yellow)
+        eq0[5 + a + 18 + 8 : 5 + a + 20 + 8].set_color(yellow)
         eq0[5 + a + b + 4 + 12].set_color(blue)
-        eq0[5 + a + b + 6 + 12:5 + a + b + 8 + 12].set_color(yellow)
-        eq0[5 + a + b + 9 + 12:5 + a + b + 11 + 12].set_color(yellow)
+        eq0[5 + a + b + 6 + 12 : 5 + a + b + 8 + 12].set_color(yellow)
+        eq0[5 + a + b + 9 + 12 : 5 + a + b + 11 + 12].set_color(yellow)
         eq0[5:7].set_color(red)
-        eq0[5 + a + 4:5 + a + 4 + 2].set_color(red)
-        eq0[5 + a + 4 + b + 4:5 + a + 4 + b + 4 + 2].set_color(red)
+        eq0[5 + a + 4 : 5 + a + 4 + 2].set_color(red)
+        eq0[5 + a + 4 + b + 4 : 5 + a + 4 + b + 4 + 2].set_color(red)
         eq0[5 + 2].set_color(yellow)
         eq0[5 + a + 4 + 2].set_color(yellow)
         eq0[5 + a + 4 + b + 4 + 2].set_color(yellow)
@@ -104,10 +132,12 @@ class Plane(MovingCameraScene, PrimeScene):
         eq0[5 + a + 4 + 2 + 3].set_color(yellow)
         eq0[5 + a + 4 + b + 4 + 2 + 3].set_color(yellow)
 
-        self.play(system.animate.shift(20 * LEFT * UNIT), eq0.animate.shift(20 * LEFT * UNIT))
+        self.play(
+            system.animate.shift(20 * LEFT * UNIT), eq0.animate.shift(20 * LEFT * UNIT)
+        )
         self.remove(system)
         self.play(eq0.animate.scale(1.2))
-        self.play(eq0.animate.scale(5.0/6))
+        self.play(eq0.animate.scale(5.0 / 6))
         self.wait(1)
         self.play(eq0.animate.shift(20 * LEFT * UNIT))
         self.wait(1)
@@ -120,7 +150,7 @@ class Plane(MovingCameraScene, PrimeScene):
             r"0 & \frac{k}{m_1} & -\frac{k}{m_1}"
             r"\end{bmatrix}}",
             color=dark_blue,
-            font_size=60
+            font_size=60,
         )[0]
         eq1.shift(20 * RIGHT * UNIT + eq1[0].get_bottom()[1] * DOWN)
         eq1[8].set_color(blue)
@@ -157,7 +187,7 @@ class Plane(MovingCameraScene, PrimeScene):
             r"-\frac{k(2m_1 + m_2)}{m_1 m_2}"
             r"\end{bmatrix}",
             color=dark_blue,
-            font_size=48
+            font_size=48,
         )[0]
         eq2.shift(eq2[4].get_bottom()[1] * DOWN)
         eq2[15].set_color(blue)
@@ -178,7 +208,7 @@ class Plane(MovingCameraScene, PrimeScene):
             r"1 & 1 & 1"
             r"\end{array} \right]",
             color=dark_blue,
-            font_size=48
+            font_size=48,
         )[0]
         eq3.shift(2 * UNIT * DOWN + eq3[1].get_bottom()[1] * DOWN)
         eq3[19:21].set_color(red)
@@ -189,7 +219,9 @@ class Plane(MovingCameraScene, PrimeScene):
 
         eq4 = MathTex("\lambda = -\omega^2", color=dark_blue, font_size=48)[0]
         eq4.shift(2 * UNIT * UP + 4 * UNIT * RIGHT - eq4[0].get_bottom()[1] * UP)
-        self.play(LaggedStart(eq2.animate.shift(3*UNIT*LEFT),Write(eq4), lag_ratio=0.4))
+        self.play(
+            LaggedStart(eq2.animate.shift(3 * UNIT * LEFT), Write(eq4), lag_ratio=0.4)
+        )
 
         eigen = Group(eq2, eq3, eq4)
         self.wait(1)
@@ -198,7 +230,7 @@ class Plane(MovingCameraScene, PrimeScene):
 
         eq00 = MathTex(
             r"\textbf{x}(t) = C_1 \textbf{v}_1 e^{i \omega_1 t} + C_2 \textbf{v}_2 e^{i \omega_2 t} + \cdots + C_n \textbf{v}_n e^{i \omega_n t}",
-            color=dark_blue
+            color=dark_blue,
         )[0]
         eq00.shift(eq00[0].get_bottom()[1] * DOWN)
         self.play(Write(eq00))
@@ -206,11 +238,17 @@ class Plane(MovingCameraScene, PrimeScene):
 
         eq5 = MathTex(
             r"\textbf{x}(t) = C_1 \textbf{v}_1 \cos(\omega_1 t) + C_2 \textbf{v}_2 \cos(\omega_2 t) + \cdots + C_n \textbf{v}_n \cos(\omega_n t)",
-            color=dark_blue
+            color=dark_blue,
         )[0]
         eq5.shift(eq5[0].get_bottom()[1] * DOWN)
-        self.play(ReplacementTransform(eq00[:9], eq5[:9]), ReplacementTransform(eq00[9:14], eq5[9:17]), ReplacementTransform(eq00[14:19], eq5[17:22]), ReplacementTransform(eq00[19:24], eq5[22:30]), ReplacementTransform(eq00[24:33], eq5[30:39]), ReplacementTransform(eq00[33:], eq5[39:]),)
-
+        self.play(
+            ReplacementTransform(eq00[:9], eq5[:9]),
+            ReplacementTransform(eq00[9:14], eq5[9:17]),
+            ReplacementTransform(eq00[14:19], eq5[17:22]),
+            ReplacementTransform(eq00[19:24], eq5[22:30]),
+            ReplacementTransform(eq00[24:33], eq5[30:39]),
+            ReplacementTransform(eq00[33:], eq5[39:]),
+        )
 
         self.wait(1)
         self.play(Indicate(eq5[13:15]), Indicate(eq5[26:28]), Indicate(eq5[43:45]))
@@ -225,11 +263,7 @@ class Plane(MovingCameraScene, PrimeScene):
         self.wait(1)
         self.play(Unwrite(eq5))
 
-        eq7 = MathTex(
-            r"\lambda_1 = 0",
-            color=dark_blue,
-            font_size=48
-        )[0]
+        eq7 = MathTex(r"\lambda_1 = 0", color=dark_blue, font_size=48)[0]
         eq7.shift(12 * UNIT * RIGHT + 3 * UNIT * UP + eq7[0].get_bottom()[1] * DOWN)
         self.play(Write(eq7))
         self.wait(1)
@@ -242,22 +276,21 @@ class Plane(MovingCameraScene, PrimeScene):
             r"1"
             r"\end{bmatrix}",
             color=dark_blue,
-            font_size=48
+            font_size=48,
         )[0]
         eq8.shift(15 * UNIT * RIGHT + 3 * UNIT * UP + eq8[0].get_bottom()[1] * DOWN)
         self.play(Write(eq8))
         self.wait(1)
 
-        self.play(system.animate.shift(1*UNIT*RIGHT))
+        self.play(system.animate.shift(1 * UNIT * RIGHT))
         self.wait(1)
 
         eq52 = MathTex(
             r"\textbf{x}(t) = C_2 \textbf{v}_2 \cos\left(\omega_2 t\right) + C_3 \textbf{v}_3 \cos\left(\omega_3 t\right)",
-            color=dark_blue
+            color=dark_blue,
         )[0]
         eq52.shift(eq52[0].get_bottom()[1] * DOWN)
         self.add(eq52)
-
 
         eq6 = MathTex(
             r"\textbf{x}(t) = C_2 "
@@ -272,7 +305,8 @@ class Plane(MovingCameraScene, PrimeScene):
             r"-\frac{2m_1}{m_2} \\"
             r"1"
             r"\end{bmatrix}"
-            r" \cos\left(- \sqrt{\lambda_3} t\right)", color=dark_blue
+            r" \cos\left(- \sqrt{\lambda_3} t\right)",
+            color=dark_blue,
         )[0]
         eq6[34:36].set_color(red)
         eq6[37:39].set_color(red)
@@ -280,18 +314,20 @@ class Plane(MovingCameraScene, PrimeScene):
         self.play(self.camera.frame.animate.move_to(ORIGIN))
         self.wait(1)
 
-        self.play(ReplacementTransform(eq52[:7], eq6[:7]), ReplacementTransform(eq52[7:9], eq6[7:15]),
-                  ReplacementTransform(eq52[9:13], eq6[15:19]), ReplacementTransform(eq52[13: 15], eq6[19:24]),
-                  ReplacementTransform(eq52[15:20], eq6[24:29]), ReplacementTransform(eq52[20:22], eq6[29:42]),
-                  ReplacementTransform(eq52[22:26], eq6[42:46]), ReplacementTransform(eq52[26:28], eq6[46:51]),
-                  ReplacementTransform(eq52[28:], eq6[51:]))
+        self.play(
+            ReplacementTransform(eq52[:7], eq6[:7]),
+            ReplacementTransform(eq52[7:9], eq6[7:15]),
+            ReplacementTransform(eq52[9:13], eq6[15:19]),
+            ReplacementTransform(eq52[13:15], eq6[19:24]),
+            ReplacementTransform(eq52[15:20], eq6[24:29]),
+            ReplacementTransform(eq52[20:22], eq6[29:42]),
+            ReplacementTransform(eq52[22:26], eq6[42:46]),
+            ReplacementTransform(eq52[26:28], eq6[46:51]),
+            ReplacementTransform(eq52[28:], eq6[51:]),
+        )
 
-        eq9 = MathTex(
-            r"m_2 = 3 m_1",
-            color=dark_blue,
-            font_size=48
-        )[0]
-        eq9.shift(2*UNIT*UP + eq9[0].get_bottom()[1] * DOWN)
+        eq9 = MathTex(r"m_2 = 3 m_1", color=dark_blue, font_size=48)[0]
+        eq9.shift(2 * UNIT * UP + eq9[0].get_bottom()[1] * DOWN)
         eq9[:2].set_color(red)
         eq9[4:6].set_color(red)
         self.play(Write(eq9))
@@ -310,10 +346,17 @@ class Plane(MovingCameraScene, PrimeScene):
             r"-\frac{2}{3} \\"
             r"1"
             r"\end{bmatrix}"
-            r" \cos\left(- \sqrt{\lambda_3} t\right)", color=dark_blue
+            r" \cos\left(- \sqrt{\lambda_3} t\right)",
+            color=dark_blue,
         )[0]
         eq10.shift(eq10[0].get_bottom()[1] * DOWN)
-        self.play(ReplacementTransform(eq6[34:36], eq10[32]), ShrinkToCenter(eq6[31:33]), ReplacementTransform(eq6[33], eq10[31]), ReplacementTransform(eq6[:31], eq10[:31]), ReplacementTransform(eq6[36:], eq10[33:]))
+        self.play(
+            ReplacementTransform(eq6[34:36], eq10[32]),
+            ShrinkToCenter(eq6[31:33]),
+            ReplacementTransform(eq6[33], eq10[31]),
+            ReplacementTransform(eq6[:31], eq10[:31]),
+            ReplacementTransform(eq6[36:], eq10[33:]),
+        )
         self.wait(1)
 
         self.play(FadeOut(eq9))
@@ -326,7 +369,9 @@ class Plane(MovingCameraScene, PrimeScene):
             r"0 \\"
             r"1"
             r"\end{bmatrix}"
-            r" \cos\left(- \sqrt{\lambda_2} t\right)", color=dark_blue, font_size=28
+            r" \cos\left(- \sqrt{\lambda_2} t\right)",
+            color=dark_blue,
+            font_size=28,
         )[0]
         eq11.shift(19 * UNIT * RIGHT + 4 * UNIT * DOWN + eq11[0].get_bottom()[1] * DOWN)
 
@@ -353,30 +398,26 @@ class Plane(MovingCameraScene, PrimeScene):
         # Left mass: xₗ(t) = - C₂ cos(√2 t)
         left_square.add_updater(
             lambda m: m.move_to(
-                left_eq + direction * (
-                        - C2 * np.cos(w2_eigen * time_tracker.get_value())
-                )
+                left_eq
+                + direction * (-C2 * np.cos(w2_eigen * time_tracker.get_value()))
             )
         )
         # Center mass: x_c(t) = 0
-        center_square.add_updater(
-            lambda m: m.move_to(
-                center_eq
-            )
-        )
+        center_square.add_updater(lambda m: m.move_to(center_eq))
         # Right mass: xᵣ(t) = C₂ cos(w₂ t)
         right_square.add_updater(
             lambda m: m.move_to(
-                right_eq + direction * (
-                        C2 * np.cos(w2_eigen * time_tracker.get_value())
-                )
+                right_eq
+                + direction * (C2 * np.cos(w2_eigen * time_tracker.get_value()))
             )
         )
 
         # Let Phase 1 run for 6 seconds.
         self.wait(1)
-        self.play(self.camera.frame.animate.move_to(19 * UNIT * RIGHT),
-                  ReplacementTransform(eq10[:len(eq11)].copy(), eq11))
+        self.play(
+            self.camera.frame.animate.move_to(19 * UNIT * RIGHT),
+            ReplacementTransform(eq10[: len(eq11)].copy(), eq11),
+        )
         self.wait(20)
 
         self.play(self.camera.frame.animate.move_to(ORIGIN))
@@ -399,36 +440,34 @@ class Plane(MovingCameraScene, PrimeScene):
             r"-\frac{2}{3} \\"
             r"1"
             r"\end{bmatrix}"
-            r" \cos\left(- \sqrt{\lambda_3} t\right)", color=dark_blue, font_size=28
+            r" \cos\left(- \sqrt{\lambda_3} t\right)",
+            color=dark_blue,
+            font_size=28,
         )[0]
         eq12.shift(19 * UNIT * RIGHT + 4 * UNIT * DOWN + eq12[0].get_bottom()[1] * DOWN)
         self.wait(1)
-
 
         # --- Phase 2 ---
         # Equation: x(t) = C3 V3 cos(w3 t)
         # Left mass: xₗ(t) = C3 cos(w3 t)
         left_square.add_updater(
             lambda m: m.move_to(
-                left_eq + direction * (
-                        C2 * np.cos(w2_eigen * time_tracker.get_value())
-                )
+                left_eq + direction * (C2 * np.cos(w2_eigen * time_tracker.get_value()))
             )
         )
         # Center mass: x_c(t) = C3 cos(w3 t)
         center_square.add_updater(
             lambda m: m.move_to(
-                center_eq + direction * (
-                        -(2.0/3.0) * C2 * np.cos(w2_eigen * time_tracker.get_value())
-                )
+                center_eq
+                + direction
+                * (-(2.0 / 3.0) * C2 * np.cos(w2_eigen * time_tracker.get_value()))
             )
         )
         # Right mass: xᵣ(t) = -2/3 * C3 cos(w3 t)
         right_square.add_updater(
             lambda m: m.move_to(
-                right_eq + direction * (
-                        C2 * np.cos(w2_eigen * time_tracker.get_value())
-                )
+                right_eq
+                + direction * (C2 * np.cos(w2_eigen * time_tracker.get_value()))
             )
         )
 
@@ -437,8 +476,11 @@ class Plane(MovingCameraScene, PrimeScene):
         self.add(dummy)
 
         # Let Phase 2 run.
-        self.play(self.camera.frame.animate.move_to(19 * UNIT * RIGHT),
-                  ReplacementTransform(eq10[0:5].copy(), eq12[0:5]), ReplacementTransform(eq10[27:].copy(), eq12[5:]))
+        self.play(
+            self.camera.frame.animate.move_to(19 * UNIT * RIGHT),
+            ReplacementTransform(eq10[0:5].copy(), eq12[0:5]),
+            ReplacementTransform(eq10[27:].copy(), eq12[5:]),
+        )
         self.wait(20)
 
         self.play(self.camera.frame.animate.move_to(ORIGIN))
@@ -466,11 +508,16 @@ class Plane(MovingCameraScene, PrimeScene):
             r"-\frac{2}{3} \\"
             r"1"
             r"\end{bmatrix}"
-            r"t \cos\left(- \sqrt{\lambda_3} t\right)", color=dark_blue
+            r"t \cos\left(- \sqrt{\lambda_3} t\right)",
+            color=dark_blue,
         )[0]
         eq13.shift(eq13[0].get_bottom()[1] * DOWN)
         self.wait(1)
-        self.play(ReplacementTransform(eq10[:39], eq13[:39]), GrowFromCenter(eq13[39]), ReplacementTransform(eq10[39:], eq13[40:]))
+        self.play(
+            ReplacementTransform(eq10[:39], eq13[:39]),
+            GrowFromCenter(eq13[39]),
+            ReplacementTransform(eq10[39:], eq13[40:]),
+        )
         self.play(Indicate(eq13[39]))
         self.wait(1)
 
@@ -487,34 +534,48 @@ class Plane(MovingCameraScene, PrimeScene):
             r"-\frac{2}{3} \\"
             r"1"
             r"\end{bmatrix}"
-            r"t \cos\left(- \sqrt{\lambda_3} t\right)", color=dark_blue, font_size=28
+            r"t \cos\left(- \sqrt{\lambda_3} t\right)",
+            color=dark_blue,
+            font_size=28,
         )[0]
         eq14.shift(19 * UNIT * RIGHT + 4 * UNIT * DOWN + eq14[0].get_bottom()[1] * DOWN)
-
 
         # --- Phase 3 ---
         # Equation: x(t) = C2 V2 cos(w2 t) + C3 V3 t cos(w3 t)
         # Left mass: xₗ(t) = C3 cos(w3 t)
         left_square.add_updater(
             lambda m: m.move_to(
-                left_eq + direction * (
-                        - C2 * np.cos(w2_eigen * time_tracker.get_value()) +
-                        C2 * time_tracker.get_value() * np.cos(w2_eigen * time_tracker.get_value())
+                left_eq
+                + direction
+                * (
+                    -C2 * np.cos(w2_eigen * time_tracker.get_value())
+                    + C2
+                    * time_tracker.get_value()
+                    * np.cos(w2_eigen * time_tracker.get_value())
                 )
             )
         )
         center_square.add_updater(
             lambda m: m.move_to(
-                center_eq + direction * (
-                        -(2.0 / 3.0) * C2 * time_tracker.get_value() * np.cos(w2_eigen * time_tracker.get_value())
+                center_eq
+                + direction
+                * (
+                    -(2.0 / 3.0)
+                    * C2
+                    * time_tracker.get_value()
+                    * np.cos(w2_eigen * time_tracker.get_value())
                 )
             )
         )
         right_square.add_updater(
             lambda m: m.move_to(
-                right_eq + direction * (
-                        C2 * np.cos(w2_eigen * time_tracker.get_value()) +
-                        C2 * time_tracker.get_value() * np.cos(w2_eigen * time_tracker.get_value())
+                right_eq
+                + direction
+                * (
+                    C2 * np.cos(w2_eigen * time_tracker.get_value())
+                    + C2
+                    * time_tracker.get_value()
+                    * np.cos(w2_eigen * time_tracker.get_value())
                 )
             )
         )
@@ -524,7 +585,10 @@ class Plane(MovingCameraScene, PrimeScene):
 
         # Let Phase 3 run.
         self.wait(1)
-        self.play(self.camera.frame.animate.move_to(19 * UNIT * RIGHT), ReplacementTransform(eq13.copy(), eq14), )
+        self.play(
+            self.camera.frame.animate.move_to(19 * UNIT * RIGHT),
+            ReplacementTransform(eq13.copy(), eq14),
+        )
         self.wait(10)
 
         self.play(Unwrite(eq13))

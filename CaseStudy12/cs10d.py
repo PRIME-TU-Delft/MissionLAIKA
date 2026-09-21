@@ -2,31 +2,24 @@ import numpy as np
 from manim import *
 from primescene import *
 
-config.background_color = ManimColor('#FFFFFF')
+config.background_color = ManimColor("#FFFFFF")
+
 
 class Lecture10Scene(PrimeScene, ThreeDScene):
     def construct(self):
         super().construct()
-        UNIT = 3/4
-        dark_blue = ManimColor('#0C2340')
-        red = ManimColor('#E03C31')
-        yellow = ManimColor('#cc9316')
-        blue = ManimColor('#0076C2')
+        UNIT = 3 / 4
+        dark_blue = ManimColor("#0C2340")
+        red = ManimColor("#E03C31")
+        yellow = ManimColor("#cc9316")
+        blue = ManimColor("#0076C2")
 
-        axes_defaults = {
-            "color": dark_blue,
-            "include_numbers": True
-        }
+        axes_defaults = {"color": dark_blue, "include_numbers": True}
 
         self.set_camera_orientation(phi=70 * DEGREES, theta=45 * DEGREES)
 
         ar = [-3, 3, 1]
-        axes = ThreeDAxes(
-            x_range=ar,
-            y_range=ar,
-            z_range=ar,
-            axis_config=axes_defaults
-        )
+        axes = ThreeDAxes(x_range=ar, y_range=ar, z_range=ar, axis_config=axes_defaults)
         self.add(axes)
 
         cube = Cube(
@@ -34,7 +27,7 @@ class Lecture10Scene(PrimeScene, ThreeDScene):
             fill_color=blue,
             fill_opacity=0.5,
             stroke_color=dark_blue,
-            stroke_width=0
+            stroke_width=0,
         ).move_to(ORIGIN)
 
         cube.save_state()
@@ -43,23 +36,29 @@ class Lecture10Scene(PrimeScene, ThreeDScene):
 
         angle = np.pi / 4
 
-        Rz = np.array([
-            [np.cos(angle), -np.sin(angle), 0],
-            [np.sin(angle),  np.cos(angle), 0],
-            [0,              0,             1],
-        ])
+        Rz = np.array(
+            [
+                [np.cos(angle), -np.sin(angle), 0],
+                [np.sin(angle), np.cos(angle), 0],
+                [0, 0, 1],
+            ]
+        )
 
-        S = np.array([
-            [1, 1, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-        ])
+        S = np.array(
+            [
+                [1, 1, 0],
+                [0, 1, 0],
+                [0, 0, 1],
+            ]
+        )
 
-        D = np.array([
-            [2,   0,   0],
-            [0, 0.5,   0],
-            [0,   0,   3],
-        ])
+        D = np.array(
+            [
+                [2, 0, 0],
+                [0, 0.5, 0],
+                [0, 0, 3],
+            ]
+        )
 
         T = D @ S @ Rz
 
@@ -70,7 +69,7 @@ class Lecture10Scene(PrimeScene, ThreeDScene):
             r"0 & 0 & 1"
             r"\end{bmatrix}",
             color=dark_blue,
-            font_size=32
+            font_size=32,
         ).to_corner(UR)
 
         S_tex = MathTex(
@@ -80,7 +79,7 @@ class Lecture10Scene(PrimeScene, ThreeDScene):
             r"0 & 0 & 1"
             r"\end{bmatrix}",
             color=dark_blue,
-            font_size=32
+            font_size=32,
         ).to_corner(UR)
 
         D_tex = MathTex(
@@ -90,16 +89,22 @@ class Lecture10Scene(PrimeScene, ThreeDScene):
             r"0 & 0 & 3"
             r"\end{bmatrix}",
             color=dark_blue,
-            font_size=32
+            font_size=32,
         ).to_corner(UR)
 
-        T_tex = MathTex(
-            r"T = D S R_z", color=dark_blue, font_size=32
-        ).to_corner(UR)
+        T_tex = MathTex(r"T = D S R_z", color=dark_blue, font_size=32).to_corner(UR)
 
         def rotate_camera(time):
-            self.play(theta.animate(run_time=time/2.0, rate_func=rate_functions.ease_in_sine).set_value(225 * DEGREES))
-            self.play(theta.animate(run_time=time/2.0, rate_func=rate_functions.ease_out_sine).set_value(405 * DEGREES))
+            self.play(
+                theta.animate(
+                    run_time=time / 2.0, rate_func=rate_functions.ease_in_sine
+                ).set_value(225 * DEGREES)
+            )
+            self.play(
+                theta.animate(
+                    run_time=time / 2.0, rate_func=rate_functions.ease_out_sine
+                ).set_value(405 * DEGREES)
+            )
             theta.set_value(45 * DEGREES)
 
         def show_matrix_transform(matrix, tex, run_time=2):
@@ -112,7 +117,9 @@ class Lecture10Scene(PrimeScene, ThreeDScene):
             self.play(FadeOut(tex))
             self.play(Restore(cube), run_time=run_time)
 
-        phi, theta, focal_distance, gamma, distance_to_origin = self.camera.get_value_trackers()
+        phi, theta, focal_distance, gamma, distance_to_origin = (
+            self.camera.get_value_trackers()
+        )
 
         rotate_camera(time=4)
 
@@ -122,4 +129,3 @@ class Lecture10Scene(PrimeScene, ThreeDScene):
         show_matrix_transform(T, T_tex)
 
         self.wait(2)
-

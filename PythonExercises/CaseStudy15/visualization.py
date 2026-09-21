@@ -1,12 +1,13 @@
 from manim import *
 import numpy as np
 
+
 class OrbitTypes(Scene):
     def construct(self):
-        dark_blue = ManimColor('#0C2340')
-        red = ManimColor('#E03C31') #ManimColor('#FF5132')
-        yellow = ManimColor('#cc9316') #ManimColor('#FFCC12')
-        blue = ManimColor('#0076C2') #ManimColor('#46A6FF')
+        dark_blue = ManimColor("#0C2340")
+        red = ManimColor("#E03C31")  # ManimColor('#FF5132')
+        yellow = ManimColor("#cc9316")  # ManimColor('#FFCC12')
+        blue = ManimColor("#0076C2")  # ManimColor('#46A6FF')
 
         body = Circle(radius=0.22)
         body.set_fill(blue, opacity=1)
@@ -34,9 +35,7 @@ class OrbitTypes(Scene):
         ellipse_label.next_to(ellipse, UP, buff=0.15).shift(RIGHT * 0.4)
 
         ellipse_formula = MathTex(
-            r"\frac{(x-h)^2}{a^2}+\frac{(y-k)^2}{b^2}=1",
-            font_size=28,
-            color=BLACK
+            r"\frac{(x-h)^2}{a^2}+\frac{(y-k)^2}{b^2}=1", font_size=28, color=BLACK
         )
         ellipse_formula.next_to(ellipse_label, RIGHT, buff=0.15)
 
@@ -52,11 +51,7 @@ class OrbitTypes(Scene):
         parabola_label = Text("Parabola:", font_size=28, color=BLACK)
         parabola_label.next_to(parabola, RIGHT, buff=0.2).shift(UP * 0.4)
 
-        parabola_formula = MathTex(
-            r"y=\frac{x^2}{4p}-p",
-            font_size=28,
-            color=BLACK
-        )
+        parabola_formula = MathTex(r"y=\frac{x^2}{4p}-p", font_size=28, color=BLACK)
         parabola_formula.next_to(parabola_label, RIGHT, buff=0.15)
 
         a2, b2 = 0.75, 1.2
@@ -72,22 +67,35 @@ class OrbitTypes(Scene):
         hyperbola_label.next_to(hyperbola, RIGHT, buff=0.2).shift(UP * 0.2)
 
         hyperbola_formula = MathTex(
-            r"\frac{(y-k)^2}{a^2}-\frac{(x-h)^2}{b^2}=1",
-            font_size=28,
-            color=BLACK
+            r"\frac{(y-k)^2}{a^2}-\frac{(x-h)^2}{b^2}=1", font_size=28, color=BLACK
         )
         hyperbola_formula.next_to(hyperbola_label, RIGHT, buff=0.15)
 
         group = VGroup(
-            glow, body,
-            ellipse, parabola, hyperbola,
-            ellipse_label, parabola_label, hyperbola_label,
-            ellipse_formula, parabola_formula, hyperbola_formula
+            glow,
+            body,
+            ellipse,
+            parabola,
+            hyperbola,
+            ellipse_label,
+            parabola_label,
+            hyperbola_label,
+            ellipse_formula,
+            parabola_formula,
+            hyperbola_formula,
         )
-        group.scale(1.15).shift(2*LEFT)
+        group.scale(1.15).shift(2 * LEFT)
 
         self.add(
-            glow, body, ellipse, parabola, hyperbola,
-            ellipse_label, parabola_label, hyperbola_label,
-            ellipse_formula, parabola_formula, hyperbola_formula
+            glow,
+            body,
+            ellipse,
+            parabola,
+            hyperbola,
+            ellipse_label,
+            parabola_label,
+            hyperbola_label,
+            ellipse_formula,
+            parabola_formula,
+            hyperbola_formula,
         )

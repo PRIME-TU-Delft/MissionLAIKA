@@ -46,7 +46,9 @@ class Plane(MovingCameraScene, PrimeScene):
         # ==========================================================
         # 1) Title
         # ==========================================================
-        title = Tex("Wing/Beam Vibrations \\& Eigenmodes", font_size=54, color=dark_blue)
+        title = Tex(
+            "Wing/Beam Vibrations \\& Eigenmodes", font_size=54, color=dark_blue
+        )
         show_then_clear(title, hold=1.2, in_anim=Write, out_anim=FadeOut)
 
         # ==========================================================
@@ -86,30 +88,47 @@ class Plane(MovingCameraScene, PrimeScene):
 
         clamp_label = Tex("fixed", font_size=34, color=dark_blue).next_to(wall, LEFT)
 
-        model_text = Tex("Model the wing as a cantilever beam", font_size=40, color=dark_blue)
+        model_text = Tex(
+            "Model the wing as a cantilever beam", font_size=40, color=dark_blue
+        )
         model_text.next_to(beam, UP, buff=0.7)
 
-        beam_model = VGroup(model_text, wall, hatch_lines, beam, clamp_label).move_to(ORIGIN)
+        beam_model = VGroup(model_text, wall, hatch_lines, beam, clamp_label).move_to(
+            ORIGIN
+        )
 
-        self.play(Create(wall), Create(hatch_lines), Create(beam), Write(model_text), Write(clamp_label))
+        self.play(
+            Create(wall),
+            Create(hatch_lines),
+            Create(beam),
+            Write(model_text),
+            Write(clamp_label),
+        )
         self.wait(1.2)
 
         # ==========================================================
         # 3) Discretization points
         # ==========================================================
         # Keep the beam on screen; add points + labels, then clear all.
-        p1 = Dot(color=red, radius=0.085).move_to(beam.get_left() + 0.55 * beam_width * RIGHT)
+        p1 = Dot(color=red, radius=0.085).move_to(
+            beam.get_left() + 0.55 * beam_width * RIGHT
+        )
         p2 = Dot(color=red, radius=0.085).move_to(beam.get_right())
 
         p1_label = MathTex("1", font_size=42, color=red).next_to(p1, DOWN, buff=0.15)
         p2_label = MathTex("2", font_size=42, color=red).next_to(p2, DOWN, buff=0.15)
 
-        disc_text = Tex("Discretize: choose a few points", font_size=40, color=dark_blue).next_to(
-            model_text, DOWN, buff=0.35
-        )
+        disc_text = Tex(
+            "Discretize: choose a few points", font_size=40, color=dark_blue
+        ).next_to(model_text, DOWN, buff=0.35)
 
         self.play(Write(disc_text))
-        self.play(FadeIn(p1, scale=0.5), FadeIn(p2, scale=0.5), Write(p1_label), Write(p2_label))
+        self.play(
+            FadeIn(p1, scale=0.5),
+            FadeIn(p2, scale=0.5),
+            Write(p1_label),
+            Write(p2_label),
+        )
         self.wait(1.2)
 
         # ==========================================================
@@ -118,13 +137,25 @@ class Plane(MovingCameraScene, PrimeScene):
         def dof_glyphs(anchor: Mobject, idx: str) -> VGroup:
             base = anchor.get_center()
 
-            ax = Arrow(base, base + 0.85 * RIGHT, color=yellow, stroke_width=4, buff=0.0)
-            tx = MathTex(fr"x_{idx}", font_size=36, color=yellow).next_to(ax, RIGHT, buff=0.12)
+            ax = Arrow(
+                base, base + 0.85 * RIGHT, color=yellow, stroke_width=4, buff=0.0
+            )
+            tx = MathTex(rf"x_{idx}", font_size=36, color=yellow).next_to(
+                ax, RIGHT, buff=0.12
+            )
 
             ay = Arrow(base, base + 0.85 * UP, color=yellow, stroke_width=4, buff=0.0)
-            ty = MathTex(fr"y_{idx}", font_size=36, color=yellow).next_to(ay, UP, buff=0.12)
+            ty = MathTex(rf"y_{idx}", font_size=36, color=yellow).next_to(
+                ay, UP, buff=0.12
+            )
 
-            arc = Arc(radius=0.45, start_angle=25 * DEGREES, angle=300 * DEGREES, arc_center=base, color=yellow)
+            arc = Arc(
+                radius=0.45,
+                start_angle=25 * DEGREES,
+                angle=300 * DEGREES,
+                arc_center=base,
+                color=yellow,
+            )
             arc_tip = Arrow(
                 arc.point_from_proportion(0.92),
                 arc.point_from_proportion(0.98),
@@ -133,16 +164,18 @@ class Plane(MovingCameraScene, PrimeScene):
                 buff=0.0,
                 max_tip_length_to_length_ratio=0.8,
             )
-            ttheta = MathTex(fr"\theta_{idx}", font_size=36, color=yellow).next_to(arc, DOWN, buff=0.08)
+            ttheta = MathTex(rf"\theta_{idx}", font_size=36, color=yellow).next_to(
+                arc, DOWN, buff=0.08
+            )
 
             return VGroup(ax, tx, ay, ty, arc, arc_tip, ttheta)
 
         dofs1 = dof_glyphs(p1, "1").shift(0.25 * DOWN + 0.1 * LEFT)
         dofs2 = dof_glyphs(p2, "2").shift(0.25 * DOWN + 0.1 * LEFT)
 
-        dof_text = Tex("At each point: translations and rotation", font_size=40, color=dark_blue).next_to(
-            disc_text, DOWN, buff=0.35
-        )
+        dof_text = Tex(
+            "At each point: translations and rotation", font_size=40, color=dark_blue
+        ).next_to(disc_text, DOWN, buff=0.35)
 
         self.play(Write(dof_text))
         self.play(LaggedStart(GrowArrow(dofs1[0]), GrowArrow(dofs1[2]), lag_ratio=0.15))
@@ -156,7 +189,19 @@ class Plane(MovingCameraScene, PrimeScene):
 
         # Clear the whole physical scene before equations (sequential)
         self.play(
-            FadeOut(VGroup(beam_model, disc_text, dof_text, p1, p2, p1_label, p2_label, dofs1, dofs2))
+            FadeOut(
+                VGroup(
+                    beam_model,
+                    disc_text,
+                    dof_text,
+                    p1,
+                    p2,
+                    p1_label,
+                    p2_label,
+                    dofs1,
+                    dofs2,
+                )
+            )
         )
         self.wait(0.3)
 
@@ -182,14 +227,22 @@ class Plane(MovingCameraScene, PrimeScene):
         # ==========================================================
         e1_header = Tex("Matrix equation of motion", font_size=44, color=dark_blue)
         eq_motion = MathTex(r"M\ddot{u}+Ku=0", font_size=64, color=dark_blue)
-        eq_motion.set_color_by_tex_to_color_map({"M": blue, "K": blue, "u": yellow, r"\ddot{u}": yellow})
-
-        labels = VGroup(
-            Tex("mass matrix", font_size=34, color=dark_blue).next_to(eq_motion, DOWN, buff=0.3).shift(2.4 * LEFT),
-            Tex("stiffness matrix", font_size=34, color=dark_blue).next_to(eq_motion, DOWN, buff=0.3).shift(2.4 * RIGHT),
+        eq_motion.set_color_by_tex_to_color_map(
+            {"M": blue, "K": blue, "u": yellow, r"\ddot{u}": yellow}
         )
 
-        e1_group = VGroup(e1_header, eq_motion, labels).arrange(DOWN, buff=0.5).move_to(ORIGIN)
+        labels = VGroup(
+            Tex("mass matrix", font_size=34, color=dark_blue)
+            .next_to(eq_motion, DOWN, buff=0.3)
+            .shift(2.4 * LEFT),
+            Tex("stiffness matrix", font_size=34, color=dark_blue)
+            .next_to(eq_motion, DOWN, buff=0.3)
+            .shift(2.4 * RIGHT),
+        )
+
+        e1_group = (
+            VGroup(e1_header, eq_motion, labels).arrange(DOWN, buff=0.5).move_to(ORIGIN)
+        )
         self.play(Write(e1_header))
         self.play(Write(eq_motion))
         self.play(FadeIn(labels, shift=0.2 * UP))
@@ -200,15 +253,21 @@ class Plane(MovingCameraScene, PrimeScene):
         # ==========================================================
         # 7) Multiply by M^{-1}, define A
         # ==========================================================
-        e2_header = Tex("Standard form using $A=M^{-1}K$", font_size=44, color=dark_blue)
+        e2_header = Tex(
+            "Standard form using $A=M^{-1}K$", font_size=44, color=dark_blue
+        )
 
         eq_A = MathTex(r"\ddot{u}+Au=0", font_size=64, color=dark_blue)
-        eq_A.set_color_by_tex_to_color_map({"A": blue, "u": yellow, r"\ddot{u}": yellow})
+        eq_A.set_color_by_tex_to_color_map(
+            {"A": blue, "u": yellow, r"\ddot{u}": yellow}
+        )
 
         def_A = MathTex(r"A=M^{-1}K", font_size=56, color=dark_blue)
         def_A.set_color_by_tex_to_color_map({"A": blue, "M": blue, "K": blue})
 
-        e2_group = VGroup(e2_header, eq_A, def_A).arrange(DOWN, buff=0.55).move_to(ORIGIN)
+        e2_group = (
+            VGroup(e2_header, eq_A, def_A).arrange(DOWN, buff=0.55).move_to(ORIGIN)
+        )
         show_then_clear(e2_group, hold=1.8, in_anim=Write, out_anim=FadeOut)
 
         # ==========================================================
@@ -221,7 +280,9 @@ class Plane(MovingCameraScene, PrimeScene):
         eig2 = MathTex(r"\lambda_i=\omega_i^2", font_size=64, color=dark_blue)
         eig2.set_color_by_tex_to_color_map({r"\lambda_i": red, r"\omega_i": red})
 
-        e3_group = VGroup(e3_header, eig1, eig2).arrange(DOWN, buff=0.55).move_to(ORIGIN)
+        e3_group = (
+            VGroup(e3_header, eig1, eig2).arrange(DOWN, buff=0.55).move_to(ORIGIN)
+        )
         show_then_clear(e3_group, hold=1.8, in_anim=Write, out_anim=FadeOut)
 
         # ==========================================================
@@ -239,7 +300,9 @@ class Plane(MovingCameraScene, PrimeScene):
         D_def.set_color_by_tex("D", blue)
         D_def.set_color_by_tex(r"\omega", red)
 
-        e4_group = VGroup(e4_header, diag, D_def).arrange(DOWN, buff=0.55).move_to(ORIGIN)
+        e4_group = (
+            VGroup(e4_header, diag, D_def).arrange(DOWN, buff=0.55).move_to(ORIGIN)
+        )
         show_then_clear(e4_group, hold=1.9, in_anim=Write, out_anim=FadeOut)
 
         # ==========================================================
@@ -251,9 +314,13 @@ class Plane(MovingCameraScene, PrimeScene):
         y_def.set_color_by_tex_to_color_map({"y": yellow, "P": blue, "u": yellow})
 
         y_eq = MathTex(r"\ddot{y}+Dy=0", font_size=64, color=dark_blue)
-        y_eq.set_color_by_tex_to_color_map({"y": yellow, "D": blue, r"\ddot{y}": yellow})
+        y_eq.set_color_by_tex_to_color_map(
+            {"y": yellow, "D": blue, r"\ddot{y}": yellow}
+        )
 
-        e5_group = VGroup(e5_header, y_def, y_eq).arrange(DOWN, buff=0.55).move_to(ORIGIN)
+        e5_group = (
+            VGroup(e5_header, y_def, y_eq).arrange(DOWN, buff=0.55).move_to(ORIGIN)
+        )
         show_then_clear(e5_group, hold=1.9, in_anim=Write, out_anim=FadeOut)
 
         # ==========================================================
@@ -270,7 +337,9 @@ class Plane(MovingCameraScene, PrimeScene):
         # ==========================================================
         # 12) Mode shapes (separate, centered visual payoff)
         # ==========================================================
-        mode_title = Tex("Eigenvectors = mode shapes", font_size=48, color=dark_blue).to_edge(UP)
+        mode_title = Tex(
+            "Eigenvectors = mode shapes", font_size=48, color=dark_blue
+        ).to_edge(UP)
 
         # Rebuild a centered beam (clean slate)
         beam2 = Rectangle(
@@ -329,7 +398,9 @@ class Plane(MovingCameraScene, PrimeScene):
         curve1 = always_redraw(lambda: make_curve(mode1, amp=1.0))
         curve2 = always_redraw(lambda: make_curve(mode2, amp=1.0))
 
-        m_label = Tex("mode 1", font_size=38, color=dark_blue).next_to(beam2, DOWN, buff=0.6)
+        m_label = Tex("mode 1", font_size=38, color=dark_blue).next_to(
+            beam2, DOWN, buff=0.6
+        )
 
         # Show mode 1
         self.play(Write(mode_title))
@@ -342,7 +413,11 @@ class Plane(MovingCameraScene, PrimeScene):
         # Switch to mode 2
         self.remove(curve1)
         self.add(curve2)
-        self.play(Transform(m_label, Tex("mode 2", font_size=38, color=dark_blue).move_to(m_label)))
+        self.play(
+            Transform(
+                m_label, Tex("mode 2", font_size=38, color=dark_blue).move_to(m_label)
+            )
+        )
         self.play(t.animate.set_value(6 * PI), run_time=2.0, rate_func=linear)
         self.play(t.animate.set_value(8 * PI), run_time=2.0, rate_func=linear)
 
