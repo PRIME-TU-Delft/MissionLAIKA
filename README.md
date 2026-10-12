@@ -62,6 +62,7 @@ cd Mission-LAIKA
 ### 2. Set up your environment
 
 Install [Manim Community Edition](https://docs.manim.community/en/stable/installation.html) and dependencies. 
+
 For MacOS: 
 ```bash
 pip install -r requirements.txt
@@ -120,8 +121,8 @@ Pull requests are welcome! If you have ideas for new scenes or applications, ope
 
 ---
 
-## Author
+## Authors
 
-Animations made by [Jakub Fręchowicz](https://jakubfrechowicz.com) and Stella Schultz
+Animations and Python notebooks made by [Jakub Fręchowicz](https://jakubfrechowicz.com) and [Stella Schultz](https://github.com/smarlene).
 
 Feel free to reach out!
