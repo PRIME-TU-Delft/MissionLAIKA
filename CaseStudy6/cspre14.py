@@ -222,11 +222,21 @@ class FlowAroundAirfoil(PrimeScene, MovingCameraScene):
         divergence = np.abs(np.unwrap(angles - free_angle))
         max_div = divergence.max()
 
+        from scipy.interpolate import RegularGridInterpolator
+
+        Ui = RegularGridInterpolator((ys, xs), UU)
+        Vi = RegularGridInterpolator((ys, xs), VV)
+
         def vfield_func(pos):
-            x, y = float(pos[0]), float(pos[1])
-            i = np.abs(xs - x).argmin()
-            j = np.abs(ys - y).argmin()
-            return np.array([UU[j, i], VV[j, i], 0.0])
+            x = np.clip(pos[0], xs[0], xs[-1])
+            y = np.clip(pos[1], ys[0], ys[-1])
+            return np.array([Ui([[y, x]])[0], Vi([[y, x]])[0], 0.0])
+
+        # def vfield_func(pos):
+        #     x, y = float(pos[0]), float(pos[1])
+        #     i = np.abs(xs - x).argmin()
+        #     j = np.abs(ys - y).argmin()
+        #     return np.array([UU[j, i], VV[j, i], 0.0])
 
         ax = Axes(x_range=[-5, 5, 1], y_range=[-3, 3, 0.5], x_length=14, y_length=8)
         airfoil_shape = VMobject(color=dark_blue)
@@ -322,18 +332,14 @@ class FlowAroundAirfoil(PrimeScene, MovingCameraScene):
         moving_shell = VMobject(color=red, stroke_width=2, fill_opacity=0.25)
 
         def update_shell(m):
-            # Current marker positions (scene coords)
-            pts = np.array([mk.get_center() for mk in markers])
-            if len(pts) < 3:
-                return
+            pts = [mk.get_center() for mk in markers]
+            # pts = np.array(pts)
+            # c = pts.mean(axis=0)
+            # ang = np.arctan2(pts[:, 1] - c[1], pts[:, 0] - c[0])
+            # order = np.argsort(ang)
+            # pts = pts[order]
 
-            # Order points around centroid to keep a non-zigzag boundary
-            c = pts.mean(axis=0)
-            ang = np.arctan2(pts[:, 1] - c[1], pts[:, 0] - c[0])
-            order = np.argsort(ang)
-            pts = pts[order]
-
-            # Build a smooth closed curve (looks like a deforming "shell")
+            pts = np.vstack([pts, pts[:1]])      # close the loop
             m.set_points_smoothly(pts)
             m.close_path()
 
@@ -374,7 +380,7 @@ class FlowAroundAirfoil(PrimeScene, MovingCameraScene):
         self.wait(1)
         self.add(moving_shell)
         self.play(start.animate.set_value(1.0))
-        self.wait(6)
+        self.wait(6.1)
 
         for mk in markers:
             mk.remove_updater(advect_point)

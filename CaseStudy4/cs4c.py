@@ -391,9 +391,9 @@ class Lecture4Scene(PrimeScene):
         self.wait(1)
         self.play(Write(eq8))
         self.wait(1)
-        self.play(Wiggle(eq8[27:32]))
+        self.play(Wiggle(eq8[27:32]), Wiggle(eq8[9:14]))
         self.wait(1)
-        self.play(Wiggle(eq8[33:36]))
+        self.play(Wiggle(eq8[33:36]),Wiggle(eq8[15:26]))
         self.play(
             LaggedStart(
                 ShrinkToCenter(eq8[9:27]),
