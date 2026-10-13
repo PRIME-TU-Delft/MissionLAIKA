@@ -59,20 +59,49 @@ git clone https://github.com/yourusername/Mission-LAIKA.git
 cd Mission-LAIKA
 ```
 
-### 2. Set up your environment
+### 2. Install Manim
 
-Install [Manim Community Edition](https://docs.manim.community/en/stable/installation.html) and dependencies. 
+The instructions for installing Manim can be found on [Manim Community Edition](https://docs.manim.community/en/stable/installation.html). 
 
-For MacOS: 
+
+### 3. Install uv
+
+This project uses [uv](https://docs.astral.sh/uv/) to manage Python and dependencies.
+
 ```bash
-pip install -r requirements.txt
-```
-For Linux/WSL:
-```bash
-pip install -r requirements_linux.txt
+# macOS / Linux / WSL
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### 3. Render an animation
+
+### 4. Install system libraries
+
+Manim needs Cairo, Pango and ffmpeg.
+
+**WSL / Ubuntu / Debian**
+```bash
+sudo apt update
+sudo apt install libcairo2-dev libpango1.0-dev ffmpeg pkg-config build-essential
+```
+
+**macOS**
+```bash
+brew install cairo pango pkg-config ffmpeg
+```
+
+LaTeX is only needed if your scenes use `Tex` / `MathTex`. If they do, you can follow the instructions on [Manim Community Edition](https://docs.manim.community/en/stable/installation.html).
+
+### 5. Install the project
+
+From the repo root:
+
+```bash
+uv sync
+```
+You can run `uv run manim checkhealth` to verify your installation.
+
+
+### 6. Render an animation
 
 Navigate to the **animation folder**, e.g.:
 
@@ -83,8 +112,17 @@ cd CaseStudy1
 and run:
 
 ```bash
-manim -p beginning.py
+uv run manim -p beginning.py
 ```
+
+*Note: Always run commands through `uv run` so they use the project environment.*
+
+Quality flags: `-ql` (480p), `-qm` (720p), `-qh` (1080p), `-qk` (4K). Output goes to the `media/` folder.
+
+--- 
+## Managing dependencies
+
+Commit both `pyproject.toml` and `uv.lock` whenever they change. Don't use `pip install` in this project.
 
 ---
 
